@@ -1,30 +1,68 @@
 import mainImage from "../../assets/login/loginMainImage.jpeg";
+import axios from "axios";
+import { API_ROUTE } from "../../config/env.js";
+import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 
 export default function Login() {
-
-  const [loginForm, setLoginForm] = useState({username: '', password: ''})
+  const [loginForm, setLoginForm] = useState({ username: "", password: "" });
 
   const handleInputChange = (e) => {
-    setLoginForm({...loginForm, [e.target.name]:e.target.value})
-  }
+    setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { username, password } = loginForm;
+    if (!username || password) {
+      toast("Enter the username and password");
+    }
+
+    const response = await axios.post(`${API_ROUTE}/employee/login`, loginForm);
+  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen w-full overscroll-none	">
-      
-
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            border: "1px solid #A9872D",
+            backgroundColor: "#A9872D",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+          },
+        }}
+      />
       <div className="bg-mainBlue flex flex-col justify-center px-4">
-        <form className="flex items-center max-w-[400px] w-full mx-auto bg-gray-500 p-8 px-8 rounded-lg 2xl:max-w-[600px] 2xl:h-[600px] text-right">
+        <form
+          className="flex items-center max-w-[400px] w-full mx-auto bg-gray-500 p-8 px-8 rounded-lg 2xl:max-w-[600px] 2xl:h-[600px] text-right"
+          onSubmit={handleSubmit}
+        >
           <div className="w-full">
             <h2 className="text-4xl 2xl:text-6xl">تسجيل دخول</h2>
             <div className="flex flex-col text-slate-300 py-2 2xl:text-3xl">
               <label>اسم المستخدم</label>
-              <input className="loginLabel" name="username" type="text" value={loginForm.username} onChange={handleInputChange}/>
+              <input
+                className="loginLabel"
+                name="username"
+                type="text"
+                value={loginForm.username}
+                onChange={handleInputChange}
+              />
             </div>
 
             <div className="flex flex-col text-slate-300 py-2 2xl:text-3xl">
               <label>كلمه السر</label>
-              <input className="loginLabel" type="password" name="password"value={loginForm.password} onChange={ handleInputChange} />
+              <input
+                className="loginLabel"
+                type="password"
+                name="password"
+                value={loginForm.password}
+                onChange={handleInputChange}
+              />
             </div>
             <div className="flex justify-between p-2">
               <button className="bg-mainYellow w-full my-5 py-2 hover:opacity-70 font-semibold rounded-lg text-slate-200 transition-all duration-200">
