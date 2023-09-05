@@ -3,9 +3,11 @@ import axios from "axios";
 import { API_ROUTE } from "../../config/env.js";
 import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function Login() {
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
@@ -13,12 +15,37 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const { username, password } = loginForm;
-    if (!username || password) {
-      toast("Enter the username and password");
+    if (!username || !password) {
+      toast.dismiss()
+      return toast("Enter the username and password");
     }
 
-    const response = await axios.post(`${API_ROUTE}/employee/login`, loginForm);
+    setLoginLoading(true);
+
+    try {
+      const response = await axios.post(
+        `${API_ROUTE}/employee/login`,
+        loginForm
+      );
+
+      if (response.status == 200) {
+        setLoginLoading(false);
+        toast("Success");
+      }
+    } catch (error) {
+      console.log(error.response.status);
+      if (error.response.status == 401) {
+        setLoginLoading(false);
+        toast.dismiss()
+        return toast("Your username or password are incorrect");
+      } else if (error.response.status == 500) {
+        setLoginLoading(false);
+        toast.dismiss()
+        return toast("Something went wrong");
+      }
+    }
   };
 
   return (
@@ -33,6 +60,7 @@ export default function Login() {
             color: "white",
             fontWeight: "Bold",
             marginTop: "65px",
+            textAlign: "center",
           },
         }}
       />
@@ -65,8 +93,15 @@ export default function Login() {
               />
             </div>
             <div className="flex justify-between p-2">
-              <button className="bg-mainYellow w-full my-5 py-2 hover:opacity-70 font-semibold rounded-lg text-slate-200 transition-all duration-200">
-                تسجيل دخول
+              <button
+                disabled={loginLoading}
+                className="bg-mainYellow flex justify-center w-full my-5 py-2 hover:opacity-70 disabled:opacity-70 font-semibold rounded-lg text-slate-200 transition-all duration-200"
+              >
+                {loginLoading ? (
+                  <Loader2 className="animate-spin duration-200" />
+                ) : (
+                  "تسجيل دخول"
+                )}
               </button>
             </div>
           </div>

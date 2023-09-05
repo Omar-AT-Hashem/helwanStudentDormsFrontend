@@ -11,20 +11,10 @@ export const Navbar = () => {
   const [portalClicked, setPortalClicked] = useState(false);
 
   const handleNavMenuClick = () => {
-    // if (!navMenuOpen) {
-    //   document.body.style.overflow = "hidden";
-    // } else {
-    //   document.body.style.overflow = "visible";
-    // }
     setNavMenuOpen(!navMenuOpen);
   };
 
   const HandleExitClick = () => {
-    // if (navMenuOpen) {
-    //   document.body.style.overflow = "visible";
-    // } else {
-    //   document.body.style.overflow = "hidden";
-    // }
     setNavMenuOpen(false);
     setServicesClicked(false);
     setAboutClicked(false);
@@ -61,7 +51,10 @@ export const Navbar = () => {
     /*tailwind repeated classnames*/
   }
   const navLinkClass =
-    "mx-4 flex items-center h-full hover:cursor-pointer flex-col justify-center  transition-all duration-200 w-fit group font-semibold relative";
+    "mx-4 flex items-center h-full hover:cursor-pointer flex-col justify-center  transition-all duration-200 w-fit group font-semibold";
+
+  const itemClass =
+    "w-full py-4 hover:bg-mainYellow text-center transition-all duration-200  group";
 
   const navLinkSideMenuClass =
     "my-4 flex items-center h-full hover:cursor-pointer flex-col justify-center  transition-all duration-200 w-fit group font-semibold relative bg-mainBlue w-full";
@@ -88,55 +81,62 @@ export const Navbar = () => {
 
           <Menu
             size={28}
-            className="text-white lg:hidden mr-3 hover:cursor-pointer hover:opacity-80 transition-all h-full"
+            className="text-white lg:hidden mr-3 hover:cursor-pointer hover:opacity-80 transition-all h-full "
             onClick={handleNavMenuClick}
           />
           {/* NavLinks*/}
           <div className="h-full hidden lg:block">
             <ul className="flex h-full text-white">
-              {/* Home*/}
-              <li>
-                <Link to="/" className={navLinkClass}>
-                  <div className="flex items-center">
-                    <p>ارشادات التقدم و الاقرارات</p>
-                  </div>
-                  <span className={growingLineClass}></span>
-                </Link>
-              </li>
-
               {/* Services*/}
               <li>
                 <div className={navLinkClass}>
                   <div className="flex items-center">
-                    <p>الاستعلام عن القبول بالمدن الجامعيه</p>
+                    <p>itemsMenu 1</p>
                     <ChevronDown size={18} className={shevronClass} />
                   </div>
                   <span className={growingLineClass}></span>
                   {/*Submenu*/}
-                  <ul className="bg-mainBlue flex flex-col items-center  absolute w-52 border-gray-300 top-full h-0 group-hover:h-56  transition-all duration-200 overflow-hidden">
+                  <ul className="bg-mainBlue flex  items-center  absolute left-0 w-screen top-full h-0 group-hover:h-14 transition-all duration-200 overflow-hidden ">
                     <Link
                       to="/services/fire-and-life-safety-systems"
-                      className="w-full py-4 hover:bg-mainYellow text-center transition-all duration-200"
+                      className={itemClass}
                     >
-                      Fire & Life Safety
+                      item 1
                     </Link>
-                    <Link
-                      to="services/security-systems"
-                      className="py-4 hover:bg-mainYellow   w-full text-center transition-all duration-200 "
-                    >
-                      Security Systems
+
+                    <Link to="services/security-systems" className={itemClass}>
+                      item 2
                     </Link>
-                    <Link
-                      to="services/passive-fire"
-                      className="py-4 hover:bg-mainYellow  w-full text-center transition-all duration-200 "
-                    >
-                      Passive Fire
+                    <Link to="services/passive-fire" className={itemClass}>
+                      item 3
                     </Link>
-                    <Link
-                      to="services/monitoring"
-                      className="py-4 hover:bg-mainYellow   w-full text-center transition-all duration-200 "
-                    >
-                      Monitoring
+                    <Link to="services/monitoring" className={itemClass}>
+                      item 4
+                    </Link>
+                    <div className={`${itemClass} group`}>
+                      <div>item 8</div>
+                      <ul className="bg-mainBlue flex flex-col items-center absolute w-full top-full h-0 group-hover:h-52 transition-all duration-200 overflow-hidden">
+                        <Link className={itemClass}> link1 </Link>
+                        <Link className={itemClass}> link2 </Link>
+                        <Link className={itemClass}> link3 </Link>
+                        <Link className={itemClass}> link4 </Link>
+                      </ul>
+                    </div>
+                    <Link to="services/monitoring" className={itemClass}>
+                      item 5
+                    </Link>
+                    <Link to="services/monitoring" className={itemClass}>
+                      item 6
+                    </Link>
+                    <Link to="services/monitoring" className={itemClass}>
+                      item 7
+                    </Link>
+
+                    <Link to="services/monitoring" className={itemClass}>
+                      item 9
+                    </Link>
+                    <Link to="services/monitoring" className={itemClass}>
+                      item 10
                     </Link>
                   </ul>
                 </div>
@@ -155,7 +155,7 @@ export const Navbar = () => {
                   </div>
                   <span className={growingLineClass}></span>
                   {/*Submenu*/}
-                  <ul className="bg-white flex flex-col items-center  absolute w-52 border-gray-300 top-full h-0 group-hover:h-[169px] group-hover:border-t transition-all duration-200 overflow-hidden">
+                  <ul className="bg-mainBlue flex  items-center  absolute left-0 w-screen border-gray-300 top-full h-0 group-hover:h-10  transition-all duration-200 overflow-hidden">
                     <Link
                       target="_blank"
                       to="https://esft.onuptick.com/login/?next=/newcustomerportal/?"
@@ -190,7 +190,7 @@ export const Navbar = () => {
                   </div>
                   <span className={growingLineClass}></span>
                   {/*Submenu*/}
-                  <ul className="bg-white flex flex-col items-center  absolute w-52 border-gray-300 top-full h-0 group-hover:h-[113px] group-hover:border-t transition-all duration-200 overflow-hidden">
+                  <ul className="bg-mainBlue flex  items-center  absolute left-0 w-screen border-gray-300 top-full h-0 group-hover:h-10  transition-all duration-200 overflow-hidden">
                     <Link
                       to="/about/accreditations"
                       className="py-4 hover:bg-mainTheme hover:text-white w-full text-center transition-all duration-200 "
@@ -216,10 +216,10 @@ export const Navbar = () => {
                   </div>
                   <span className={growingLineClass}></span>
                   {/*Submenu*/}
-                  <ul className="bg-white flex flex-col items-center  absolute w-52 border-gray-300 top-full h-0 group-hover:h-[57px] group-hover:border-t transition-all duration-200 overflow-hidden">
+                  <ul className="bg-mainBlue flex  items-center  absolute left-0 w-screen border-gray-300 top-full h-0 group-hover:h-10  transition-all duration-200 overflow-hidden">
                     <Link
                       to="/work-with-us"
-                      className="py-4 hover:bg-mainTheme hover:text-white w-full text-center transition-all duration-200"
+                      className="py-4 hover:bg-mainYellow hover:text-white w-full text-center transition-all duration-200"
                     >
                       Work With Us
                     </Link>
