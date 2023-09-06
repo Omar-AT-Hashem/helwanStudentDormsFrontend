@@ -14,7 +14,7 @@
   .loginLabel {
     @apply rounded-lg mt-2 p-2 border-blue-500 bg-gray-800 focus:outline-none
   }
-  
+ 
 }
 
 * {
