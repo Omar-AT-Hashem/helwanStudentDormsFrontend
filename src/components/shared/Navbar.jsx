@@ -66,7 +66,7 @@ export const Navbar = () => {
         </div>
       </nav>
       <div
-        className={`absolute w-full px-10 text-slate-100  ${
+        className={` w-full px-10 text-slate-100 fixed ${
           firstLinkClicked ? "top-16" : "top-0"
         }  right-0 bg-mainBlue transition-all duration-200`}
       >
@@ -97,33 +97,65 @@ export const Navbar = () => {
         </ul>
       </div>
       <div
-        className={`absolute w-full px-10 text-slate-100 ${
+        className={`fixed w-full px-10 text-slate-100  ${
           secondLinkClicked ? "top-16" : "top-0"
-        }  overflow-hidden top-full right-0 bg-mainBlue transition-all duration-200`}
+        }  right-0 bg-mainBlue transition-all duration-200`}
       >
         <ul className="flex h-full items-center">
-          <li className={subBarLinks}>item 2</li>
-          <li className={subBarLinks}>item 2</li>
-          <li className={subBarLinks}>item 2</li>
-          <li className={subBarLinks}>item 2</li>
-          <li className={subBarLinks}>item 2</li>
-          <li className={subBarLinks}>item 2</li>
-          <li className={subBarLinks}>item 2</li>
+          <li className={subBarLinks}>item 1</li>
+          <div className="relative group">
+            <li className={subBarLinks}>item 1</li>
+            <ul className="flex flex-col items-center absolute top-full -left-10 h-0 overflow-hidden group-hover:h-36 bg-mainBlue w-44 transition-all duration-200">
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+            </ul>
+          </div>
+          <li className={subBarLinks}>item 1</li>
+          <li className={subBarLinks}>item 1</li>
+          <li className={subBarLinks}>item 1</li>
+          <div className="relative group">
+            <li className={subBarLinks}>item 1</li>
+            <ul className="flex flex-col items-center absolute top-full -left-10 h-0 overflow-hidden group-hover:h-36 bg-mainBlue w-44 transition-all duration-200">
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+            </ul>
+          </div>
+          <li className={subBarLinks}>item 10</li>
         </ul>
       </div>
       <div
-        className={`absolute  w-full px-10 text-slate-100 ${
+        className={`fixed w-full px-10 text-slate-100  ${
           thirdLinkClicked ? "top-16" : "top-0"
-        }  overflow-hidden top-full right-0  bg-mainBlue transition-all duration-200`}
+        }  right-0 bg-mainBlue transition-all duration-200`}
       >
         <ul className="flex h-full items-center">
-          <li className={subBarLinks}>item 3</li>
-          <li className={subBarLinks}>item 3</li>
-          <li className={subBarLinks}>item 3</li>
-          <li className={subBarLinks}>item 3</li>
-          <li className={subBarLinks}>item 3</li>
-          <li className={subBarLinks}>item 3</li>
-          <li className={subBarLinks}>item 3</li>
+          <li className={subBarLinks}>item 1</li>
+          <div className="relative group">
+            <li className={subBarLinks}>item 1</li>
+            <ul className="flex flex-col items-center absolute top-full -left-10 h-0 overflow-hidden group-hover:h-36 bg-mainBlue w-44 transition-all duration-200">
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+            </ul>
+          </div>
+          <li className={subBarLinks}>item 1</li>
+          <li className={subBarLinks}>item 1</li>
+          <li className={subBarLinks}>item 1</li>
+          <div className="relative group">
+            <li className={subBarLinks}>item 1</li>
+            <ul className="flex flex-col items-center absolute top-full -left-10 h-0 overflow-hidden group-hover:h-36 bg-mainBlue w-44 transition-all duration-200">
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+              <li className={dropDownLinks}>subitem 1</li>
+            </ul>
+          </div>
+          <li className={subBarLinks}>item 10</li>
         </ul>
       </div>
     </>

@@ -4,6 +4,7 @@ import { API_ROUTE } from "../../config/env.js";
 import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { Navbar } from "../../components/shared/Navbar";
 
 export default function Login() {
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
@@ -49,6 +50,8 @@ export default function Login() {
   };
 
   return (
+    <>
+    <Navbar />
     <div className="grid grid-cols-1 md:grid-cols-2 h-screen w-full overscroll-none	">
       <Toaster
         toastOptions={{
@@ -116,5 +119,6 @@ export default function Login() {
         />
       </div>
     </div>
+    </>
   );
 }

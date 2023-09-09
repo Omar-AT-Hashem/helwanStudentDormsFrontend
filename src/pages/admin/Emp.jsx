@@ -5,13 +5,13 @@ const Emp = () => {
     return (
         <div className=' mt-20 flex flex-row w-full h-screen '  >
             <div className= "bg-gray-800 w-1/5">
-                <div className='  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl'>
+                <div className='  bg- w-full h-10 text-fuchsia-50 text-center text-2xl overflow-scroll'>
                     بيانات اساسية
                 </div>
                 <div className=' flex flex-col'>
                     <form>
                     <div className=' m-1'>
-                <label className='  text-white' for="years">العام الدراسي </label>
+                <label className='  text-white' htmlFor="years">العام الدراسي </label>
                 
                     <select className=' mr-2'  name="years" id="years">
                     <option value="">2022-2023</option>
@@ -20,7 +20,7 @@ const Emp = () => {
                     </select>
                     </div>
                     <div className=' m-1'>
-                    <label className='  text-white ro' for="college"> الكلية</label>
+                    <label className='  text-white ro' htmlFor="college"> الكلية</label>
 
                     <select className=' mx-2'  name="college" id="college">
                     <option value="">الحاسبات والذكاء الاصطناعي</option>
@@ -30,14 +30,14 @@ const Emp = () => {
                     </div>
                     <div className=' text-white'>
                         <input className='mx-2 ' type='radio' id="inuniversity" name="checkInUniversity" value="inuniversity"></input>
-                        <label for="inuniversity">طلاب الجامعة</label>
+                        <label htmlFor="inuniversity">طلاب الجامعة</label>
 
                         <input className=' mx-2' type='radio'  id="outuniversity" name="checkInUniversity" value="outuniversity"></input>
-                        <label for ="outuniversity">من خارج الجامعة</label>
+                        <label htmlFor ="outuniversity">من خارج الجامعة</label>
                      </div> 
                      <div className=' text-white'>
                         <input className=' mx-2' type='radio'id="egyption" name="checkegyption" value="egyption"></input>
-                        <label for ="egyption">مصري</label>
+                        <label htmlFor ="egyption">مصري</label>
 
                         <input className=' mx-2 mr-10' type='radio'id="outegyption" name="checkegyption" value="outegyption"></input>
                         <label for ="outegyption">وافد</label>

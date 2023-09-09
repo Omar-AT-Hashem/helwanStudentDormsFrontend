@@ -6,6 +6,7 @@ export default {
       colors: {
         mainBlue: "#235787",
         mainYellow: "#A9872D",
+
       },
     },
   },
