@@ -1,14 +1,15 @@
+import Footer from "./components/shared/Footer.jsx";
 import { Navbar } from "./components/shared/Navbar.jsx";
-import Login from "./pages/login/login.jsx";
-import { Routes, Route } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Login />} />
-      </Routes>
+          <Navbar />
+          <Outlet />
+          <Footer />
+          
+
     </>
   );
 }
