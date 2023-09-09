@@ -55,7 +55,7 @@ export const routes = createBrowserRouter([
             element: <Asbsenteeism />,
           },
           {
-            path: "/penaltis",
+            path: "/penalties",
             element: <Penalties />,
           },
         ]

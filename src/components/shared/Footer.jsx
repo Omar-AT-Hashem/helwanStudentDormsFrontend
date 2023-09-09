@@ -1,7 +1,7 @@
-import React from 'react';
+
 const Footer = () => {
     return (
-        <div className=' text-center bg-slate-300'>
+        <div className=' text-center bg-slate-300 z-50'>
 
             <div>
             جميع الحقوق محفوظة لوحدة الدعم الإلكتروني  - الادارة العامة لنظم المعلومات والتحول الرقمى  2023 ©
