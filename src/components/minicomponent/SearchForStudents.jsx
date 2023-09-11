@@ -1,12 +1,64 @@
+import React, { useState } from 'react';
 
-// eslint-disable-next-line react/prop-types
-const SearchForStudents = ({setStudent}) => {
+const SearchForStudents = ({ setStudent }) => {
+  
+  const initialStudents = [
+    { name: "shendua", nationality: "egyptian", applicationStatus: "accepted" },
+    { name: "omar", nationality: "egyptian", applicationStatus: "applied" },
+  
+  ];
 
-    const students = ["shendua", "omar","shahira","hana", "mahitab","mariem","student","student","student","student","student","student","student","student","student","student","student","student","student"]
+  // State variables for filters
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedCollege, setSelectedCollege] = useState('');
+  const [selectedNationality, setSelectedNationality] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedFilters, setSelectedFilters] = useState([]);
 
-    const handleStudentClick = (student) => {
-        setStudent({name:student})
+  // State variable for search query
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
+  // State variable to hold the list of students based on filters
+  const [filteredStudents, setFilteredStudents] = useState(initialStudents);
+
+  // Function to apply filters and update filteredStudents
+  const applyFilters = () => {
+    // Implement the logic to filter students based on selected filters
+    let filteredList = initialStudents;
+
+    if (selectedYear) {
+      filteredList = filteredList.filter((student) => student.year === selectedYear);
     }
+
+    if (selectedCollege) {
+      filteredList = filteredList.filter((student) => student.college === selectedCollege);
+    }
+
+    if (selectedNationality) {
+      filteredList = filteredList.filter((student) => student.nationality === selectedNationality);
+    }
+
+    if (selectedStatus) {
+      filteredList = filteredList.filter((student) => student.applicationStatus === selectedStatus);
+    }
+
+    setFilteredStudents(filteredList);
+  };
+
+  // Function to search for students by national ID
+  const searchStudents = () => {
+    // Implement the logic to search for students by national ID
+    const results = filteredStudents.filter((student) =>
+      student.name.includes(searchQuery)
+    );
+    setSearchResults(results);
+  };
+
+  // Function to handle selecting a student
+  const handleStudentClick = (student) => {
+    setStudent({ name: student });
+  };
 
   return (
     <div className="fixed bg-gray-800 flex flex-col w-64 z-30 h-[100vh]">
@@ -131,8 +183,9 @@ const SearchForStudents = ({setStudent}) => {
           ></input>
           <label htmlFor="evacution"> اخلاء</label>
         </div>
+        {/* Search bar */}
         <div>
-          <label className=" text-slate-50 mr-3" htmlFor="nationalId">
+          <label className="text-slate-50 mr-3" htmlFor="nationalId">
             البحث بالرقم القومي
           </label>
           <input
@@ -140,22 +193,50 @@ const SearchForStudents = ({setStudent}) => {
             type="text"
             id="nationalId"
             name="nationalId"
-          ></input>
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {/* Add a "Search" button */}
           <button
-            className=" text-slate-50 mr-2 px-1 border-2 rounded bg-orange-500 hover:bg-lime-900 "
+            className="text-slate-50 mr-2 px-1 border-2 rounded bg-orange-500 hover:bg-lime-900"
             type="button"
-            onClick=""
+            onClick={searchStudents}
           >
-            عرض
+            بحث
           </button>
         </div>
 
+        {/* Add a "تطبيق الفلتر" (Apply Filter) button */}
+        <button
+          className="text-slate-50 mr-2 px-1 border-2 rounded bg-orange-500 hover:bg-lime-900"
+          type="button"
+          onClick={applyFilters}
+        >
+          تطبيق الفلتر
+        </button>
+
         <div className="mr-5 mt-5 h-64 overflow-y-scroll">
-            <ul>
-                {students.map((student, index) => (
-                   <li key={index} className="hover:cursor-pointer hover:bg-mainYellow" onClick={() => handleStudentClick(student)}>{student}</li> 
+          <ul>
+            {searchResults.length > 0
+              ? searchResults.map((student, index) => (
+                  <li
+                    key={index}
+                    className="hover:cursor-pointer hover:bg-mainYellow"
+                    onClick={() => handleStudentClick(student.name)}
+                  >
+                    {student.name}
+                  </li>
+                ))
+              : filteredStudents.map((student, index) => (
+                  <li
+                    key={index}
+                    className="hover:cursor-pointer hover:bg-mainYellow"
+                    onClick={() => handleStudentClick(student.name)}
+                  >
+                    {student.name}
+                  </li>
                 ))}
-            </ul>
+          </ul>
         </div>
       </form>
     </div>
