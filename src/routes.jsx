@@ -11,6 +11,7 @@ import BlockMeals from "./pages/admin/BlockMeals";
 import TaxesStatment from "./pages/admin/TaxesStatment";
 import Asbsenteeism from "./pages/admin/asbsenteeism";
 import Penalties from "./pages/admin/penalties";
+import resom from "./pages/admin/resom"
 export const routes = createBrowserRouter([
     {
 
@@ -57,6 +58,10 @@ export const routes = createBrowserRouter([
           {
             path: "/penalties",
             element: <Penalties />,
+          },
+          {
+            path: "/resom",
+            element: <resom />,
           },
         ]
     },
