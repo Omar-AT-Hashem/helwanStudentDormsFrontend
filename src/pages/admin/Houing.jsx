@@ -5,6 +5,8 @@ const Houing = () => {
     const [student, setStudent] = useState({name: "wrwer"})
   return (
     <div className="pt-16 flex flex-row w-full h-screen ">
+
+      
       <div className="w-64">
         <SearchForStudents setStudent={setStudent} />
       </div>
@@ -15,7 +17,11 @@ const Houing = () => {
         <div className="text-white px-5">{student.name}</div>
       </div>
     </div>
+
+  
   );
 };
+
+
 
 export default Houing;
