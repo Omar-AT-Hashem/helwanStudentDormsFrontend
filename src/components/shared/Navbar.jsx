@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import logo from "../../assets/auxillary/helwanLogo.jpg";
 import { useState } from "react";
 
@@ -32,7 +33,7 @@ export const Navbar = () => {
   return (
     <>
       <nav className="h-16 bg-mainBlue z-50 w-screen fixed ">
-        <div className="flex gap-32 items-center h-full relative z-50">
+        <div className="flex gap-32 items-center h-full relative z-20">
           <div className="h-full">
             <img src={logo} alt="Logo" className="h-full" />
           </div>
@@ -66,12 +67,14 @@ export const Navbar = () => {
         </div>
       </nav>
       <div
-        className={` w-full px-10 text-slate-100 fixed ${
+        className={` w-full px-10 text-slate-100 fixed z-40 ${
           firstLinkClicked ? "top-16" : "top-0"
         }  right-0 bg-mainBlue transition-all duration-200`}
       >
         <ul className="flex h-full items-center">
-          <li className={subBarLinks}>item 1</li>
+          <Link to="/basicdata" className={subBarLinks}>
+            بيانات اساسية
+          </Link>
           <div className="relative group">
             <li className={subBarLinks}>item 1</li>
             <ul className="flex flex-col items-center absolute top-full -left-10 h-0 overflow-hidden group-hover:h-36 bg-mainBlue w-44 transition-all duration-200">
@@ -97,7 +100,7 @@ export const Navbar = () => {
         </ul>
       </div>
       <div
-        className={`fixed w-full px-10 text-slate-100  ${
+        className={`fixed w-full px-10 text-slate-100 z-40  ${
           secondLinkClicked ? "top-16" : "top-0"
         }  right-0 bg-mainBlue transition-all duration-200`}
       >
@@ -128,7 +131,7 @@ export const Navbar = () => {
         </ul>
       </div>
       <div
-        className={`fixed w-full px-10 text-slate-100  ${
+        className={`fixed w-full px-10 text-slate-100 z-40 ${
           thirdLinkClicked ? "top-16" : "top-0"
         }  right-0 bg-mainBlue transition-all duration-200`}
       >
