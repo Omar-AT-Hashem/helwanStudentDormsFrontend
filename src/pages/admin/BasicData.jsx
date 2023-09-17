@@ -41,7 +41,7 @@ const BasicData = () => {
                   </div>
                   <div className="form-group">
                     <label>Student ID:</label>
-                    <p>{selectedStudent["student-id"]}</p>
+                    <span>{selectedStudent["student-id"]}</span>
                   </div>
                   <div className="form-group">
                     <label>National ID:</label>
