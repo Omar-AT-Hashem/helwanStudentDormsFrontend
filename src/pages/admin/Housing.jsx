@@ -1,7 +1,7 @@
 import {useState} from "react";
 import SearchForStudents from "../../components/minicomponent/SearchForStudents";
 
-const Houing = () => {
+const Housing = () => {
     const [student, setStudent] = useState({name: "wrwer"})
   return (
     <div className="pt-16 flex flex-row w-full h-screen ">
@@ -24,4 +24,4 @@ const Houing = () => {
 
 
 
-export default Houing;
+export default Housing;

@@ -4,7 +4,7 @@ import Login from "./pages/login/login";
 import Emp from "./pages/admin/Emp";
 import BasicData from "./pages/admin/BasicData";
 import Taxes from "./pages/admin/Taxes";
-import Houing from "./pages/admin/Houing";
+import Housing from "./pages/admin/Housing";
 import SeparateStudunts from "./pages/admin/SeparateStudunts";
 import Status from "./pages/admin/Status";
 import BlockMeals from "./pages/admin/BlockMeals";
@@ -33,7 +33,7 @@ export const routes = createBrowserRouter([
           },
           {
             path: "/housing",
-            element: <Houing />,
+            element: <Housing />,
           },
           {
             path: "/separateStudunts",

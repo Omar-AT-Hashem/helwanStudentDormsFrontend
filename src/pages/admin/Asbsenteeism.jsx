@@ -79,7 +79,7 @@ const Asbsenteeism = () => {
                                         <tr>
                                            <th className="px-4 py-2">النوع</th>
                                            <th className="px-4 py-2">من تاريخ</th>
-                                           <th className="px-4 py-2" >حتى تاريخ<button class="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2">اضافه</button></th>
+                                           <th className="px-4 py-2" >حتى تاريخ<button className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2">اضافه</button></th>
                                         </tr>
                                       </thead>
                                       <tbody>
