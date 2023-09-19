@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
-import SearchForStudents from '../../components/minicomponent/SearchForStudents';
+import React, { useState } from "react";
+import SearchForStudents from "../../components/minicomponent/SearchForStudents";
 
 const BasicData = () => {
   // State to store the selected student's data
-  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState(true);
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen">
       {/* Sidebar with student search */}
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            border: "1px solid #A9872D",
+            backgroundColor: "#A9872D",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
       <div className="w-64">
         {/* Pass setSelectedStudent function to SearchForStudents to update selected student */}
         <SearchForStudents setSelectedStudent={setSelectedStudent} />
@@ -20,7 +34,7 @@ const BasicData = () => {
         </div>
         <div className="text-white px-5">
           {/* Conditional rendering based on whether a student is selected */}
-          {selectedStudent ? (
+          {selectedStudentData ? (
             // Display student details when a student is selected
             <div className="person-details">
               {/* Student image */}
@@ -29,7 +43,7 @@ const BasicData = () => {
               </div>
               {/* Student information */}
               <div className="person-info">
-                <h2>{selectedStudent.name}</h2>
+                <h2>{selectedStudentData.name}</h2>
                 {/* Student details form */}
                 <form>
                   <div className="form-group">
@@ -38,31 +52,31 @@ const BasicData = () => {
                   </div>
                   <div className="form-group">
                     <label>Student ID:</label>
-                    <p>{selectedStudent['student-id']}</p>
+                    <span>{selectedStudent["student-id"]}</span>
                   </div>
                   <div className="form-group">
                     <label>National ID:</label>
-                    <p>{selectedStudent['national-id']}</p>
+                    <p>{selectedStudent["national-id"]}</p>
                   </div>
                   <div className="form-group">
                     <label>Email:</label>
-                    <p>{selectedStudent.email}</p>
+                    <p>{selectedStudentData.email}</p>
                   </div>
                   <div className="form-group">
                     <label>Mobile Number:</label>
-                    <p>{selectedStudent['mobile-number']}</p>
+                    <p>{selectedStudent["mobile-number"]}</p>
                   </div>
                   <div className="form-group">
                     <label>Religion:</label>
-                    <p>{selectedStudent.religion}</p>
+                    <p>{selectedStudentData.religion}</p>
                   </div>
                   <div className="form-group">
                     <label>Father's Name:</label>
-                    <p>{selectedStudent['father-name']}</p>
+                    <p>{selectedStudent["father-name"]}</p>
                   </div>
                   <div className="form-group">
                     <label>Father's National ID:</label>
-                    <p>{selectedStudent['father-national-id']}</p>
+                    <p>{selectedStudent["father-national-id"]}</p>
                   </div>
                   <div className="form-group">
                     <label>Father's Job:</label>

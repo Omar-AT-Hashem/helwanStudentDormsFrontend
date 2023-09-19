@@ -1,26 +1,30 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from "react";
+import { API_ROUTE } from "../../config/env.js";
+import axios from "axios";
 
-const SearchForStudents = ({ setStudent }) => {
-  
-  const initialStudents = [
-    { name: "shendua", nationality: "egyptian", applicationStatus: "accepted" },
-    { name: "omar", nationality: "egyptian", applicationStatus: "applied" },
-  
-  ];
-
+const SearchForStudents = ({ setSelectedStudent }) => {
   // State variables for filters
-  const [selectedYear, setSelectedYear] = useState('');
-  const [selectedCollege, setSelectedCollege] = useState('');
-  const [selectedNationality, setSelectedNationality] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedYear, setSelectedYear] = useState("");
+  const [selectedCollege, setSelectedCollege] = useState("");
+  const [selectedNationality, setSelectedNationality] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [initialStudents, setInitialStudents] = useState();
 
   // State variable for search query
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
   // State variable to hold the list of students based on filters
   const [filteredStudents, setFilteredStudents] = useState(initialStudents);
+
+  useEffect(() => {
+    axios
+      .get(`${API_ROUTE}/employee/students`)
+      .then((res) => setInitialStudents(res.data));
+  }, []);
+
+
 
   // Function to apply filters and update filteredStudents
   const applyFilters = () => {
@@ -28,19 +32,27 @@ const SearchForStudents = ({ setStudent }) => {
     let filteredList = initialStudents;
 
     if (selectedYear) {
-      filteredList = filteredList.filter((student) => student.year === selectedYear);
+      filteredList = filteredList.filter(
+        (student) => student.year === selectedYear
+      );
     }
 
     if (selectedCollege) {
-      filteredList = filteredList.filter((student) => student.college === selectedCollege);
+      filteredList = filteredList.filter(
+        (student) => student.college === selectedCollege
+      );
     }
 
     if (selectedNationality) {
-      filteredList = filteredList.filter((student) => student.nationality === selectedNationality);
+      filteredList = filteredList.filter(
+        (student) => student.nationality === selectedNationality
+      );
     }
 
     if (selectedStatus) {
-      filteredList = filteredList.filter((student) => student.applicationStatus === selectedStatus);
+      filteredList = filteredList.filter(
+        (student) => student.applicationStatus === selectedStatus
+      );
     }
 
     setFilteredStudents(filteredList);
@@ -56,8 +68,8 @@ const SearchForStudents = ({ setStudent }) => {
   };
 
   // Function to handle selecting a student
-  const handleStudentClick = (student) => {
-    setStudent({ name: student });
+  const handleStudentClick = (studentId) => {
+    setSelectedStudent(studentId );
   };
 
   return (
@@ -218,20 +230,20 @@ const SearchForStudents = ({ setStudent }) => {
         <div className="mr-5 mt-5 h-64 overflow-y-scroll">
           <ul>
             {searchResults.length > 0
-              ? searchResults.map((student, index) => (
+              ? searchResults && searchResults.map((student, index) => (
                   <li
                     key={index}
                     className="hover:cursor-pointer hover:bg-mainYellow"
-                    onClick={() => handleStudentClick(student.name)}
+                    onClick={() => handleStudentClick(student.id)}
                   >
                     {student.name}
                   </li>
                 ))
-              : filteredStudents.map((student, index) => (
+              : filteredStudents && filteredStudents.map((student, index) => (
                   <li
                     key={index}
                     className="hover:cursor-pointer hover:bg-mainYellow"
-                    onClick={() => handleStudentClick(student.name)}
+                    onClick={() => handleStudentClick(student.id)}
                   >
                     {student.name}
                   </li>

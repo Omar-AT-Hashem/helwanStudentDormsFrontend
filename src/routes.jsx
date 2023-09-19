@@ -11,7 +11,8 @@ import BlockMeals from "./pages/admin/BlockMeals";
 import TaxesStatment from "./pages/admin/TaxesStatment";
 import Asbsenteeism from "./pages/admin/asbsenteeism";
 import Penalties from "./pages/admin/penalties";
-import resom from "./pages/admin/resom"
+import resom from "./pages/admin/resom";
+import IdCardGenerator from "./pages/admin/IdCardGenerator"
 export const routes = createBrowserRouter([
     {
 
@@ -51,10 +52,15 @@ export const routes = createBrowserRouter([
             path: "/taxesstatment",
             element: <TaxesStatment />,
           },
+           {
+            path: "/IdCardGenerator",
+            element: <IdCardGenerator />,
+          },       
           {
             path: "/asbsenteeism",
             element: <Asbsenteeism />,
           },
+        
           {
             path: "/penalties",
             element: <Penalties />,
