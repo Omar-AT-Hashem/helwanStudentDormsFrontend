@@ -11,6 +11,8 @@ import BlockMeals from "./pages/admin/BlockMeals";
 import TaxesStatment from "./pages/admin/TaxesStatment";
 import Asbsenteeism from "./pages/admin/asbsenteeism";
 import Penalties from "./pages/admin/penalties";
+import WhenToApply from "./pages/admin/WhenToApply";
+import InstructionsViewer from "./pages/admin/InstructionsViewer"
 import resom from "./pages/admin/resom";
 import IdCardGenerator from "./pages/admin/IdCardGenerator"
 export const routes = createBrowserRouter([
@@ -23,7 +25,14 @@ export const routes = createBrowserRouter([
             path: "/emp",
             element: <Emp />,
           },
-        
+         {
+            path: "/instructionsViewer",
+            element: <InstructionsViewer />,
+          },
+         {
+            path: "/ whenToApply ",
+            element: < WhenToApply />,
+          },
           {
             path: "/basicdata",
             element: <BasicData />,
