@@ -20,11 +20,13 @@ const SearchForStudents = ({ setSelectedStudent }) => {
 
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/employee/students`)
+      .get(`${API_ROUTE}/employee/students`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
+      })
       .then((res) => setInitialStudents(res.data));
   }, []);
-
-
 
   // Function to apply filters and update filteredStudents
   const applyFilters = () => {
@@ -69,7 +71,7 @@ const SearchForStudents = ({ setSelectedStudent }) => {
 
   // Function to handle selecting a student
   const handleStudentClick = (studentId) => {
-    setSelectedStudent(studentId );
+    setSelectedStudent(studentId);
   };
 
   return (
@@ -230,7 +232,8 @@ const SearchForStudents = ({ setSelectedStudent }) => {
         <div className="mr-5 mt-5 h-64 overflow-y-scroll">
           <ul>
             {searchResults.length > 0
-              ? searchResults && searchResults.map((student, index) => (
+              ? searchResults &&
+                searchResults.map((student, index) => (
                   <li
                     key={index}
                     className="hover:cursor-pointer hover:bg-mainYellow"
@@ -239,7 +242,8 @@ const SearchForStudents = ({ setSelectedStudent }) => {
                     {student.name}
                   </li>
                 ))
-              : filteredStudents && filteredStudents.map((student, index) => (
+              : filteredStudents &&
+                filteredStudents.map((student, index) => (
                   <li
                     key={index}
                     className="hover:cursor-pointer hover:bg-mainYellow"

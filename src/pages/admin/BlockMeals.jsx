@@ -1,8 +1,7 @@
 import { useState } from "react";
 import SearchForStudents from "../../components/minicomponent/SearchForStudents";
 import Records from "../../assets/fakeData/Records.json";
-import holidayData from "../../assets/fakeDaTA/holidatData.json";
-import React from "react";
+
 
 const BlockMeals = () => {
   const [student, setStudent] = useState({ name: "wrwer" });

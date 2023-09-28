@@ -11,7 +11,11 @@ const BasicData = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/employee/students/get-by-id/${selectedStudent}`,)
+      .get(`${API_ROUTE}/employee/students/get-by-id/${selectedStudent}`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        }
+      })
       .then((res) => {
         return setSelectedStudentData(res.data);
       })
