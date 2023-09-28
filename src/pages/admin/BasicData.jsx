@@ -11,9 +11,7 @@ const BasicData = () => {
 
   useEffect(() => {
     axios
-      .post(`${API_ROUTE}/employee/students/get-by-id`, {
-        studentId: selectedStudent,
-      })
+      .get(`${API_ROUTE}/employee/students/get-by-id/${selectedStudent}`,)
       .then((res) => {
         return setSelectedStudentData(res.data);
       })
@@ -26,7 +24,6 @@ const BasicData = () => {
       });
   }, [selectedStudent]);
 
-  console.log(selectedStudentData);
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen">
@@ -82,7 +79,7 @@ const BasicData = () => {
                   </div>
                   <div className="form-group">
                     <label>National ID:</label>
-                    <p>{selectedStudentData.nationalNumber}</p>
+                    <p>{selectedStudentData.nationalId}</p>
                   </div>
                   <div className="form-group">
                     <label>Email:</label>
@@ -102,7 +99,7 @@ const BasicData = () => {
                   </div>
                   <div className="form-group">
                     <label>Father's National ID:</label>
-                    <p>{selectedStudentData.fatherNationalNumber}</p>
+                    <p>{selectedStudentData.fatherNationalId}</p>
                   </div>
                   <div className="form-group">
                     <label>Father's Job:</label>
@@ -146,7 +143,7 @@ const BasicData = () => {
                   </div>
                   <div className="form-group">
                     <label>Disabled:</label>
-                    <p>{selectedStudent.disabled ? "Yes" : "No"}</p>
+                    <p>{selectedStudentData.disabled ? "Yes" : "No"}</p>
                   </div>
                   <div className="form-group">
                     <label>Family Abroad:</label>
@@ -184,3 +181,6 @@ const BasicData = () => {
 };
 
 export default BasicData;
+
+
+
