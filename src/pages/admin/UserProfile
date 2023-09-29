@@ -99,7 +99,7 @@ function UserProfile({ nationalId }) {
         <div>
           <label htmlFor="image">Image:</label>
           <input
-            type="text"
+            type="file"
             value={userData.image}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, image: e.target.value })}
@@ -128,7 +128,7 @@ function UserProfile({ nationalId }) {
         <div>
           <label htmlFor="mobile">Mobile:</label>
           <input
-            type="number"
+            type="text"
             value={userData.mobile}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, mobile: e.target.value })}
@@ -188,7 +188,7 @@ function UserProfile({ nationalId }) {
         <div>
           <label htmlFor="fatherNationalId">Father's National Id:</label>
           <input
-            type="text"
+            type="number"
             value={userData.fatherNationalId}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, fatherNationalId: e.target.value })}
@@ -198,7 +198,7 @@ function UserProfile({ nationalId }) {
         <div>
           <label htmlFor="fatherNumber">Father's Phone Number:</label>
           <input
-            type="number"
+            type="text"
             value={userData.fatherNumber}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, fatherNumber: e.target.value })}
@@ -270,7 +270,7 @@ function UserProfile({ nationalId }) {
           <input
             type="text"
             value={userData.applicationStatus}
-            readOnly={!isEditable}
+            readOnly
             onChange={(e) => setUserData({ ...userData, applicationStatus: e.target.value })}
             id="applicationStatus"
           />
