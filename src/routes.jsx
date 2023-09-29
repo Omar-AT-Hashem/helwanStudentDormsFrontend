@@ -13,6 +13,7 @@ import Asbsenteeism from "./pages/admin/asbsenteeism";
 import Penalties from "./pages/admin/penalties";
 import WhenToApply from "./pages/admin/WhenToApply";
 import UserProfile from "./pages/admin/UserProfile";
+import StudentApplicationForm from "./pages/admin/StudentApplicationForm";
 import InstructionsViewer from "./pages/admin/InstructionsViewer"
 import resom from "./pages/admin/resom";
 import IdCardGenerator from "./pages/admin/IdCardGenerator"
@@ -33,6 +34,10 @@ export const routes = createBrowserRouter([
          {
             path: "/ whentoapply ",
             element: < WhenToApply />,
+          },
+         {
+            path: "/ studentapplicationform ",
+            element: < StudentApplicationForm />,
           },
           {
             path: "/ userprofile ",
