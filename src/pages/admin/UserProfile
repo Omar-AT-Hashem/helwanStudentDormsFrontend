@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 function UserProfile({ nationalId }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isEditable, setIsEditable] = useState(false); // Initialize as not editable
+  const [isEditable, setIsEditable] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
   // State variables for user data
@@ -30,8 +30,10 @@ function UserProfile({ nationalId }) {
     applicationStatus: '',
   });
 
+  // State variable to track the selected image file
+  const [selectedImage, setSelectedImage] = useState(null);
+
   useEffect(() => {
-    // Fetch user data with JWT token in headers
     axios
       .get(`${process.env.VITE_API_ROUTE}/user/${nationalId}`, {
         headers: {
@@ -40,7 +42,7 @@ function UserProfile({ nationalId }) {
       })
       .then((response) => {
         setUser(response.data);
-        setUserData(response.data); // Set user data in state
+        setUserData(response.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -49,9 +51,23 @@ function UserProfile({ nationalId }) {
       });
   }, [nationalId]);
 
+  // Function to handle the image selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]; // Get the first selected file
+
+    // Set the selected image file
+    setSelectedImage(file);
+
+    // Display a preview of the selected image
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setUserData({ ...userData, image: e.target.result });
+    };
+    reader.readAsDataURL(file);
+  };
+
   // Function to handle the Save button click
   const handleSaveClick = () => {
-    // Clear any previous error messages
     setErrorMessage(null);
 
     // Create an object with the updated user data based on the form fields
@@ -75,6 +91,11 @@ function UserProfile({ nationalId }) {
       apartmentType: userData.apartmentType,
       applicationStatus: userData.applicationStatus,
     };
+
+    // If a new image is selected, update the 'image' property in the user data
+    if (selectedImage) {
+      updatedUserData.image = selectedImage;
+    }
 
     axios
       .put(`${process.env.VITE_API_ROUTE}/user/update/${nationalId}`, updatedUserData, {
@@ -100,11 +121,19 @@ function UserProfile({ nationalId }) {
           <label htmlFor="image">Image:</label>
           <input
             type="file"
-            value={userData.image}
-            readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, image: e.target.value })}
+            accept="image/*"
+            onChange={handleImageChange}
             id="image"
+            style={{ display: 'none' }} // Hide the file input
           />
+          <img
+            src={userData.image || user.image}
+            alt="User's Profile"
+            style={{ maxWidth: '200px' }}
+          />
+          {isEditable && (
+            <button onClick={() => document.getElementById('image').click()}>Select Image</button>
+          )}
         </div>
         <div>
           <label htmlFor="nationalId">National ID:</label>
@@ -125,10 +154,10 @@ function UserProfile({ nationalId }) {
             id="name"
           />
         </div>
-        <div>
+      <div>
           <label htmlFor="mobile">Mobile:</label>
           <input
-            type="text"
+            type="number"
             value={userData.mobile}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, mobile: e.target.value })}
@@ -188,7 +217,7 @@ function UserProfile({ nationalId }) {
         <div>
           <label htmlFor="fatherNationalId">Father's National Id:</label>
           <input
-            type="number"
+            type="text"
             value={userData.fatherNationalId}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, fatherNationalId: e.target.value })}
@@ -198,7 +227,7 @@ function UserProfile({ nationalId }) {
         <div>
           <label htmlFor="fatherNumber">Father's Phone Number:</label>
           <input
-            type="text"
+            type="number"
             value={userData.fatherNumber}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, fatherNumber: e.target.value })}
@@ -270,7 +299,7 @@ function UserProfile({ nationalId }) {
           <input
             type="text"
             value={userData.applicationStatus}
-            readOnly
+            readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, applicationStatus: e.target.value })}
             id="applicationStatus"
           />
@@ -279,14 +308,14 @@ function UserProfile({ nationalId }) {
         {user &&
           (user.applicationStatus !== 'accepted' &&
             user.applicationStatus !== 'reviewed') && (
-            <div>
-              {isEditable ? (
-                <button onClick={handleSaveClick}>Save</button>
-              ) : (
-                <button onClick={() => setIsEditable(true)}>Edit</button>
-              )}
-            </div>
-          )}
+              <div>
+                {isEditable ? (
+                  <button onClick={handleSaveClick}>Save</button>
+                ) : (
+                    <button onClick={() => setIsEditable(true)}>Edit</button>
+                  )}
+              </div>
+            )}
       </form>
     </div>
   );
