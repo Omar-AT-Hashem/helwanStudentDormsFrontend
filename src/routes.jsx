@@ -32,16 +32,16 @@ export const routes = createBrowserRouter([
             element: <InstructionsViewer />,
           },
          {
-            path: "/ whentoapply ",
-            element: < WhenToApply />,
+            path: "/whentoapply ",
+            element: <WhenToApply />,
           },
          {
-            path: "/ studentapplicationform ",
-            element: < StudentApplicationForm />,
+            path: "/studentapplicationform ",
+            element: <StudentApplicationForm />,
           },
           {
-            path: "/ userprofile ",
-            element: < UserProfile />,
+            path: "/userprofile ",
+            element: <UserProfile />,
           },
           {
             path: "/basicdata",
