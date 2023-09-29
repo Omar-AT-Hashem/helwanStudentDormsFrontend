@@ -196,43 +196,43 @@ function UserProfile({ nationalId }) {
           />
         </div>
         <div>
-          <label htmlFor="father-number">Father's Phone Number:</label>
+          <label htmlFor="fatherNumber">Father's Phone Number:</label>
           <input
             type="number"
             value={userData.fatherNumber}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, fatherNumber: e.target.value })}
-            id="father-number"
+            id="fatherNumber"
           />
         </div>
         <div>
-          <label htmlFor="father-job">Father's Job:</label>
+          <label htmlFor="fatherJob">Father's Job:</label>
           <input
             type="text"
             value={userData.fatherJob}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, fatherJob: e.target.value })}
-            id="father-job"
+            id="fatherJob"
           />
         </div>
         <div>
-          <label htmlFor="guardian-name">Guardian Name:</label>
+          <label htmlFor="guardianName">Guardian Name:</label>
           <input
             type="text"
             value={userData.guardianName}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, guardianName: e.target.value })}
-            id="guardian-name"
+            id="guardianName"
           />
         </div>
         <div>
-          <label htmlFor="guardian-relationship">Guardian Relationship:</label>
+          <label htmlFor="guardianRelationship">Guardian Relationship:</label>
           <input
             type="text"
             value={userData.guardianRelationship}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, guardianRelationship: e.target.value })}
-            id="guardian-relationship"
+            id="guardianRelationship"
           />
         </div>
         <div>
@@ -246,23 +246,23 @@ function UserProfile({ nationalId }) {
           />
         </div>
         <div>
-          <label htmlFor="family-abroad">Family Abroad:</label>
+          <label htmlFor="familyAbroad">Family Abroad:</label>
           <input
             type="checkbox"
             checked={userData.familyAbroad}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, familyAbroad: e.target.checked })}
-            id="family-abroad"
+            id="familyAbroad"
           />
         </div>
         <div>
-          <label htmlFor="apartment-type">Apartment Type:</label>
+          <label htmlFor="apartmentType">Apartment Type:</label>
           <input
             type="text"
             value={userData.apartmentType}
             readOnly={!isEditable}
             onChange={(e) => setUserData({ ...userData, apartmentType: e.target.value })}
-            id="apartment-type"
+            id="apartmentType"
           />
         </div>
         <div>
