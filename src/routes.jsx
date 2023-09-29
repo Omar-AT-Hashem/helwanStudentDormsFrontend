@@ -12,6 +12,7 @@ import TaxesStatment from "./pages/admin/TaxesStatment";
 import Asbsenteeism from "./pages/admin/asbsenteeism";
 import Penalties from "./pages/admin/penalties";
 import WhenToApply from "./pages/admin/WhenToApply";
+import UserProfile from "./pages/admin/UserProfile";
 import InstructionsViewer from "./pages/admin/InstructionsViewer"
 import resom from "./pages/admin/resom";
 import IdCardGenerator from "./pages/admin/IdCardGenerator"
@@ -26,12 +27,16 @@ export const routes = createBrowserRouter([
             element: <Emp />,
           },
          {
-            path: "/instructionsViewer",
+            path: "/instructionsviewer",
             element: <InstructionsViewer />,
           },
          {
-            path: "/ whenToApply ",
+            path: "/ whentoapply ",
             element: < WhenToApply />,
+          },
+          {
+            path: "/ userprofile ",
+            element: < UserProfile />,
           },
           {
             path: "/basicdata",
@@ -62,7 +67,7 @@ export const routes = createBrowserRouter([
             element: <TaxesStatment />,
           },
            {
-            path: "/IdCardGenerator",
+            path: "/idcardgenerator",
             element: <IdCardGenerator />,
           },       
           {
