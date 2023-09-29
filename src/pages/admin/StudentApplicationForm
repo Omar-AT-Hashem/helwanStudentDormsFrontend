@@ -1,0 +1,330 @@
+
+import React, { useState } from 'react';
+
+function StudentApplicationForm() {
+  const [formData, setFormData] = useState({
+    nationalId: '',
+    name: '',
+    image: null, 
+    mobile: '',
+    email: '',
+    address: '',
+    religion: '',
+    collage: '',
+    fatherName: '',
+    fatherNationalId: '',
+    fatherJob: '',
+    fatherNumber: '',
+    guardianName: '',
+    guardianRelationship: '',
+    residence: '',
+    addressDetails: '',
+    dateOfApplying: '', 
+    isDisabled: false, 
+    familyAbroad: false, 
+    apartmentType: '',
+    password: '',
+  });
+
+  const [formError, setFormError] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
+    });
+  };
+const handleImageChange = (e) => {
+  const file = e.target.files[0];
+  setFormData({
+    ...formData,
+    image: file,
+  });
+};
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Send formData to your backend API to insert into the database and create an account
+    try {
+      const response = await fetch('/api/student-application', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        // Reset the form and show a success message
+        setFormData({
+          nationalId: '',
+          name: '',
+          image: '',
+          mobile: '',
+          email: '',
+          address: '',
+          religion: '',
+          collage: '',
+          fatherName: '',
+          fatherNationalId: '',
+          fatherJob: '',
+          fatherNumber: '',
+          guardianName: '',
+          guardianRelationship: '',
+          residence: '',
+          addressDetails: '',
+          dateOfApplying: '',
+          isDisabled: false,
+          familyAbroad: false,
+          apartmentType: '',
+          password: '',
+        });
+        setFormError(null);
+        alert('Application submitted successfully!');
+      } else {
+        const data = await response.json();
+        setFormError(data.error);
+      }
+    } catch (error) {
+      console.error('Error submitting the form:', error);
+      setFormError('An error occurred while submitting the form.');
+    }
+  };
+
+  return (
+    <div>
+      <h1>Student Application Form</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          National ID:
+          <input
+            type="number"
+            name="nationalId"
+            value={formData.nationalId}
+            onChange={handleChange}
+            required
+          />
+        </label>
+      <label>
+        Image:
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          onChange={handleImageChange} 
+        />
+      </label>
+
+        <label>
+          Name:
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </label>
+
+        <label>
+          Mobile:
+          <input
+            type="text"
+            name="mobile"
+            value={formData.mobile}
+            onChange={handleChange}
+            required
+          />
+        </label>
+
+        <label>
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label>
+          Address:
+          <textarea
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            required
+          />
+        </label>
+        <label>
+        Religion:
+        <input
+          type="text"
+          name="religion"
+          value={formData.religion}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        College:
+        <input
+          type="text"
+          name="collage"
+          value={formData.collage}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Father's Name:
+        <input
+          type="text"
+          name="fatherName"
+          value={formData.fatherName}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Father's National ID:
+        <input
+          type="number"
+          name="fatherNationalId"
+          value={formData.fatherNationalId}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Father's Job:
+        <input
+          type="text"
+          name="fatherJob"
+          value={formData.fatherJob}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Father's Phone Number:
+        <input
+          type="text"
+          name="fatherNumber"
+          value={formData.fatherNumber}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Guardian's Name:
+        <input
+          type="text"
+          name="guardianName"
+          value={formData.guardianName}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Guardian's Relationship:
+        <input
+          type="text"
+          name="guardianRelationship"
+          value={formData.guardianRelationship}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Residence:
+        <input
+          type="text"
+          name="residence"
+          value={formData.residence}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Address Details:
+        <textarea
+          name="addressDetails"
+          value={formData.addressDetails}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Date of Applying:
+        <input
+          type="date"
+          name="dateOfApplying"
+          value={formData.dateOfApplying}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Disabled:
+        <input
+          type="checkbox"
+          name="isDisabled"
+          checked={formData.isDisabled}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label>
+        Family Abroad:
+        <input
+          type="checkbox"
+          name="familyAbroad"
+          checked={formData.familyAbroad}
+          onChange={handleChange}
+        />
+      </label>
+
+      <label>
+        Apartment Type:
+        <input
+          type="text"
+          name="apartmentType"
+          value={formData.apartmentType}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+      <label>
+        Password:
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+      </label>
+
+        <button type="submit">Submit</button>
+      </form>
+    {formError && <p className="error">{formError}</p>}
+    </div>
+  );
+}
+
+export default StudentApplicationForm;
