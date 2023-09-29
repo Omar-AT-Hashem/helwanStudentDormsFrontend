@@ -31,7 +31,7 @@ function SearchByNationalId() {
   return (
     <div>
       <h1>Search by National ID</h1>
-      {/* Input field for entering the national ID as a number */}
+      {/* Input field for entering the national ID */}
       <input
         type="number"
         placeholder="Enter National ID"
