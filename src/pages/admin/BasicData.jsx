@@ -19,13 +19,13 @@ const BasicData = () => {
       .then((res) => {
         return setSelectedStudentData(res.data);
       })
-      .catch((err) => {
-        if (err.code == "ERR_BAD_REQUEST") {
-          return;
-        }
-        toast.dismiss();
-        return toast("Something went wrong");
-      });
+.catch((err) => {
+  if (err && err.code === "ERR_BAD_REQUEST") {
+    return;
+  }
+  toast.dismiss();
+  return toast("Something went wrong");
+});
   }, [selectedStudent]);
 
 
