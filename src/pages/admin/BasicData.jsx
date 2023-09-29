@@ -75,7 +75,7 @@ const BasicData = () => {
                 <form>
                   <div className="form-group">
                     <label>Date of Applying:</label>
-                    <p>{selectedStudent["date-of-applying"]}</p>
+                    <p>{selectedStudent.dateOfApplying}</p>
                   </div>
                   <div className="form-group">
                     <label>Student ID:</label>
@@ -107,19 +107,19 @@ const BasicData = () => {
                   </div>
                   <div className="form-group">
                     <label>Father's Job:</label>
-                    <p>{selectedStudent["father-job"]}</p>
+                    <p>{selectedStudent.fatherJob}</p>
                   </div>
                   <div className="form-group">
                     <label>Father's Number:</label>
-                    <p>{selectedStudent["father-number"]}</p>
+                    <p>{selectedStudent.fatherNumber}</p>
                   </div>
                   <div className="form-group">
                     <label>Guardian's Name:</label>
-                    <p>{selectedStudent["guardian-name"]}</p>
+                    <p>{selectedStudent.guardianName}</p>
                   </div>
                   <div className="form-group">
                     <label>Guardian's Relationship:</label>
-                    <p>{selectedStudent["guardian-relationship"]}</p>
+                    <p>{selectedStudent.guardianRelationship}</p>
                   </div>
                   <div className="form-group">
                     <label>Residence:</label>
@@ -127,7 +127,7 @@ const BasicData = () => {
                   </div>
                   <div className="form-group">
                     <label>Address Details:</label>
-                    <p>{selectedStudent["address-details"]}</p>
+                    <p>{selectedStudent.addressDetails}</p>
                   </div>
                   <div className="form-group">
                     <label>College:</label>
@@ -143,7 +143,7 @@ const BasicData = () => {
                   </div>
                   <div className="form-group">
                     <label>Apartment Type:</label>
-                    <p>{selectedStudent["apartment-type"]}</p>
+                    <p>{selectedStudent.apartmentType}</p>
                   </div>
                   <div className="form-group">
                     <label>Disabled:</label>
@@ -151,21 +151,21 @@ const BasicData = () => {
                   </div>
                   <div className="form-group">
                     <label>Family Abroad:</label>
-                    <p>{selectedStudent["family-abroad"] ? "Yes" : "No"}</p>
+                    <p>{selectedStudent.familyAbroad ? "Yes" : "No"}</p>
                   </div>
                   <div className="form-group">
                     <label>No Food:</label>
-                    <p>{selectedStudent["no-food"] ? "Yes" : "No"}</p>
+                    <p>{selectedStudent.noFood ? "Yes" : "No"}</p>
                   </div>
                   <div className="form-group">
                     <label>Exempt from Expenses:</label>
                     <p>
-                      {selectedStudent["exempt-from-expenses"] ? "Yes" : "No"}
+                      {selectedStudent.exemptFromExpenses ? "Yes" : "No"}
                     </p>
                   </div>
                   <div className="form-group">
                     <label>Application Status:</label>
-                    <p>{selectedStudent["application-status"]}</p>
+                    <p>{selectedStudent.applicationStatus}</p>
                   </div>
                   <div className="form-group">
                     <label>Notes:</label>
