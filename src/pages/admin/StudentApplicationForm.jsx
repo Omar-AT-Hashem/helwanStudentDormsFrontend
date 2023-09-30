@@ -20,7 +20,6 @@ function StudentApplicationForm() {
     guardianRelationship: "",
     residence: "",
     addressDetails: "",
-    dateOfApplying: "",
     isDisabled: false,
     familyAbroad: false,
     apartmentType: "",
@@ -51,61 +50,60 @@ function StudentApplicationForm() {
     e.preventDefault();
 
     // Send formData to your backend API to insert into the database and create an account
-    
-      const form = new FormData();
-      form.set("image", formData.image);
-      form.set("nationalId", formData.nationalId);
-      form.set("name", formData.name);
-      form.set("mobile", formData.mobile);
-      form.set("email", formData.email);
-      form.set("religion", formData.religion);
-      form.set("address", formData.address);
-      form.set("faculty", formData.faculty);
-      form.set("fatherName", formData.fatherName);
-      form.set("fatherNationalId", formData.fatherNationalId);
-      form.set("fatherOccupation", formData.fatherOccupation);
-      form.set("fatherNumber", formData.fatherNumber);
-      form.set("guardianName", formData.guardianName);
-      form.set("guardianRelationship", formData.guardianRelationship);
-      form.set("residence", formData.residence);
-      form.set("addressDetails", formData.addressDetails);
-      form.set("dateOfApplying", formData.dateOfApplying);
-      form.set("isDisabled", formData.isDisabled);
-      form.set("familyAbroad", formData.familyAbroad);
-      form.set("apartmentType", formData.apartmentType);
-      form.set("password", formData.password);
 
-      axios
-        .post(`${API_ROUTE}/student/register`, form)
-        .then((res) => {
-          // setFormData({
-          //   nationalId: "",
-          //   name: "",
-          //   image: "",
-          //   mobile: "",
-          //   email: "",
-          //   address: "",
-          //   religion: "",
-          //   faculty: "",
-          //   fatherName: "",
-          //   fatherNationalId: "",
-          //   fatherOccupation: "",
-          //   fatherNumber: "",
-          //   guardianName: "",
-          //   guardianRelationship: "",
-          //   residence: "",
-          //   addressDetails: "",
-          //   dateOfApplying: "",
-          //   isDisabled: 0,
-          //   familyAbroad: 0,
-          //   apartmentType: "",
-          //   password: "",
-          // });
-          setFormError(null);
-          alert("Application submitted successfully!");
-        }).catch(err => {
-          console.log(err);
-        })
+    const form = new FormData();
+    form.set("image", formData.image);
+    form.set("nationalId", formData.nationalId);
+    form.set("name", formData.name);
+    form.set("mobile", formData.mobile);
+    form.set("email", formData.email);
+    form.set("religion", formData.religion);
+    form.set("address", formData.address);
+    form.set("faculty", formData.faculty);
+    form.set("fatherName", formData.fatherName);
+    form.set("fatherNationalId", formData.fatherNationalId);
+    form.set("fatherOccupation", formData.fatherOccupation);
+    form.set("fatherNumber", formData.fatherNumber);
+    form.set("guardianName", formData.guardianName);
+    form.set("guardianRelationship", formData.guardianRelationship);
+    form.set("residence", formData.residence);
+    form.set("addressDetails", formData.addressDetails);
+    form.set("isDisabled", formData.isDisabled);
+    form.set("familyAbroad", formData.familyAbroad);
+    form.set("apartmentType", formData.apartmentType);
+    form.set("password", formData.password);
+
+    axios
+      .post(`${API_ROUTE}/student/register`, form)
+      .then((res) => {
+        // setFormData({
+        //   nationalId: "",
+        //   name: "",
+        //   image: "",
+        //   mobile: "",
+        //   email: "",
+        //   address: "",
+        //   religion: "",
+        //   faculty: "",
+        //   fatherName: "",
+        //   fatherNationalId: "",
+        //   fatherOccupation: "",
+        //   fatherNumber: "",
+        //   guardianName: "",
+        //   guardianRelationship: "",
+        //   residence: "",
+        //   addressDetails: "",
+        //   isDisabled: 0,
+        //   familyAbroad: 0,
+        //   apartmentType: "",
+        //   password: "",
+        // });
+        setFormError(null);
+        alert("Application submitted successfully!");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -277,17 +275,6 @@ function StudentApplicationForm() {
           <textarea
             name="addressDetails"
             value={formData.addressDetails}
-            onChange={handleChange}
-            required
-          />
-        </label>
-
-        <label>
-          Date of Applying:
-          <input
-            type="date"
-            name="dateOfApplying"
-            value={formData.dateOfApplying}
             onChange={handleChange}
             required
           />
