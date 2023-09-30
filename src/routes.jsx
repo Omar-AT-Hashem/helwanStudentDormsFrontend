@@ -15,7 +15,7 @@ import WhenToApply from "./pages/admin/WhenToApply";
 import UserProfile from "./pages/admin/UserProfile";
 import StudentApplicationForm from "./pages/admin/StudentApplicationForm";
 import InstructionsViewer from "./pages/admin/InstructionsViewer"
-import resom from "./pages/admin/resom";
+
 import IdCardGenerator from "./pages/admin/IdCardGenerator"
 export const routes = createBrowserRouter([
     {
@@ -32,15 +32,15 @@ export const routes = createBrowserRouter([
             element: <InstructionsViewer />,
           },
          {
-            path: "/whentoapply ",
+            path: "/whentoapply",
             element: <WhenToApply />,
           },
          {
-            path: "/studentapplicationform ",
+            path: "/studentapplicationform",
             element: <StudentApplicationForm />,
           },
           {
-            path: "/userprofile ",
+            path: "/userprofile",
             element: <UserProfile />,
           },
           {
@@ -84,10 +84,7 @@ export const routes = createBrowserRouter([
             path: "/penalties",
             element: <Penalties />,
           },
-          {
-            path: "/resom",
-            element: <resom />,
-          },
+          
         ]
     },
     {

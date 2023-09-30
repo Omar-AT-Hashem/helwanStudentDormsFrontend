@@ -11,13 +11,13 @@ function SearchByNationalId() {
   const handleSearch = async () => {
     try {
       // Send a GET request to the backend API, passing the national ID as a query parameter.
-      const response = await axios.get(`/api/search?nationalId=${nationalId}`);
+      const response = await axios.get(`/api/search/${nationalId}`);
       
       // Assuming the API returns both name and address, extract them from the response.
-      const { name, address } = response.data;
+      const { name, applicationStatus } = response.data;
       
       // Update the result state with the retrieved name and address, and clear any previous errors.
-      setResult({ name, address });
+      setResult({ name, applicationStatus });
       setError('');
     } catch (error) {
       // Handle any errors that occur during the API request.
