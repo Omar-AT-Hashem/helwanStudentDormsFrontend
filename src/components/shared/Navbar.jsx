@@ -10,7 +10,7 @@ export const Navbar = () => {
   const navBarMainLinks =
     " hover:bg-mainYellow hover:cursor-pointer h-full flex items-center px-6 transition-all duration-200 select-none";
   const subBarLinks =
-    "h-10 flex px-6 items-center hover:bg-mainYellow hover:cursor-pointer transition-all duration-200 select-none";
+    "h-10 flex px-6 items-center hover:bg-mainYellow hover:cursor-pointer transition-all duration-200 select-none text-sm";
   const dropDownLinks =
     "h-9 w-full flex text-center items-center hover:bg-mainYellow hover:cursor-pointer transition-all duration-200 select-none flex justify-center";
 
@@ -72,20 +72,36 @@ export const Navbar = () => {
         }  right-0 bg-mainBlue transition-all duration-200`}
       >
         <ul className="flex h-full items-center">
-           <Link to="/basicdata" className={subBarLinks}>
+          <Link to="/basicdata" className={subBarLinks}>
             بيانات اساسية
-           </Link>
-          <Link to="/Housing" className={subBarLinks}>السكن</Link>
-          <Link to="/Penalties" className={subBarLinks}>الجزاءات</Link>
-          <Link to="/SeparateStudunts" className={subBarLinks}>فصل الطلاب</Link>
-          <Link to="/Asbsenteeism" className={subBarLinks}>الغياب والتصاريح</Link>
-          <Link to="/taxes" className={subBarLinks}>الرسوم</Link>
-          <Link to="/status" className={subBarLinks}>بيان حالة</Link>
-          <Link to="/taxesstatment" className={subBarLinks}>بيان بالرسوم</Link>
-          <Link to="/blockmeals" className={subBarLinks}>حجب وجبات</Link>
-          
+          </Link>
+          <Link to="/Housing" className={subBarLinks}>
+            السكن
+          </Link>
+          <Link to="/Penalties" className={subBarLinks}>
+            الجزاءات
+          </Link>
+          <Link to="/SeparateStudunts" className={subBarLinks}>
+            فصل الطلاب
+          </Link>
+          <Link to="/Asbsenteeism" className={subBarLinks}>
+            الغياب والتصاريح
+          </Link>
+          <Link to="/taxes" className={subBarLinks}>
+            الرسوم
+          </Link>
+          <Link to="/status" className={subBarLinks}>
+            بيان حالة
+          </Link>
+          <Link to="/taxesstatment" className={subBarLinks}>
+            بيان بالرسوم
+          </Link>
+          <Link to="/blockmeals" className={subBarLinks}>
+            حجب وجبات
+          </Link>
+
           <div className="relative group">
-          <li className={subBarLinks}>تطبيقات</li>
+            <li className={subBarLinks}>تطبيقات</li>
             <ul className="flex flex-col items-center absolute top-full -left-10 h-0 overflow-hidden group-hover:h-96 bg-mainBlue w-72 grid grid-cols-2 transition-all duration-200">
               <li className={dropDownLinks}>مراجعة طلبات الانترنت</li>
               <li className={dropDownLinks}>سحب الصور</li>
@@ -107,12 +123,8 @@ export const Navbar = () => {
               <li className={dropDownLinks}>حجز الوجبات بالباركود</li>
               <li className={dropDownLinks}>حالات البحث الاجتماعي</li>
               <li className={dropDownLinks}>اخلاء جماعي</li>
-
-
-
             </ul>
           </div>
-
 
           <div className="relative group">
             <li className={subBarLinks}>تقارير</li>
@@ -139,19 +151,35 @@ export const Navbar = () => {
           secondLinkClicked ? "top-16" : "top-0"
         }  right-0 bg-mainBlue transition-all duration-200`}
       >
-                <ul className="flex h-full items-center">
+        <ul className="flex h-full items-center">
           <Link to="/basicdata" className={subBarLinks}>
             بيانات اساسية
           </Link>
-          
-          <Link to="/Housing" className={subBarLinks}>السكن</Link>
-          <Link to="/Penalties" className={subBarLinks}>الجزاءات</Link>
-          <Link to="/SeparateStudunts" className={subBarLinks}>فصل الطلاب</Link>
-          <Link to="/Asbsenteeism" className={subBarLinks}>الغياب والتصاريح</Link>
-          <Link to="/taxes" className={subBarLinks}>الرسوم</Link>
-          <Link to="/status" className={subBarLinks}>بيان حالة</Link>
-          <Link to="/taxesstatment" className={subBarLinks}>بيان بالرسوم</Link>
-          <Link to="/blockmeals" className={subBarLinks}>حجب وجبات</Link>
+
+          <Link to="/Housing" className={subBarLinks}>
+            السكن
+          </Link>
+          <Link to="/Penalties" className={subBarLinks}>
+            الجزاءات
+          </Link>
+          <Link to="/SeparateStudunts" className={subBarLinks}>
+            فصل الطلاب
+          </Link>
+          <Link to="/Asbsenteeism" className={subBarLinks}>
+            الغياب والتصاريح
+          </Link>
+          <Link to="/taxes" className={subBarLinks}>
+            الرسوم
+          </Link>
+          <Link to="/status" className={subBarLinks}>
+            بيان حالة
+          </Link>
+          <Link to="/taxesstatment" className={subBarLinks}>
+            بيان بالرسوم
+          </Link>
+          <Link to="/blockmeals" className={subBarLinks}>
+            حجب وجبات
+          </Link>
           <div className="relative group">
             <li className={subBarLinks}>تطبيقات</li>
             <ul className="flex flex-col items-center absolute top-full -left-10 h-0 overflow-hidden group-hover:h-96 bg-mainBlue w-72 grid grid-cols-2 transition-all duration-200">
@@ -175,12 +203,8 @@ export const Navbar = () => {
               <li className={dropDownLinks}>حجز الوجبات بالباركود</li>
               <li className={dropDownLinks}>حالات البحث الاجتماعي</li>
               <li className={dropDownLinks}>اخلاء جماعي</li>
-
-
-
             </ul>
           </div>
-
 
           <div className="relative group">
             <li className={subBarLinks}>تقارير</li>
@@ -210,9 +234,11 @@ export const Navbar = () => {
         <ul className="flex h-full items-center">
           <li className={subBarLinks}>item 1</li>
           <div className="relative group">
-            <li className={subBarLinks}>item 1</li>
+            <li className={subBarLinks}>Misc</li>
             <ul className="flex flex-col items-center absolute top-full -left-10 h-0 overflow-hidden group-hover:h-36 bg-mainBlue w-44 transition-all duration-200">
-              <li className={dropDownLinks}>subitem 1</li>
+              <Link to="/manageInstructions" className={dropDownLinks}>
+                Manage Instructions
+              </Link>
               <li className={dropDownLinks}>subitem 1</li>
               <li className={dropDownLinks}>subitem 1</li>
               <li className={dropDownLinks}>subitem 1</li>

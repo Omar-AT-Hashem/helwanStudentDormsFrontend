@@ -5,29 +5,30 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
 const BasicData = () => {
+  if (sessionStorage.getItem("token")) {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
+  }
+
   // State to store the selected student's data
   const [selectedStudent, setSelectedStudent] = useState();
   const [selectedStudentData, setSelectedStudentData] = useState();
 
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/employee/students/get-by-id/${selectedStudent}`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-        }
-      })
+      .get(`${API_ROUTE}/employee/students/get-by-id/${selectedStudent}`)
       .then((res) => {
         return setSelectedStudentData(res.data);
       })
-.catch((err) => {
-  if (err && err.code === "ERR_BAD_REQUEST") {
-    return;
-  }
-  toast.dismiss();
-  return toast("Something went wrong");
-});
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
   }, [selectedStudent]);
-
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen">
@@ -159,9 +160,7 @@ const BasicData = () => {
                   </div>
                   <div className="form-group">
                     <label>Exempt from Expenses:</label>
-                    <p>
-                      {selectedStudent.exemptFromExpenses ? "Yes" : "No"}
-                    </p>
+                    <p>{selectedStudent.exemptFromExpenses ? "Yes" : "No"}</p>
                   </div>
                   <div className="form-group">
                     <label>Application Status:</label>
@@ -185,6 +184,3 @@ const BasicData = () => {
 };
 
 export default BasicData;
-
-
-
