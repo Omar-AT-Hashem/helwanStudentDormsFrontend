@@ -109,12 +109,13 @@ function StudentApplicationForm() {
   return (
     <div>
       <h1>Student Application Form</h1>
-      <form onSubmit={handleSubmit} className="mt-20">
+      <form onSubmit={handleSubmit} className="mt-20 flex flex-col gap-10">
         <label>
           National ID:
           <input
             type="number"
             name="nationalId"
+            className="bg-slate-300"
             value={formData.nationalId}
             onChange={handleChange}
             required
@@ -124,6 +125,7 @@ function StudentApplicationForm() {
           Image:
           <input
             type="file"
+            className="bg-slate-300"
             name="image"
             accept="image/*"
             onChange={handleImageChange}
@@ -134,6 +136,7 @@ function StudentApplicationForm() {
           Name:
           <input
             type="text"
+            className="bg-slate-300"
             name="name"
             value={formData.name}
             onChange={handleChange}
@@ -145,6 +148,7 @@ function StudentApplicationForm() {
           Mobile:
           <input
             type="text"
+            className="bg-slate-300"
             name="mobile"
             value={formData.mobile}
             onChange={handleChange}
@@ -156,6 +160,7 @@ function StudentApplicationForm() {
           Email:
           <input
             type="email"
+            className="bg-slate-300"
             name="email"
             value={formData.email}
             onChange={handleChange}
@@ -166,6 +171,7 @@ function StudentApplicationForm() {
           Address:
           <textarea
             name="address"
+            className="bg-slate-300"
             value={formData.address}
             onChange={handleChange}
             required
@@ -175,6 +181,7 @@ function StudentApplicationForm() {
           Religion:
           <input
             type="text"
+            className="bg-slate-300"
             name="religion"
             value={formData.religion}
             onChange={handleChange}
@@ -186,6 +193,7 @@ function StudentApplicationForm() {
           College:
           <input
             type="text"
+            className="bg-slate-300"
             name="faculty"
             value={formData.faculty}
             onChange={handleChange}
@@ -197,6 +205,7 @@ function StudentApplicationForm() {
           Father Name:
           <input
             type="text"
+            className="bg-slate-300"
             name="fatherName"
             value={formData.fatherName}
             onChange={handleChange}
@@ -208,6 +217,7 @@ function StudentApplicationForm() {
           Father National ID:
           <input
             type="number"
+            className="bg-slate-300"
             name="fatherNationalId"
             value={formData.fatherNationalId}
             onChange={handleChange}
@@ -219,6 +229,7 @@ function StudentApplicationForm() {
           Father Occupation:
           <input
             type="text"
+            className="bg-slate-300"
             name="fatherOccupation"
             value={formData.fatherOccupation}
             onChange={handleChange}
@@ -230,6 +241,7 @@ function StudentApplicationForm() {
           Father Phone Number:
           <input
             type="text"
+            className="bg-slate-300"
             name="fatherNumber"
             value={formData.fatherNumber}
             onChange={handleChange}
@@ -241,6 +253,7 @@ function StudentApplicationForm() {
           Guardian Name:
           <input
             type="text"
+            className="bg-slate-300"
             name="guardianName"
             value={formData.guardianName}
             onChange={handleChange}
@@ -252,6 +265,7 @@ function StudentApplicationForm() {
           Guardian Relationship:
           <input
             type="text"
+            className="bg-slate-300"
             name="guardianRelationship"
             value={formData.guardianRelationship}
             onChange={handleChange}
@@ -263,6 +277,7 @@ function StudentApplicationForm() {
           Residence:
           <input
             type="text"
+            className="bg-slate-300"
             name="residence"
             value={formData.residence}
             onChange={handleChange}
@@ -274,6 +289,7 @@ function StudentApplicationForm() {
           Address Details:
           <textarea
             name="addressDetails"
+            className="bg-slate-300"
             value={formData.addressDetails}
             onChange={handleChange}
             required
@@ -284,6 +300,7 @@ function StudentApplicationForm() {
           Disabled:
           <input
             type="checkbox"
+            className="bg-slate-300"
             name="isDisabled"
             checked={formData.isDisabled}
             onChange={handleChange}
@@ -294,6 +311,7 @@ function StudentApplicationForm() {
           Family Abroad:
           <input
             type="checkbox"
+            className="bg-slate-300"
             name="familyAbroad"
             checked={formData.familyAbroad}
             onChange={handleChange}
@@ -304,6 +322,7 @@ function StudentApplicationForm() {
           Apartment Type:
           <input
             type="text"
+            className="bg-slate-300"
             name="apartmentType"
             value={formData.apartmentType}
             onChange={handleChange}
@@ -315,6 +334,7 @@ function StudentApplicationForm() {
           Password:
           <input
             type="password"
+            className="bg-slate-300"
             name="password"
             value={formData.password}
             onChange={handleChange}
