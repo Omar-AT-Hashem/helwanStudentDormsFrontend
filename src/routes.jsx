@@ -28,7 +28,7 @@ export const routes = createBrowserRouter([
         element: <Emp />,
       },
       {
-        path: "/instructionsviewer",
+        path: "/instructionsViewer",
         element: <InstructionsViewer />,
       },
       {
