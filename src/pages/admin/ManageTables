@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { API_ROUTE } from "../../config/env"; // Import your API route definition here
+import { API_ROUTE } from "../../config/env";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 
@@ -19,7 +19,7 @@ const ManageTables = () => {
   const [updatedTables, setUpdatedTables] = useState([]);
 
   useEffect(() => {
-    // Fetch table data from the backend API route that provides gender, status, start_date, and end_date.
+
     axios
       .get(`${API_ROUTE}/tables`)
       .then((res) => {
