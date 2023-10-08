@@ -18,6 +18,7 @@ import InstructionsViewer from "./pages/student/InstructionsViewer";
 
 import IdCardGenerator from "./pages/admin/IdCardGenerator";
 import ManageInsturctions from "./pages/admin/ManageInstructions";
+import ManageTables from "./pages/admin/ManageTables";
 export const routes = createBrowserRouter([
   {
     path: "",
@@ -89,6 +90,11 @@ export const routes = createBrowserRouter([
         path: "/manageInstructions",
         element: <ManageInsturctions />,
       },
+      {
+        path: "/manageTables",
+        element: <ManageTables />,
+      },
+      
     ],
   },
   {
