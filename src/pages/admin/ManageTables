@@ -19,7 +19,6 @@ const ManageTables = () => {
   const [updatedTables, setUpdatedTables] = useState([]);
 
   useEffect(() => {
-
     axios
       .get(`${API_ROUTE}/tables`)
       .then((res) => {
@@ -45,7 +44,6 @@ const ManageTables = () => {
   };
 
   const handleTableChange = (tableId, field, value) => {
-    // Find the edited table and update the field value
     setTables((prevTables) =>
       prevTables.map((table) =>
         table.id === tableId ? { ...table, [field]: value } : table
@@ -75,7 +73,9 @@ const ManageTables = () => {
       .delete(`${API_ROUTE}/tables/${tableId}`)
       .then(() => {
         setLoading(false);
-        setTables((prevTables) => prevTables.filter((table) => table.id !== tableId));
+        setTables((prevTables) =>
+          prevTables.filter((table) => table.id !== tableId)
+        );
       })
       .catch(() => {
         setLoading(false);
@@ -149,14 +149,18 @@ const ManageTables = () => {
                       <>
                         <select
                           value={table.gender}
-                          onChange={(e) => handleTableChange(table.id, "gender", e.target.value)}
+                          onChange={(e) =>
+                            handleTableChange(table.id, "gender", e.target.value)
+                          }
                         >
                           <option value="male">Male</option>
                           <option value="female">Female</option>
                         </select>
                         <select
                           value={table.status}
-                          onChange={(e) => handleTableChange(table.id, "status", e.target.value)}
+                          onChange={(e) =>
+                            handleTableChange(table.id, "status", e.target.value)
+                          }
                         >
                           <option value="unreviewed">Unreviewed</option>
                           <option value="reviewed">Reviewed</option>
@@ -166,12 +170,16 @@ const ManageTables = () => {
                         <input
                           type="date"
                           value={table.start_date}
-                          onChange={(e) => handleTableChange(table.id, "start_date", e.target.value)}
+                          onChange={(e) =>
+                            handleTableChange(table.id, "start_date", e.target.value)
+                          }
                         />
                         <input
                           type="date"
                           value={table.end_date}
-                          onChange={(e) => handleTableChange(table.id, "end_date", e.target.value)}
+                          onChange={(e) =>
+                            handleTableChange(table.id, "end_date", e.target.value)
+                          }
                         />
                         <button onClick={() => handleSaveChanges(table.id)}>Save</button>
                         <button onClick={() => handleCancelEdit(table.id)}>Cancel</button>
@@ -207,7 +215,14 @@ const ManageTables = () => {
           </button>
           <button
             className="font-bold bg-green-600 text-white rounded w-20 h-10"
-            onClick={() => setAddedTable({ gender: "New Gender", status: "New Status", start_date: "New Start Date", end_date: "New End Date" })}
+            onClick={() =>
+              setAddedTable({
+                gender: "New Gender",
+                status: "New Status",
+                start_date: "New Start Date",
+                end_date: "New End Date",
+              })
+            }
           >
             Add Table
           </button>
