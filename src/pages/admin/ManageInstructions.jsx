@@ -195,7 +195,7 @@ const ManageInsturctions = () => {
   };
 
   return (
-    <div className=" pt-16 flex flex-row w-full h-screen relative">
+    <div className=" pt-16 flex flex-row w-full h-screen relative font-sans">
       <Toaster
         toastOptions={{
           className: "",
@@ -297,16 +297,16 @@ const ManageInsturctions = () => {
             {addedInstructions.map((addedInstruction, index) => (
               <div key={index + 2000} className="flex bg-slate-500 m-10">
                 <button
-                  className="flex items-center justify-center bg-red-700 text-white font-bold h-14 w-14 top-0 right-0 rounded-full"
+                  className="flex items-center justify-center bg-red-700 text-white font-bold h-14 w-14 top-0 right-0 "
                   onClick={handleAddDelete}
                   name={index}
                 >
-                  X
+                  الغاء
                 </button>
                 <textarea
                   value={addedInstruction}
                   name={index}
-                  className={`w-[80%] resize-none p-1 h-full bg-slate-300`}
+                  className={`w-[100%] resize-none p-1 h-full bg-slate-300`}
                   onChange={handleAddChange}
                 ></textarea>
               </div>
@@ -317,11 +317,11 @@ const ManageInsturctions = () => {
         <div className="mx-auto w-64 my-10 flex gap-10">
           {addedInstructions.length > 0 && (
             <button
-              className="font-bold bg-yellow-900 text-white rounded w-20 h-10"
+              className="font-bold bg-orange-500 text-white rounded w-20 h-10"
               onClick={handleAddAll}
               name="add"
             >
-              Add All
+              اضافه الكل 
             </button>
           )}
           <button
@@ -329,7 +329,7 @@ const ManageInsturctions = () => {
             onClick={handleAdd}
             name="add"
           >
-            Add
+            اضافه
           </button>
         </div>
       </div>
