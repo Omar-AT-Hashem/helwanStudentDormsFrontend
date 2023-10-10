@@ -216,7 +216,7 @@ const ManageInsturctions = () => {
         </div>
 
         {instructions ? (
-          <div className="flex flex-col">
+          <div className="flex flex-col  font-sans">
             <div>
               {instructions.length === 0 && <div>No instructions present</div>}
               {instructions.map((instruction, index) => (
@@ -236,7 +236,7 @@ const ManageInsturctions = () => {
                       value={instruction.instruction}
                       id={instruction.id}
                       name={index}
-                      className={`w-[80%] resize-none p-1 h-full ${
+                      className={`w-[100%] resize-none p-1 h-full bg-slate-300 ${
                         !editable && "bg-slate-300"
                       }`}
                       onChange={handleTextChange}
@@ -246,39 +246,39 @@ const ManageInsturctions = () => {
               ))}
             </div>
             {instructions.length > 0 && (
-              <div className="mx-auto flex gap-10">
+              <div className="mx-auto flex gap-10 ">
                 {editable || deletable ? (
                   <>
                     <button
-                      className="font-bold bg-orange-600 text-white rounded w-20 h-10 "
+                      className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2"
                       onClick={handleSubmit}
                       name="submit"
                     >
-                      Submit
+                      ارسال
                     </button>
                     <button
-                      className="font-bold bg-slate-600  text-white rounded w-20 h-10 "
+                      className="bg-red-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 "
                       onClick={handleCancel}
                       name="cancel"
                     >
-                      cancel
+                      الغاء 
                     </button>
                   </>
                 ) : (
                   <>
                     <button
-                      className="font-bold bg-blue-600 text-white rounded w-20 h-10 "
+                      className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2"
                       onClick={handleEdit}
                       name="edit"
                     >
-                      Edit
+                      تعديل
                     </button>
                     <button
-                      className="font-bold bg-red-600 text-white rounded w-20 h-10 "
+                      className="bg-red-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 "
                       onClick={handleDelete}
                       name="delete"
                     >
-                      Delete
+                      حذف 
                     </button>
                   </>
                 )}
