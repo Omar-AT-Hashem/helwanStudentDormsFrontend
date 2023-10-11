@@ -23,7 +23,7 @@ const ManageTables = () => {
   });
   const [editedTables, setEditedTables] = useState([]);
   const [updatedTables, setUpdatedTables] = useState([]);
-  const [isAddingTable, setIsAddingTable] = useState(false; // Define isAddingTable state
+  const [isAddingTable, setIsAddingTable] = useState(false); // Define isAddingTable state
 
   useEffect(() => {
     axios
@@ -224,7 +224,7 @@ const ManageTables = () => {
         <div className="mx-auto flex gap-10">
           <button
             className="font-bold bg-red-600 text-white rounded w-20 h-10"
-            onClick={handleDeleteTables}
+            onClick={handleDeleteTable}
           >
             Delete Selected
           </button>
@@ -268,7 +268,7 @@ const ManageTables = () => {
             <option value="reviewed">Reviewed</option>
             <option value="accepted">Accepted</option>
             <option value="rejected">Rejected</option>
-          />
+            </select>
 
           <input
             type="date"

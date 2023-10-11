@@ -1,32 +1,43 @@
 import { useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 function StudentApplicationForm() {
   const [formData, setFormData] = useState({
     nationalId: "",
     name: "",
-    image: null,
+    birthday: "",
+    placeOfBirth: "",
+    gender: "",
+    telephone: "",
     mobile: "",
     email: "",
     address: "",
     religion: "",
-    collage: "",
+    faculty: "",
     fatherName: "",
     fatherNationalId: "",
-    fatherJob: "",
+    fatherOccupation: "",
     fatherNumber: "",
     guardianName: "",
+    guardianNationalId: "",
     guardianRelationship: "",
     residence: "",
     addressDetails: "",
-    isDisabled: false,
-    familyAbroad: false,
-    apartmentType: "",
+    isDisabled: 0,
+    familyAbroad: 0,
+    highschoolAbroad: 0,
+    highschoolSpecialization: "",
+    highschoolGrade: "",
+    accomodationType: "",
+    accomodationWithNutrition: 0,
     password: "",
+    confirmPassword: "",
   });
 
-  const [formError, setFormError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     let { name, value, type, checked } = e.target;
@@ -38,77 +49,124 @@ function StudentApplicationForm() {
     });
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setFormData({
-      ...formData,
-      image: file,
-    });
-  };
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setFormData({
+  //     ...formData,
+  //     image: file,
+  //   });
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      toast.dismiss();
+      return toast("كلمة المرور وتأكيد كلمة المرور غير متطابقين");
+    }
 
     // Send formData to your backend API to insert into the database and create an account
 
-    const form = new FormData();
-    form.set("image", formData.image);
-    form.set("nationalId", formData.nationalId);
-    form.set("name", formData.name);
-    form.set("mobile", formData.mobile);
-    form.set("email", formData.email);
-    form.set("religion", formData.religion);
-    form.set("address", formData.address);
-    form.set("faculty", formData.faculty);
-    form.set("fatherName", formData.fatherName);
-    form.set("fatherNationalId", formData.fatherNationalId);
-    form.set("fatherOccupation", formData.fatherOccupation);
-    form.set("fatherNumber", formData.fatherNumber);
-    form.set("guardianName", formData.guardianName);
-    form.set("guardianRelationship", formData.guardianRelationship);
-    form.set("residence", formData.residence);
-    form.set("addressDetails", formData.addressDetails);
-    form.set("isDisabled", formData.isDisabled);
-    form.set("familyAbroad", formData.familyAbroad);
-    form.set("apartmentType", formData.apartmentType);
-    form.set("password", formData.password);
+    // const form = new FormData();
+    // form.set("image", formData.image);
+    // form.set("nationalId", formData.nationalId);
+    // form.set("name", formData.name);
+    // form.set("birthday", formData.birthday);
+    // form.set("placeOfBirth", formData.placeOfBirth);
+    // form.set("gender", formData.gender);
+    // form.set("telephone", formData.telephone);
+    // form.set("mobile", formData.mobile);
+    // form.set("email", formData.email);
+    // form.set("religion", formData.religion);
+    // form.set("address", formData.address);
+    // form.set("faculty", formData.faculty);
+    // form.set("fatherName", formData.fatherName);
+    // form.set("fatherNationalId", formData.fatherNationalId);
+    // form.set("fatherOccupation", formData.fatherOccupation);
+    // form.set("fatherNumber", formData.fatherNumber);
+    // form.set("guardianName", formData.guardianName);
+    // form.set("guardianNationalId", formData.guardianNationalId);
+    // form.set("guardianRelationship", formData.guardianRelationship);
+    // form.set("residence", formData.residence);
+    // form.set("addressDetails", formData.addressDetails);
+    // form.set("isDisabled", formData.isDisabled);
+    // form.set("familyAbroad", formData.familyAbroad);
+    // form.set("highschoolSpecialization", formData.highschoolSpecialization);
+    // form.set("highschoolAbroad", formData.highschoolAbroad);
+    // form.set("highschoolGrade", formData.highschoolGrade);
+    // form.set("accomodationType", formData.accomodationType);
+    // form.set("accomodationWithNutrition", formData.accomodationWithNutrition);
+    // form.set("password", formData.password);
+
+    setLoading(true);
 
     axios
-      .post(`${API_ROUTE}/student/register`, form)
+      .post(`${API_ROUTE}/student/register`, formData)
       .then((res) => {
-        // setFormData({
-        //   nationalId: "",
-        //   name: "",
-        //   image: "",
-        //   mobile: "",
-        //   email: "",
-        //   address: "",
-        //   religion: "",
-        //   faculty: "",
-        //   fatherName: "",
-        //   fatherNationalId: "",
-        //   fatherOccupation: "",
-        //   fatherNumber: "",
-        //   guardianName: "",
-        //   guardianRelationship: "",
-        //   residence: "",
-        //   addressDetails: "",
-        //   isDisabled: 0,
-        //   familyAbroad: 0,
-        //   apartmentType: "",
-        //   password: "",
-        // });
-        setFormError(null);
-        alert("Application submitted successfully!");
+        setFormData({
+          nationalId: "",
+          name: "",
+          birthday: "",
+          placeOfBirth: "",
+          gender: "",
+          telephone: "",
+          mobile: "",
+          email: "",
+          address: "",
+          religion: "",
+          faculty: "",
+          fatherName: "",
+          fatherNationalId: "",
+          fatherOccupation: "",
+          fatherNumber: "",
+          guardianName: "",
+          guardianNationalId: "",
+          guardianRelationship: "",
+          residence: "",
+          addressDetails: "",
+          isDisabled: 0,
+          familyAbroad: 0,
+          highschoolAbroad: 0,
+          highschoolSpecialization: "",
+          highschoolGrade: "",
+          accomodationType: "",
+          accomodationWithNutrition: 0,
+          password: "",
+          confirmPassword: "",
+        });
+
+        setLoading(false);
+        toast.dismiss();
+        toast("تم تقديم الطلب بنجاح");
       })
       .catch((err) => {
-        console.log(err);
+        setLoading(false);
+        if (err.response.request.status == 409) {
+          toast.dismiss();
+          return toast("المستخدم موجود في النظام");
+        }
+
+        toast.dismiss();
+        toast("حدث خطأ");
       });
   };
 
   return (
     <div>
       <h1>Student Application Form</h1>
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            border: "1px solid #A9872D",
+            backgroundColor: "#A9872D",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
       <div className="box flex items-center">
         <form
           onSubmit={handleSubmit}
@@ -118,7 +176,7 @@ function StudentApplicationForm() {
             <label className="mb-4 ">
               الرقم القومى :
               <input
-                type="number"
+                type="text"
                 name="nationalId"
                 value={formData.nationalId}
                 onChange={handleChange}
@@ -145,7 +203,10 @@ function StudentApplicationForm() {
                 تاريخ الميلاد :
               </label>
               <input
-                type="text"
+                type="date"
+                name="birthday"
+                value={formData.birthday}
+                onChange={handleChange}
                 id="birthday"
                 className=" mr-2  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
@@ -156,6 +217,9 @@ function StudentApplicationForm() {
               <input
                 type="text"
                 id="PlaceOfBirth"
+                name="placeOfBirth"
+                onChange={handleChange}
+                value={formData.placeOfBirth}
                 className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
               ></input>
@@ -168,6 +232,9 @@ function StudentApplicationForm() {
               <input
                 type="text"
                 id="Gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
                 className=" mr-10 w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 ml-8"
               ></input>
@@ -178,6 +245,9 @@ function StudentApplicationForm() {
               <input
                 type="text"
                 id="Religion"
+                name="religion"
+                value={formData.religion}
+                onChange={handleChange}
                 className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
               ></input>
@@ -227,7 +297,11 @@ function StudentApplicationForm() {
               </label>
               <input
                 type="text"
-                id="Gender"
+                id="telephone"
+                name="telephone"
+                value={formData.telephone}
+                onChange={handleChange}
+                required
                 className="  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 ml-8"
               ></input>
@@ -237,7 +311,11 @@ function StudentApplicationForm() {
               </label>
               <input
                 type="text"
-                id="Religion"
+                id="mobile"
+                name="mobile"
+                value={formData.mobile}
+                onChange={handleChange}
+                required
                 className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
               ></input>
@@ -272,7 +350,7 @@ function StudentApplicationForm() {
             <label className="mb-4 ">
               الرقم القومى للاب :
               <input
-                type="number"
+                type="text"
                 name="fatherNationalId"
                 value={formData.fatherNationalId}
                 onChange={handleChange}
@@ -327,8 +405,8 @@ function StudentApplicationForm() {
                 الرقم القومى لولى الامر :
                 <input
                   type="text"
-                  name="fatherOccupation"
-                  value={formData.fatherOccupation}
+                  name="guardianNationalId"
+                  value={formData.guardianNationalId}
                   onChange={handleChange}
                   required
                   className="  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
@@ -378,8 +456,8 @@ function StudentApplicationForm() {
                 الشعبه بالثانويه العامه:
                 <input
                   type="text"
-                  name="apartmentType"
-                  value={formData.apartmentType}
+                  name="highschoolSpecialization"
+                  value={formData.highschoolSpecialization}
                   onChange={handleChange}
                   required
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
@@ -389,6 +467,9 @@ function StudentApplicationForm() {
               <label className="mb-4">الثانويه بالخارج :</label>
               <input
                 type="checkbox"
+                name="highschoolAbroad"
+                checked={formData.highschoolAbroad}
+                onChange={handleChange}
                 className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
               />
@@ -398,6 +479,8 @@ function StudentApplicationForm() {
               مجموع الثانويه العامه :
               <input
                 onChange={handleChange}
+                name="highschoolGrade"
+                value={formData.highschoolGrade}
                 required
                 className="mr-4  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
@@ -408,8 +491,8 @@ function StudentApplicationForm() {
                 نوع السكن :
                 <input
                   type="text"
-                  name="apartmentType"
-                  value={formData.apartmentType}
+                  name="accomodationType"
+                  value={formData.accomodationType}
                   onChange={handleChange}
                   required
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
@@ -419,6 +502,9 @@ function StudentApplicationForm() {
               <label className="mb-4">سكن بدون تغذيه :</label>
               <input
                 type="checkbox"
+                name="accomodationWithNutrition"
+                checked={formData.accomodationWithNutrition}
+                onChange={handleChange}
                 className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
               />
@@ -440,19 +526,29 @@ function StudentApplicationForm() {
               <input
                 className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
               />
             </div>
 
             <button
               type="submit"
-              className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2"
+              className={`bg-blue-500 w-56 h-11 hover:opacity-70 ${
+                loading && "opacity-70 hover:cursor-default"
+              } hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 flex justify-center`}
+              disabled={loading}
             >
-              تقديم طلب الالحتحاق{" "}
+              {loading ? (
+                <Loader2 className="animate-spin duration-200" />
+              ) : (
+                <span> تقديم طلب الالحتحاق </span>
+              )}
             </button>
           </div>
         </form>
       </div>
-      {formError && <p className="error">{formError}</p>}
     </div>
   );
 }
