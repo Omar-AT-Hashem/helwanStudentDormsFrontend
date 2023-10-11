@@ -177,10 +177,8 @@ const ManageTables = () => {
                             handleTableChange(table.id, "status", e.target.value)
                           }
                         >
-                          <option value="unreviewed">Unreviewed</option>
-                          <option value="reviewed">Reviewed</option>
-                          <option value="accepted">Accepted</option>
-                          <option value="rejected">Rejected</option>
+  <option value="newcomer">Newcomer</option>
+  <option value="oldtimer">Oldtimer</option>
                         </select>
                         <input
                           type="date"
@@ -264,10 +262,8 @@ const ManageTables = () => {
             value={addedTable.status}
             onChange={(e) => setAddedTable({ ...addedTable, status: e.target.value })}
           >
-            <option value="unreviewed">Unreviewed</option>
-            <option value="reviewed">Reviewed</option>
-            <option value="accepted">Accepted</option>
-            <option value="rejected">Rejected</option>
+  <option value="newcomer">Newcomer</option>
+  <option value="oldtimer">Oldtimer</option>
             </select>
 
           <input
