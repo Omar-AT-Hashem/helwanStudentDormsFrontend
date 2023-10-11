@@ -14,7 +14,12 @@ const ManageTables = () => {
   const [tables, setTables] = useState([]);
   const [loading, setLoading] = useState(false);
   const [deletedTables, setDeletedTables] = useState([]);
-  const [addedTable, setAddedTable] = useState({});
+  const [addedTable, setAddedTable] = useState({
+    gender: "",
+    status: "unreviewed",
+    start_date: "",
+    end_date: "",
+  });
   const [editedTables, setEditedTables] = useState([]);
   const [updatedTables, setUpdatedTables] = useState([]);
 
@@ -58,7 +63,12 @@ const ManageTables = () => {
       .then((res) => {
         setLoading(false);
         setTables((prevTables) => [...prevTables, res.data]);
-        setAddedTable({});
+        setAddedTable({
+          gender: "",
+          status: "unreviewed",
+          start_date: "",
+          end_date: "",
+        });
       })
       .catch(() => {
         setLoading(false);
@@ -215,14 +225,7 @@ const ManageTables = () => {
           </button>
           <button
             className="font-bold bg-green-600 text-white rounded w-20 h-10"
-            onClick={() =>
-              setAddedTable({
-                gender: "New Gender",
-                status: "New Status",
-                start_date: "New Start Date",
-                end_date: "New End Date",
-              })
-            }
+            onClick={handleAddTable}
           >
             Add Table
           </button>
