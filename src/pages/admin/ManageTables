@@ -56,26 +56,28 @@ const ManageTables = () => {
     );
   };
 
-  const handleAddTable = () => {
-    setLoading(true);
-    axios
-      .post(`${API_ROUTE}/tables`, addedTable)
-      .then((res) => {
-        setLoading(false);
-        setTables((prevTables) => [...prevTables, res.data]);
-        setAddedTable({
-          gender: "",
-          status: "unreviewed",
-          start_date: "",
-          end_date: "",
-        });
-      })
-      .catch(() => {
-        setLoading(false);
-        toast.dismiss();
-        toast("Something went wrong");
+ const handleAddTable = () => {
+  setLoading(true);
+  axios
+    .post(`${API_ROUTE}/tables`, addedTable)
+    .then((res) => {
+      setLoading(false);
+      // Add the newly added table to the state
+      setTables((prevTables) => [...prevTables, res.data]);
+      setAddedTable({
+        gender: "",
+        status: "unreviewed",
+        start_date: "",
+        end_date: "",
       });
-  };
+    })
+    .catch(() => {
+      setLoading(false);
+      toast.dismiss();
+      toast("Something went wrong");
+    });
+};
+
 
   const handleDeleteTable = (tableId) => {
     setLoading(true);
