@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_ROUTE } from "../../config/env";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 
 const ManageTables = () => {
+  // Check if there's a token in sessionStorage and set it as the default authorization header
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
       "Authorization"
@@ -22,6 +23,7 @@ const ManageTables = () => {
   });
   const [editedTables, setEditedTables] = useState([]);
   const [updatedTables, setUpdatedTables] = useState([]);
+  const [isAddingTable, setIsAddingTable] = useState(false; // Define isAddingTable state
 
   useEffect(() => {
     axios
@@ -56,28 +58,28 @@ const ManageTables = () => {
     );
   };
 
- const handleAddTable = () => {
-  setLoading(true);
-  axios
-    .post(`${API_ROUTE}/tables`, addedTable)
-    .then((res) => {
-      setLoading(false);
-      // Add the newly added table to the state
-      setTables((prevTables) => [...prevTables, res.data]);
-      setAddedTable({
-        gender: "",
-        status: "unreviewed",
-        start_date: "",
-        end_date: "",
+  const handleAddTable = () => {
+    setLoading(true);
+    axios
+      .post(`${API_ROUTE}/tables`, addedTable)
+      .then((res) => {
+        setLoading(false);
+        // Add the newly added table to the state
+        setTables((prevTables) => [...prevTables, res.data]);
+        setAddedTable({
+          gender: "",
+          status: "unreviewed",
+          start_date: "",
+          end_date: "",
+        });
+        setIsAddingTable(false); // Set isAddingTable to false after adding the table
+      })
+      .catch(() => {
+        setLoading(false);
+        toast.dismiss();
+        toast("Something went wrong");
       });
-    })
-    .catch(() => {
-      setLoading(false);
-      toast.dismiss();
-      toast("Something went wrong");
-    });
-};
-
+  };
 
   const handleDeleteTable = (tableId) => {
     setLoading(true);
@@ -122,6 +124,7 @@ const ManageTables = () => {
         toast("Something went wrong");
       });
   };
+
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen relative">
@@ -227,7 +230,7 @@ const ManageTables = () => {
           </button>
           <button
             className="font-bold bg-green-600 text-white rounded w-20 h-10"
-            onClick={handleAddTable}
+            onClick={() => setIsAddingTable(true)} // Set isAddingTable to true
           >
             Add Table
           </button>
@@ -245,6 +248,43 @@ const ManageTables = () => {
           className="animate-spin duration-200 absolute left-[50%] top-[50%]"
         />
       )}
+
+      {/* Integrate the first code snippet here */}
+      {isAddingTable ? (
+        <div className="form-for-adding-table">
+          <select
+            value={addedTable.gender}
+            onChange={(e) => setAddedTable({ ...addedTable, gender: e.target.value })}
+          >
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+
+          <select
+            value={addedTable.status}
+            onChange={(e) => setAddedTable({ ...addedTable, status: e.target.value })}
+          >
+            <option value="unreviewed">Unreviewed</option>
+            <option value="reviewed">Reviewed</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
+          />
+
+          <input
+            type="date"
+            value={addedTable.start_date}
+            onChange={(e) => setAddedTable({ ...addedTable, start_date: e.target.value })}
+          />
+
+          <input
+            type="date"
+            value={addedTable.end_date}
+            onChange={(e) => setAddedTable({ ...addedTable, end_date: e.target.value })}
+          />
+
+          <button onClick={handleAddTable}>Add Table</button>
+        </div>
+      ) : null}
     </div>
   );
 };
