@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { API_ROUTE } from "../../config/env";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
+import { API_ROUTE } from "../../config/env";
 
 const ManageTables = () => {
-  // Check if there's a token in sessionStorage and set it as the default authorization header
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
       "Authorization"
@@ -15,15 +14,10 @@ const ManageTables = () => {
   const [tables, setTables] = useState([]);
   const [loading, setLoading] = useState(false);
   const [deletedTables, setDeletedTables] = useState([]);
-  const [addedTable, setAddedTable] = useState({
-    gender: "",
-    status: "",
-    start_date: "",
-    end_date: "",
-  });
+  const [addedTables, setAddedTables] = useState([]);
   const [editedTables, setEditedTables] = useState([]);
   const [updatedTables, setUpdatedTables] = useState([]);
-  const [isAddingTable, setIsAddingTable] = useState(false); // Define isAddingTable state
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     axios
@@ -59,26 +53,15 @@ const ManageTables = () => {
   };
 
   const handleAddTable = () => {
-    setLoading(true);
-    axios
-      .post(`${API_ROUTE}/tables`, addedTable)
-      .then((res) => {
-        setLoading(false);
-        // Add the newly added table to the state
-        setTables((prevTables) => [...prevTables, res.data]);
-        setAddedTable({
-          gender: "",
-          status: "unreviewed",
-          start_date: "",
-          end_date: "",
-        });
-        setIsAddingTable(false); // Set isAddingTable to false after adding the table
-      })
-      .catch(() => {
-        setLoading(false);
-        toast.dismiss();
-        toast("Something went wrong");
-      });
+    setAddedTables((prev) => [
+      ...prev,
+      {
+        gender: "",
+        status: "",
+        start_date: "",
+        end_date: "",
+      },
+    ]);
   };
 
   const handleDeleteTable = (tableId) => {
@@ -125,6 +108,31 @@ const ManageTables = () => {
       });
   };
 
+  const handleSaveAllTables = () => {
+    setIsSaving(true);
+
+    // Send requests to save all addedTables
+    const savePromises = addedTables.map((addedTable) => {
+      return axios.post(`${API_ROUTE}/tables`, addedTable);
+    });
+
+    // Wait for all promises to resolve
+    Promise.all(savePromises)
+      .then((responses) => {
+        // Add the newly added tables to the state
+        const newTables = responses.map((res) => res.data);
+        setTables((prevTables) => [...prevTables, ...newTables]);
+
+        // Clear the addedTables array
+        setAddedTables([]);
+        setIsSaving(false);
+      })
+      .catch(() => {
+        setIsSaving(false);
+        toast.dismiss();
+        toast("Something went wrong while saving tables");
+      });
+  };
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen relative">
@@ -177,8 +185,8 @@ const ManageTables = () => {
                             handleTableChange(table.id, "status", e.target.value)
                           }
                         >
-  <option value="newcomer">Newcomer</option>
-  <option value="oldtimer">Oldtimer</option>
+                          <option value="newcomer">Newcomer</option>
+                          <option value="oldtimer">Oldtimer</option>
                         </select>
                         <input
                           type="date"
@@ -228,59 +236,70 @@ const ManageTables = () => {
           </button>
           <button
             className="font-bold bg-green-600 text-white rounded w-20 h-10"
-            onClick={() => setIsAddingTable(true)} // Set isAddingTable to true
+            onClick={handleAddTable}
           >
             Add Table
           </button>
           <button
             className="font-bold bg-blue-600 text-white rounded w-20 h-10"
-            onClick={handleAddTable}
+            onClick={handleSaveAllTables}
           >
-            Save Changes
+            Save All
           </button>
         </div>
       </div>
-      {loading && (
+      {isSaving && (
         <Loader2
           size={100}
           className="animate-spin duration-200 absolute left-[50%] top-[50%]"
         />
       )}
-
-      {/* Integrate the first code snippet here */}
-      {isAddingTable ? (
-        <div className="form-for-adding-table">
+      {addedTables.map((addedTable, index) => (
+        <div key={index} className="form-for-adding-table">
+          <label htmlFor={`gender-${index}`}>Gender:</label>
           <select
+            id={`gender-${index}`}
             value={addedTable.gender}
-            onChange={(e) => setAddedTable({ ...addedTable, gender: e.target.value })}
+            onChange={(e) =>
+              handleTableChange(index, "gender", e.target.value)
+            }
           >
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
-
+          <label htmlFor={`status-${index}`}>Status:</label>
           <select
+            id={`status-${index}`}
             value={addedTable.status}
-            onChange={(e) => setAddedTable({ ...addedTable, status: e.target.value })}
+            onChange={(e) =>
+              handleTableChange(index, "status", e.target.value)
+            }
           >
-  <option value="newcomer">Newcomer</option>
-  <option value="oldtimer">Oldtimer</option>
-            </select>
-
+            <option value="newcomer">Newcomer</option>
+            <option value="oldtimer">Oldtimer</option>
+          </select>
+          <label htmlFor={`start_date-${index}`}>Start Date:</label>
           <input
+            id={`start_date-${index}`}
             type="date"
             value={addedTable.start_date}
-            onChange={(e) => setAddedTable({ ...addedTable, start_date: e.target.value })}
+            onChange={(e) =>
+              handleTableChange(index, "start_date", e.target.value)
+            }
           />
-
+          <label htmlFor={`end_date-${index}`}>End Date:</label>
           <input
+            id={`end_date-${index}`}
             type="date"
             value={addedTable.end_date}
-            onChange={(e) => setAddedTable({ ...addedTable, end_date: e.target.value })}
+            onChange={(e) =>
+              handleTableChange(index, "end_date", e.target.value)
+            }
           />
-
-          <button onClick={handleAddTable}>Add Table</button>
+          <button onClick={() => handleSaveChanges(index)}>Save</button>
+          <button onClick={() => handleCancelEdit(index)}>Cancel</button>
         </div>
-      ) : null}
+      ))}
     </div>
   );
 };
