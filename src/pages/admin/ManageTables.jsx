@@ -17,7 +17,7 @@ const ManageTables = () => {
   const [deletedTables, setDeletedTables] = useState([]);
   const [addedTable, setAddedTable] = useState({
     gender: "",
-    status: "unreviewed",
+    status: "",
     start_date: "",
     end_date: "",
   });
