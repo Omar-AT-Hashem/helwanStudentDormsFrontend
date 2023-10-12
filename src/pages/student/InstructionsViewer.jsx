@@ -15,8 +15,9 @@ function InstructionsViewer() {
   useEffect(() => {
     // Use the useEffect hook to fetch data when the component mounts
     axios
-      .get(`${API_ROUTE}/instructions`)
+      .get(`${API_ROUTE}/v1/instruction`)
       .then((res) => {
+        
         return setInstructions(res.data);
       })
       .catch((err) => {
@@ -28,8 +29,9 @@ function InstructionsViewer() {
       });
   }, []); // The empty dependency array ensures this effect runs once after the initial render
 
+  console.log(instructions);
   return (
-    <div>
+    <div className="pt-16">
       <Toaster
         toastOptions={{
           className: "",
@@ -45,18 +47,20 @@ function InstructionsViewer() {
         }}
       />
 
-
       {instructions && instructions.length > 0 ? (
-        <div>
-          {instructions.map((instruction) => {
-            <div className="w-[80%] resize-none p-1 h-full bg-slate-300">
+        <div className="mt-20"> 
+          {instructions.map((instruction,index) => (
+            <div key={index} className="w-[80%] resize-none p-1 h-full bg-slate-300">
               {instruction.instruction}
-            </div>;
-          })}
+            </div>
+          )
+          )}
         </div>
       ) : (
-        <div>No available instruction_</div>
+        <div>No available instruction</div>
       )}
+
+      <div></div>
     </div>
   );
 }
