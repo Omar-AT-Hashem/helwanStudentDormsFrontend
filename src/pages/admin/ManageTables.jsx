@@ -178,7 +178,9 @@ const ManageTables = () => {
                             onChange={(e) =>
                               handleTableChange(table.id, "gender", e.target.value)
                             }
+                            required 
                           >
+                            <option value="" disabled>Select Gender</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                           </select>
@@ -191,7 +193,9 @@ const ManageTables = () => {
                             onChange={(e) =>
                               handleTableChange(table.id, "status", e.target.value)
                             }
+                            required 
                           >
+                            <option value="" disabled>Select Status</option>
                             <option value="newcomer">Newcomer</option>
                             <option value="oldtimer">Oldtimer</option>
                           </select>
@@ -205,6 +209,7 @@ const ManageTables = () => {
                             onChange={(e) =>
                               handleTableChange(table.id, "start_date", e.target.value)
                             }
+                            required 
                           />
                         </div>
                         <div>
@@ -216,6 +221,7 @@ const ManageTables = () => {
                             onChange={(e) =>
                               handleTableChange(table.id, "end_date", e.target.value)
                             }
+                            required 
                           />
                         </div>
                         <button onClick={() => handleSaveChanges(table.id)}>Save</button>
@@ -291,7 +297,9 @@ const ManageTables = () => {
             onChange={(e) =>
               handleTableChange(index, "gender", e.target.value)
             }
+            required 
           >
+            <option value="" disabled>Select Gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
@@ -302,7 +310,9 @@ const ManageTables = () => {
             onChange={(e) =>
               handleTableChange(index, "status", e.target.value)
             }
+            required 
           >
+            <option value="" disabled>Select Status</option>
             <option value="newcomer">Newcomer</option>
             <option value="oldtimer">Oldtimer</option>
           </select>
@@ -314,6 +324,7 @@ const ManageTables = () => {
             onChange={(e) =>
               handleTableChange(index, "start_date", e.target.value)
             }
+            required 
           />
           <label htmlFor={`end_date-${index}`}>End Date:</label>
           <input
@@ -323,6 +334,7 @@ const ManageTables = () => {
             onChange={(e) =>
               handleTableChange(index, "end_date", e.target.value)
             }
+            required 
           />
           <button onClick={() => handleSaveChanges(index)}>Save</button>
           <button onClick={() => handleCancelEdit(index)}>Cancel</button>
@@ -333,3 +345,4 @@ const ManageTables = () => {
 };
 
 export default ManageTables;
+
