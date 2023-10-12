@@ -40,15 +40,6 @@ export const routes = createBrowserRouter([
             element: <Emp />,
           },
           {
-            path: "whentoapply",
-            element: <WhenToApply />,
-          },
-          {
-            path: "studentapplicationform",
-            element: <StudentApplicationForm />,
-          },
-    
-          {
             path: "basicdata",
             element: <BasicData />,
           },
@@ -115,6 +106,14 @@ export const routes = createBrowserRouter([
           {
             path: "instructions",
             element: <InstructionsViewer />,
+          },
+          {
+            path: "application",
+            element: <StudentApplicationForm />,
+          },
+          {
+            path: "whentoapply",
+            element: <WhenToApply />,
           },
         ],
       },
