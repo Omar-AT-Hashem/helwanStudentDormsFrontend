@@ -82,6 +82,10 @@ const ManageCategories = () => {
     setEditingCategory(null);
   };
 
+  const handleCancelAddCategory = () => {
+    setNewCategory(null);
+  };
+
   const handleDeleteCategories = () => {
     const updatedCategories = categories.filter(
       (category, index) => !selectedCategories.includes(index)
@@ -212,18 +216,19 @@ const ManageCategories = () => {
             ))}
             <button onClick={() => handleAddCity(-1)}>Add City</button>
             <button onClick={handleSaveCategory}>Save</button>
+            <button onClick={handleCancelAddCategory}>Cancel</button> {/* Added Cancel button */}
           </div>
         )}
       </div>
-
-      {loading && (
-        <Loader2
-          size={100}
-          className="animate-spin duration-200 absolute left-[50%] top-[50%]"
-        />
-      )}
     </div>
-  );
-};
+
+    {loading && (
+      <Loader2
+        size={100}
+        className="animate-spin duration-200 absolute left-[50%] top-[50%]"
+      />
+    )}
+  </div>
+);
 
 export default ManageCategories;
