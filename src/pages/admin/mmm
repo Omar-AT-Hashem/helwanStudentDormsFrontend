@@ -20,35 +20,63 @@ const ManageCategories = () => {
     setNewCategory(null);
   };
 
-  const handleAddCity = () => {
+  const handleAddCity = (categoryIndex) => {
     if (newCategory) {
-      setNewCategory({
+      const updatedCategories = [...categories];
+      updatedCategories[categoryIndex] = {
         ...newCategory,
         cities: [...newCategory.cities, ""],
-      });
+      };
+      setCategories(updatedCategories);
     }
   };
 
-  const handleDeleteCity = (cityIndex) => {
+  const handleDeleteCity = (categoryIndex, cityIndex) => {
     if (newCategory) {
       const updatedCities = [...newCategory.cities];
       updatedCities.splice(cityIndex, 1);
-      setNewCategory({
+      const updatedCategories = [...categories];
+      updatedCategories[categoryIndex] = {
         ...newCategory,
         cities: updatedCities,
-      });
+      };
+      setCategories(updatedCategories);
     }
   };
 
-  const handleEditCategory = (category) => {
-    setEditingCategory(category);
+  const handleUpdateCategoryName = (categoryIndex, name) => {
+    if (newCategory) {
+      const updatedCategories = [...categories];
+      updatedCategories[categoryIndex] = {
+        ...newCategory,
+        name: name,
+      };
+      setCategories(updatedCategories);
+    }
+  };
+
+  const handleUpdateCity = (categoryIndex, cityIndex, cityName) => {
+    if (newCategory) {
+      const updatedCities = [...newCategory.cities];
+      updatedCities[cityIndex] = cityName;
+      const updatedCategories = [...categories];
+      updatedCategories[categoryIndex] = {
+        ...newCategory,
+        cities: updatedCities,
+      };
+      setCategories(updatedCategories);
+    }
+  };
+
+  const handleEditCategory = (categoryIndex) => {
+    setEditingCategory(categoryIndex);
   };
 
   const handleCancelEditCategory = () => {
     setEditingCategory(null);
   };
 
-  const handleSaveEditedCategory = () => {
+  const handleSaveEditedCategory = (categoryIndex) => {
     // Implement the logic to save the edited category here
     // After saving, update the categories state
     setEditingCategory(null);
@@ -56,18 +84,18 @@ const ManageCategories = () => {
 
   const handleDeleteCategories = () => {
     const updatedCategories = categories.filter(
-      (category) => !selectedCategories.includes(category.id)
+      (category, index) => !selectedCategories.includes(index)
     );
     setCategories(updatedCategories);
     setSelectedCategories([]);
   };
 
-  const toggleCategorySelection = (category) => {
-    if (selectedCategories.includes(category.id)) {
-      setSelectedCategories(selectedCategories.filter((id) => id !== category.id));
+  const toggleCategorySelection = (index) => {
+    if (selectedCategories.includes(index)) {
+      setSelectedCategories(selectedCategories.filter((i) => i !== index));
     } else {
-      setSelectedCategories([...selectedCategories, category.id]);
-    };
+      setSelectedCategories([...selectedCategories, index]);
+    }
   };
 
   return (
@@ -93,15 +121,15 @@ const ManageCategories = () => {
           <h2>Categories</h2>
           <button onClick={handleAddCategory}>Add Category</button>
           <button onClick={handleDeleteCategories}>Delete Checked Categories</button>
-          {categories.map((category) => (
+          {categories.map((category, index) => (
             <div key={category.id}>
               <input
                 type="checkbox"
-                onChange={() => toggleCategorySelection(category)}
-                checked={selectedCategories.includes(category.id)}
+                onChange={() => toggleCategorySelection(index)}
+                checked={selectedCategories.includes(index)}
               />
               <div>
-                {category === editingCategory ? (
+                {editingCategory === index ? (
                   // Edit mode
                   <div>
                     <h3>Edit Category</h3>
@@ -111,40 +139,42 @@ const ManageCategories = () => {
                         type="text"
                         placeholder="Category Name"
                         value={category.name}
-                        onChange={(e) => handleUpdateCity(index, e.target.value)}
+                        onChange={(e) => handleUpdateCategoryName(index, e.target.value)}
                       />
                     </label>
                     <h4>Cities:</h4>
-                    {category.cities.map((city, index) => (
-                      <div key={index}>
+                    {category.cities.map((city, cityIndex) => (
+                      <div key={cityIndex}>
                         <label>
                           City Name:
                           <input
                             type="text"
+                            placeholder
+                            type="text"
                             placeholder="City Name"
                             value={city}
-                            onChange={(e) => handleUpdateCity(index, e.target.value)}
+                            onChange={(e) => handleUpdateCity(index, cityIndex, e.target.value)}
                           />
                         </label>
-                        <button onClick={() => handleDeleteCity(index)}>Delete City</button>
+                        <button onClick={() => handleDeleteCity(index, cityIndex)}>Delete City</button>
                       </div>
                     ))}
-                    <button onClick={handleAddCity}>Add City</button>
-                    <button onClick={handleSaveEditedCategory}>Save</button>
+                    <button onClick={() => handleAddCity(index)}>Add City</button>
+                    <button onClick={() => handleSaveEditedCategory(index)}>Save</button>
                     <button onClick={handleCancelEditCategory}>Cancel</button>
                   </div>
                 ) : (
                   // Non-editable mode
                   <div>
-                    <button onClick={() => handleEditCategory(category)}>Update Category</button>
+                    <button onClick={() => handleEditCategory(index)}>Update Category</button>
                     <div>
                       <strong>Category Name: {category.name}</strong>
                     </div>
                     <div>
                       <strong>Cities:</strong>
-                      {category.cities.map((city, index) => (
-                        <div key={index}>{city}</div>
-                      )}
+                      {category.cities.map((city, cityIndex) => (
+                        <div key={cityIndex}>{city}</div>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -162,7 +192,7 @@ const ManageCategories = () => {
                 type="text"
                 placeholder="Category Name"
                 value={newCategory.name}
-                onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                onChange={(e) => handleUpdateCategoryName(-1, e.target.value)}
               />
             </label>
             <h4>Cities:</h4>
@@ -174,13 +204,13 @@ const ManageCategories = () => {
                     type="text"
                     placeholder="City Name"
                     value={city}
-                    onChange={(e) => handleUpdateCity(index, e.target.value)}
+                    onChange={(e) => handleUpdateCity(-1, index, e.target.value)}
                   />
                 </label>
-                <button onClick={() => handleDeleteCity(index)}>Delete City</button>
+                <button onClick={() => handleDeleteCity(-1, index)}>Delete City</button>
               </div>
             ))}
-            <button onClick={handleAddCity}>Add City</button>
+            <button onClick={() => handleAddCity(-1)}>Add City</button>
             <button onClick={handleSaveCategory}>Save</button>
           </div>
         )}
