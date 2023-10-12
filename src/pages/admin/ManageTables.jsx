@@ -170,47 +170,75 @@ const ManageTables = () => {
                     />
                     {editedTables.includes(table.id) ? (
                       <>
-                        <select
-                          value={table.gender}
-                          onChange={(e) =>
-                            handleTableChange(table.id, "gender", e.target.value)
-                          }
-                        >
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                        </select>
-                        <select
-                          value={table.status}
-                          onChange={(e) =>
-                            handleTableChange(table.id, "status", e.target.value)
-                          }
-                        >
-                          <option value="newcomer">Newcomer</option>
-                          <option value="oldtimer">Oldtimer</option>
-                        </select>
-                        <input
-                          type="date"
-                          value={table.start_date}
-                          onChange={(e) =>
-                            handleTableChange(table.id, "start_date", e.target.value)
-                          }
-                        />
-                        <input
-                          type="date"
-                          value={table.end_date}
-                          onChange={(e) =>
-                            handleTableChange(table.id, "end_date", e.target.value)
-                          }
-                        />
+                        <div>
+                          <label htmlFor={`gender-${table.id}`}>Gender:</label>
+                          <select
+                            id={`gender-${table.id}`}
+                            value={table.gender}
+                            onChange={(e) =>
+                              handleTableChange(table.id, "gender", e.target.value)
+                            }
+                          >
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label htmlFor={`status-${table.id}`}>Status:</label>
+                          <select
+                            id={`status-${table.id}`}
+                            value={table.status}
+                            onChange={(e) =>
+                              handleTableChange(table.id, "status", e.target.value)
+                            }
+                          >
+                            <option value="newcomer">Newcomer</option>
+                            <option value="oldtimer">Oldtimer</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label htmlFor={`start_date-${table.id}`}>Start Date:</label>
+                          <input
+                            id={`start_date-${table.id}`}
+                            type="date"
+                            value={table.start_date}
+                            onChange={(e) =>
+                              handleTableChange(table.id, "start_date", e.target.value)
+                            }
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`end_date-${table.id}`}>End Date:</label>
+                          <input
+                            id={`end_date-${table.id}`}
+                            type="date"
+                            value={table.end_date}
+                            onChange={(e) =>
+                              handleTableChange(table.id, "end_date", e.target.value)
+                            }
+                          />
+                        </div>
                         <button onClick={() => handleSaveChanges(table.id)}>Save</button>
                         <button onClick={() => handleCancelEdit(table.id)}>Cancel</button>
                       </>
                     ) : (
                       <>
-                        <div>Gender: {table.gender}</div>
-                        <div>Status: {table.status}</div>
-                        <div>Start Date: {table.start_date}</div>
-                        <div>End Date: {table.end_date}</div>
+                        <div>
+                          <label htmlFor={`gender-${table.id}`}>Gender:</label>
+                          {table.gender}
+                        </div>
+                        <div>
+                          <label htmlFor={`status-${table.id}`}>Status:</label>
+                          {table.status}
+                        </div>
+                        <div>
+                          <label htmlFor={`start_date-${table.id}`}>Start Date:</label>
+                          {table.start_date}
+                        </div>
+                        <div>
+                          <label htmlFor={`end_date-${table.id}`}>End Date:</label>
+                          {table.end_date}
+                        </div>
                         <button onClick={() => handleEditTable(table.id)}>Edit</button>
                       </>
                     )}
