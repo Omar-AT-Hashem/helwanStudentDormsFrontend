@@ -29,7 +29,7 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        `${API_ROUTE}/api/employee/login`,
+        `${API_ROUTE}/v1/employee/login`,
         loginForm
       );
 
@@ -40,7 +40,7 @@ export default function Login() {
         sessionStorage.setItem("username", username);
         sessionStorage.setItem("name", name);
         sessionStorage.setItem("token", token);
-        navigate("/basicdata");
+        navigate("/admin/basicdata");
       }
     } catch (error) {
       console.log(error.response.status);
@@ -115,7 +115,7 @@ export default function Login() {
                 </button>
               </div>
               <div>
-                <Link to="/studentLogin">بوابة الطالب</Link>
+                <Link to="/student/login">بوابة الطالب</Link>
               </div>
             </div>
           </form>

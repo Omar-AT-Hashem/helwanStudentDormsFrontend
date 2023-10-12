@@ -17,7 +17,7 @@ const BasicData = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/api/student/get-by-id/${selectedStudent}`)
+      .get(`${API_ROUTE}/v1/student/get-by-id/${selectedStudent}`)
       .then((res) => {
         return setSelectedStudentData(res.data);
       })

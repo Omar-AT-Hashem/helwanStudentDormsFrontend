@@ -15,7 +15,7 @@ function InstructionsViewer() {
   useEffect(() => {
     // Use the useEffect hook to fetch data when the component mounts
     axios
-      .get(`${API_ROUTE}/general/instructions`)
+      .get(`${API_ROUTE}/instructions`)
       .then((res) => {
         return setInstructions(res.data);
       })

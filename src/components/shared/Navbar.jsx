@@ -72,31 +72,31 @@ export const Navbar = () => {
         }  right-0 bg-mainBlue transition-all duration-200`}
       >
         <ul className="flex h-full items-center">
-          <Link to="/basicdata" className={subBarLinks}>
+          <Link to="/admin/basicdata" className={subBarLinks}>
             بيانات اساسية
           </Link>
-          <Link to="/Housing" className={subBarLinks}>
+          <Link to="/admin/Housing" className={subBarLinks}>
             السكن
           </Link>
-          <Link to="/Penalties" className={subBarLinks}>
+          <Link to="/admin/Penalties" className={subBarLinks}>
             الجزاءات
           </Link>
-          <Link to="/SeparateStudunts" className={subBarLinks}>
+          <Link to="/admin/SeparateStudunts" className={subBarLinks}>
             فصل الطلاب
           </Link>
-          <Link to="/Asbsenteeism" className={subBarLinks}>
+          <Link to="/admin/Asbsenteeism" className={subBarLinks}>
             الغياب والتصاريح
           </Link>
-          <Link to="/taxes" className={subBarLinks}>
+          <Link to="/admin/taxes" className={subBarLinks}>
             الرسوم
           </Link>
-          <Link to="/status" className={subBarLinks}>
+          <Link to="/admin/status" className={subBarLinks}>
             بيان حالة
           </Link>
-          <Link to="/taxesstatment" className={subBarLinks}>
+          <Link to="/admin/taxesstatment" className={subBarLinks}>
             بيان بالرسوم
           </Link>
-          <Link to="/blockmeals" className={subBarLinks}>
+          <Link to="/admin/blockmeals" className={subBarLinks}>
             حجب وجبات
           </Link>
 
@@ -152,32 +152,32 @@ export const Navbar = () => {
         }  right-0 bg-mainBlue transition-all duration-200`}
       >
         <ul className="flex h-full items-center">
-          <Link to="/basicdata" className={subBarLinks}>
+          <Link to="/admin/basicdata" className={subBarLinks}>
             بيانات اساسية
           </Link>
 
-          <Link to="/Housing" className={subBarLinks}>
+          <Link to="/admin/Housing" className={subBarLinks}>
             السكن
           </Link>
-          <Link to="/Penalties" className={subBarLinks}>
+          <Link to="/admin/Penalties" className={subBarLinks}>
             الجزاءات
           </Link>
-          <Link to="/SeparateStudunts" className={subBarLinks}>
+          <Link to="/admin/SeparateStudunts" className={subBarLinks}>
             فصل الطلاب
           </Link>
-          <Link to="/Asbsenteeism" className={subBarLinks}>
+          <Link to="/admin/Asbsenteeism" className={subBarLinks}>
             الغياب والتصاريح
           </Link>
-          <Link to="/taxes" className={subBarLinks}>
+          <Link to="/admin/taxes" className={subBarLinks}>
             الرسوم
           </Link>
-          <Link to="/status" className={subBarLinks}>
+          <Link to="/admin/status" className={subBarLinks}>
             بيان حالة
           </Link>
-          <Link to="/taxesstatment" className={subBarLinks}>
+          <Link to="/admin/taxesstatment" className={subBarLinks}>
             بيان بالرسوم
           </Link>
-          <Link to="/blockmeals" className={subBarLinks}>
+          <Link to="/admin/blockmeals" className={subBarLinks}>
             حجب وجبات
           </Link>
           <div className="relative group">
@@ -236,7 +236,7 @@ export const Navbar = () => {
           <div className="relative group">
             <li className={subBarLinks}>Misc</li>
             <ul className="flex flex-col items-center absolute top-full -left-10 h-0 overflow-hidden group-hover:h-36 bg-mainBlue w-44 transition-all duration-200">
-              <Link to="/manageInstructions" className={dropDownLinks}>
+              <Link to="/admin/manageInstructions" className={dropDownLinks}>
                 Manage Instructions
               </Link>
               <li className={dropDownLinks}>subitem 1</li>

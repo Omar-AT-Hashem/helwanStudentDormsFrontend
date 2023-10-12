@@ -22,7 +22,7 @@ const ManageInsturctions = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/api/instruction`)
+      .get(`${API_ROUTE}/v1/instruction`)
       .then((res) => {
         return setInstructions(res.data);
       })
@@ -82,7 +82,7 @@ const ManageInsturctions = () => {
         deletedInstruction.forEach((id) => {
           setLoading((prev) => prev + 1);
           axios
-            .delete(`${API_ROUTE}/api/instruction/${id}`)
+            .delete(`${API_ROUTE}/v1/instruction/${id}`)
             .then(() => {
               setLoading((prev) => prev - 1);
             })
@@ -113,7 +113,7 @@ const ManageInsturctions = () => {
         updates.forEach((update) => {
           setLoading((prev) => prev + 1);
           axios
-            .put(`${API_ROUTE}/api/instruction`, {
+            .put(`${API_ROUTE}/v1/instruction`, {
               id: update.id,
               instruction: update.instruction,
             })
@@ -166,7 +166,7 @@ const ManageInsturctions = () => {
       filteredAdded.forEach((addedInstruction) => {
         setLoading((prev) => prev + 1);
         axios
-          .post(`${API_ROUTE}/api/instruction`, {
+          .post(`${API_ROUTE}/v1/instruction`, {
             instruction: addedInstruction,
           })
           .then((res) => {

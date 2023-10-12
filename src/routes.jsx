@@ -20,6 +20,8 @@ import IdCardGenerator from "./pages/admin/IdCardGenerator";
 import ManageInsturctions from "./pages/admin/ManageInstructions";
 import ManageTables from "./pages/admin/ManageTables";
 import StudentLogin from "./pages/login/StudentLogin";
+import Student from "./pages/student/student";
+import Admin from "./pages/admin/Admin";
 export const routes = createBrowserRouter([
   {
     path: "",
@@ -30,79 +32,94 @@ export const routes = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/emp",
-        element: <Emp />,
+        path: "admin",
+        element: <Admin />,
+        children: [
+          {
+            path: "emp",
+            element: <Emp />,
+          },
+          {
+            path: "whentoapply",
+            element: <WhenToApply />,
+          },
+          {
+            path: "studentapplicationform",
+            element: <StudentApplicationForm />,
+          },
+    
+          {
+            path: "basicdata",
+            element: <BasicData />,
+          },
+          {
+            path: "taxes",
+            element: <Taxes />,
+          },
+          {
+            path: "housing",
+            element: <Housing />,
+          },
+          {
+            path: "separateStudunts",
+            element: <SeparateStudunts />,
+          },
+          {
+            path: "blockmeals",
+            element: <BlockMeals />,
+          },
+          {
+            path: "status",
+            element: <Status />,
+          },
+          {
+            path: "taxesstatment",
+            element: <TaxesStatment />,
+          },
+          {
+            path: "idcardgenerator",
+            element: <IdCardGenerator />,
+          },
+          {
+            path: "asbsenteeism",
+            element: <Asbsenteeism />,
+          },
+    
+          {
+            path: "penalties",
+            element: <Penalties />,
+          },
+    
+          {
+            path: "manageInstructions",
+            element: <ManageInsturctions />,
+          },
+          {
+            path: "manageTables",
+            element: <ManageTables />,
+          },
+        ]
       },
       {
-        path: "/instructionsViewer",
-        element: <InstructionsViewer />,
+        path: "student",
+        element: <Student />,
+        children: [
+          {
+            path: "login",
+            element: <StudentLogin />,
+          },
+          {
+            path: "profile",
+            element: <UserProfile />,
+          },
+          {
+            path: "instructions",
+            element: <InstructionsViewer />,
+          },
+        ],
       },
-      {
-        path: "/whentoapply",
-        element: <WhenToApply />,
-      },
-      {
-        path: "/studentapplicationform",
-        element: <StudentApplicationForm />,
-      },
-      {
-        path: "/userprofile",
-        element: <UserProfile />,
-      },
-      {
-        path: "/basicdata",
-        element: <BasicData />,
-      },
-      {
-        path: "/taxes",
-        element: <Taxes />,
-      },
-      {
-        path: "/housing",
-        element: <Housing />,
-      },
-      {
-        path: "/separateStudunts",
-        element: <SeparateStudunts />,
-      },
-      {
-        path: "/blockmeals",
-        element: <BlockMeals />,
-      },
-      {
-        path: "/status",
-        element: <Status />,
-      },
-      {
-        path: "/taxesstatment",
-        element: <TaxesStatment />,
-      },
-      {
-        path: "/idcardgenerator",
-        element: <IdCardGenerator />,
-      },
-      {
-        path: "/asbsenteeism",
-        element: <Asbsenteeism />,
-      },
-
-      {
-        path: "/penalties",
-        element: <Penalties />,
-      },
-
-      {
-        path: "/manageInstructions",
-        element: <ManageInsturctions />,
-      },
-      {
-        path: "/manageTables",
-        element: <ManageTables />,
-      },
+      
     ],
   },
-  {
-    path: "/studentLogin",
-    element: <StudentLogin />,
-  },
+  
 ]);

@@ -20,7 +20,7 @@ const SearchForStudents = ({ setSelectedStudent }) => {
 
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/api/student`, {
+      .get(`${API_ROUTE}/v1/student`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },

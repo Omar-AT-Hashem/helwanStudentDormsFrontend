@@ -1,6 +1,6 @@
-import  { useEffect, useState } from 'react';
-import axios from 'axios';
-import { API_ROUTE } from '../../config/env';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { API_ROUTE } from "../../config/env";
 
 
 function UserProfile() {
@@ -42,29 +42,33 @@ function UserProfile() {
   //   password: '',
   //   applicationStatus: '',
   // });
-  
-  const [userData, setUserData] = useState()
+
+  const [userData, setUserData] = useState();
 
   // State variable to track the selected image file
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/students/${sessionStorage.getItem}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
+      .get(
+        `${API_ROUTE}/v1/student/get-by-nationalId/${sessionStorage.getItem(
+          "nationalId"
+        )}`
+      )
       .then((response) => {
+        console.log(response);
         setUser(response.data);
         setUserData(response.data);
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.response ? err.response.data.error : 'An error occurred');
+        console.log(err);
+        setError(err.response ? err.response.data.error : "An error occurred");
         setLoading(false);
       });
   }, []);
+
+;
 
   // Function to handle the image selection
   const handleImageChange = (e) => {
@@ -113,23 +117,28 @@ function UserProfile() {
     }
 
     axios
-      .put(`${process.env.VITE_API_ROUTE}/user/update/${nationalId}`, updatedUserData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
+      .put(
+        `${API_ROUTE}/user/update/${sessionStorage.getItem("nationalId")}`,
+        updatedUserData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then((response) => {
         // Handle success response
         setIsEditable(false); // Disable editing mode after successful save
       })
       .catch((error) => {
         // Handle errors
-        setErrorMessage('Failed to update profile'); // Set error message
+        setErrorMessage("Failed to update profile"); // Set error message
       });
   };
 
   return (
-    <div>
+    user &&
+    <div clas>
       <h1>Student's Profile</h1>
       <form>
         <div>
@@ -139,15 +148,17 @@ function UserProfile() {
             accept="image/*"
             onChange={handleImageChange}
             id="image"
-            style={{ display: 'none' }} // Hide the file input
+            style={{ display: "none" }} // Hide the file input
           />
           <img
             src={userData.image || user.image}
             alt="User's Profile"
-            style={{ maxWidth: '200px' }}
+            style={{ maxWidth: "200px" }}
           />
           {isEditable && (
-            <button onClick={() => document.getElementById('image').click()}>Select Image</button>
+            <button onClick={() => document.getElementById("image").click()}>
+              Select Image
+            </button>
           )}
         </div>
         <div>
@@ -169,13 +180,15 @@ function UserProfile() {
             id="name"
           />
         </div>
-      <div>
+        <div>
           <label htmlFor="mobile">Mobile:</label>
           <input
             type="number"
             value={userData.mobile}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, mobile: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, mobile: e.target.value })
+            }
             id="mobile"
           />
         </div>
@@ -185,7 +198,9 @@ function UserProfile() {
             type="email"
             value={userData.email}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, email: e.target.value })
+            }
             id="email"
           />
         </div>
@@ -195,7 +210,9 @@ function UserProfile() {
             type="text"
             value={userData.address}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, address: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, address: e.target.value })
+            }
             id="address"
           />
         </div>
@@ -205,7 +222,9 @@ function UserProfile() {
             type="text"
             value={userData.religion}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, religion: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, religion: e.target.value })
+            }
             id="religion"
           />
         </div>
@@ -215,7 +234,9 @@ function UserProfile() {
             type="text"
             value={userData.residence}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, residence: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, residence: e.target.value })
+            }
             id="residence"
           />
         </div>
@@ -225,7 +246,9 @@ function UserProfile() {
             type="text"
             value={userData.fatherName}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, fatherName: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, fatherName: e.target.value })
+            }
             id="fatherName"
           />
         </div>
@@ -235,7 +258,9 @@ function UserProfile() {
             type="text"
             value={userData.fatherNationalId}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, fatherNationalId: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, fatherNationalId: e.target.value })
+            }
             id="fatherNationalId"
           />
         </div>
@@ -245,7 +270,9 @@ function UserProfile() {
             type="number"
             value={userData.fatherNumber}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, fatherNumber: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, fatherNumber: e.target.value })
+            }
             id="fatherNumber"
           />
         </div>
@@ -255,7 +282,9 @@ function UserProfile() {
             type="text"
             value={userData.fatherJob}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, fatherJob: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, fatherJob: e.target.value })
+            }
             id="fatherJob"
           />
         </div>
@@ -265,7 +294,9 @@ function UserProfile() {
             type="text"
             value={userData.guardianName}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, guardianName: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, guardianName: e.target.value })
+            }
             id="guardianName"
           />
         </div>
@@ -275,7 +306,9 @@ function UserProfile() {
             type="text"
             value={userData.guardianRelationship}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, guardianRelationship: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, guardianRelationship: e.target.value })
+            }
             id="guardianRelationship"
           />
         </div>
@@ -285,7 +318,9 @@ function UserProfile() {
             type="checkbox"
             checked={userData.disabled}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, disabled: e.target.checked })}
+            onChange={(e) =>
+              setUserData({ ...userData, disabled: e.target.checked })
+            }
             id="disabled"
           />
         </div>
@@ -295,7 +330,9 @@ function UserProfile() {
             type="checkbox"
             checked={userData.familyAbroad}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, familyAbroad: e.target.checked })}
+            onChange={(e) =>
+              setUserData({ ...userData, familyAbroad: e.target.checked })
+            }
             id="familyAbroad"
           />
         </div>
@@ -305,7 +342,9 @@ function UserProfile() {
             type="text"
             value={userData.apartmentType}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, apartmentType: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, apartmentType: e.target.value })
+            }
             id="apartmentType"
           />
         </div>
@@ -315,24 +354,27 @@ function UserProfile() {
             type="text"
             value={userData.applicationStatus}
             readOnly={!isEditable}
-            onChange={(e) => setUserData({ ...userData, applicationStatus: e.target.value })}
+            onChange={(e) =>
+              setUserData({ ...userData, applicationStatus: e.target.value })
+            }
             id="applicationStatus"
           />
         </div>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
         {user &&
-          (user.applicationStatus !== 'accepted' &&
-            user.applicationStatus !== 'reviewed') && (
-              <div>
-                {isEditable ? (
-                  <button onClick={handleSaveClick}>Save</button>
-                ) : (
-                    <button onClick={() => setIsEditable(true)}>Edit</button>
-                  )}
-              </div>
-            )}
+          user.applicationStatus !== "accepted" &&
+          user.applicationStatus !== "reviewed" && (
+            <div>
+              {isEditable ? (
+                <button onClick={handleSaveClick}>Save</button>
+              ) : (
+                <button onClick={() => setIsEditable(true)}>Edit</button>
+              )}
+            </div>
+          )}
       </form>
     </div>
+              
   );
 }
 

@@ -4,7 +4,6 @@ import { API_ROUTE } from "../../config/env.js";
 import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { Navbar } from "../../components/shared/Navbar";
 import { useNavigate } from "react-router-dom";
 
 export default function StudentLogin() {
@@ -29,18 +28,19 @@ export default function StudentLogin() {
 
     try {
       const response = await axios.post(
-        `${API_ROUTE}/api/student/login`,
+        `${API_ROUTE}/v1/student/login`,
         loginForm
       );
 
       if (response.status == 200) {
         setLoginLoading(false);
-        const { id, username, name, token } = response.data;
+        const { id, username, nationalId, name, token } = response.data;
         sessionStorage.setItem("id", id);
         sessionStorage.setItem("username", username);
+        sessionStorage.setItem("nationalId", nationalId);
         sessionStorage.setItem("name", name);
         sessionStorage.setItem("token", token);
-        navigate("/userprofile");
+        navigate("/student/profile");
       }
     } catch (error) {
       console.log(error.response.status);
@@ -58,7 +58,6 @@ export default function StudentLogin() {
 
   return (
     <>
-      <Navbar />
       <div className="grid grid-cols-1 md:grid-cols-2 h-screen w-full overscroll-none	">
         <Toaster
           toastOptions={{

@@ -100,7 +100,7 @@ function StudentApplicationForm() {
     setLoading(true);
 
     axios
-      .post(`${API_ROUTE}/api/student/register`, formData)
+      .post(`${API_ROUTE}/v1/student/register`, formData)
       .then((res) => {
         setFormData({
           nationalId: "",
