@@ -212,17 +212,18 @@ const ManageInsturctions = () => {
       />
       <div className=" flex-1">
         <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl ">
-          Manage Instructions
+         اداره التعليمات
         </div>
 
         {instructions ? (
           <div className="flex flex-col  font-sans">
             <div>
-              {instructions.length === 0 && <div>No instructions present</div>}
+              {instructions.length === 0 && <div className="flex justify-center items-center h-40"><p class="text-blue-600 text-center text-4xl">لا يوجد تعليمات لعرضها .</p></div>}
               {instructions.map((instruction, index) => (
                 <div key={111 + index}>
-                  <div className="flex gap-2 mx-5 my-3 p-3 border border-slate-600 bg-slate-300 w-[80vw] min- h-[100px] items-center">
-                    <div>{index + 1}-</div>
+                  
+                  <div className="flex gap-2 mx-5 my-3   border-yellow-600 bg-yellow-50 w-[80vw] min- h-suto items-center  resize-none p-1 h-full  border rounded-2xl">
+                    <div> <span className="mx-2">{index + 1}-</span></div>
                     {deletable && (
                       <input
                         type="checkbox"
@@ -236,7 +237,7 @@ const ManageInsturctions = () => {
                       value={instruction.instruction}
                       id={instruction.id}
                       name={index}
-                      className={`w-[100%] resize-none p-1 h-full bg-slate-300 ${
+                      className={`w-[100%] resize-none p-1 h-auto bg-yellow-50 ${
                         !editable && "bg-slate-300"
                       }`}
                       onChange={handleTextChange}
@@ -250,14 +251,14 @@ const ManageInsturctions = () => {
                 {editable || deletable ? (
                   <>
                     <button
-                      className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2"
+                      className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
                       onClick={handleSubmit}
                       name="submit"
                     >
                       ارسال
                     </button>
                     <button
-                      className="bg-red-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 "
+                      className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
                       onClick={handleCancel}
                       name="cancel"
                     >
@@ -267,14 +268,14 @@ const ManageInsturctions = () => {
                 ) : (
                   <>
                     <button
-                      className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2"
+                      className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
                       onClick={handleEdit}
                       name="edit"
                     >
                       تعديل
                     </button>
                     <button
-                      className="bg-red-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 "
+                      className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
                       onClick={handleDelete}
                       name="delete"
                     >
@@ -295,9 +296,9 @@ const ManageInsturctions = () => {
         {addedInstructions && (
           <div>
             {addedInstructions.map((addedInstruction, index) => (
-              <div key={index + 2000} className="flex bg-slate-500 m-10">
+              <div key={index + 2000} className="flex  m-10">
                 <button
-                  className="flex items-center justify-center bg-red-700 text-white font-bold h-14 w-14 top-0 right-0 "
+                  className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
                   onClick={handleAddDelete}
                   name={index}
                 >
@@ -306,7 +307,7 @@ const ManageInsturctions = () => {
                 <textarea
                   value={addedInstruction}
                   name={index}
-                  className={`w-[100%] resize-none p-1 h-full bg-slate-300`}
+                  className={`w-[100%] resize-none p-1 h-full bg-green-100 border-2 border-green-500 rounded-2xl	 `}
                   onChange={handleAddChange}
                 ></textarea>
               </div>
@@ -317,7 +318,7 @@ const ManageInsturctions = () => {
         <div className="mx-auto w-64 my-10 flex gap-10">
           {addedInstructions.length > 0 && (
             <button
-              className="font-bold bg-orange-500 text-white rounded w-20 h-10"
+              className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 border-b-4 border-orange-700 hover:border-orange-500 rounded"
               onClick={handleAddAll}
               name="add"
             >
@@ -325,7 +326,7 @@ const ManageInsturctions = () => {
             </button>
           )}
           <button
-            className="font-bold bg-green-900 text-white rounded w-20 h-10"
+            className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded m-auto"
             onClick={handleAdd}
             name="add"
           >
