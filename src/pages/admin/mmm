@@ -40,17 +40,6 @@ const ManageCategories = () => {
     }
   };
 
-  const handleUpdateCity = (cityIndex, cityName) => {
-    if (newCategory) {
-      const updatedCities = [...newCategory.cities];
-      updatedCities[cityIndex] = cityName;
-      setNewCategory({
-        ...newCategory,
-        cities: updatedCities,
-      });
-    }
-  };
-
   const handleEditCategory = (category) => {
     setEditingCategory(category);
   };
@@ -78,18 +67,7 @@ const ManageCategories = () => {
       setSelectedCategories(selectedCategories.filter((id) => id !== category.id));
     } else {
       setSelectedCategories([...selectedCategories, category.id]);
-    }
-  };
-
-  // Function to toggle edit mode for a category
-  const toggleEditMode = (category) => {
-    if (category === editingCategory) {
-      // The category is already in edit mode, cancel it
-      setEditingCategory(null);
-    } else {
-      // The category is not in edit mode, enter edit mode
-      setEditingCategory(category);
-    }
+    };
   };
 
   return (
@@ -122,48 +100,55 @@ const ManageCategories = () => {
                 onChange={() => toggleCategorySelection(category)}
                 checked={selectedCategories.includes(category.id)}
               />
-              <span>
+              <div>
                 {category === editingCategory ? (
-                  <strong>{category.name}</strong>
+                  // Edit mode
+                  <div>
+                    <h3>Edit Category</h3>
+                    <label>
+                      Category Name:
+                      <input
+                        type="text"
+                        placeholder="Category Name"
+                        value={category.name}
+                        onChange={(e) => handleUpdateCity(index, e.target.value)}
+                      />
+                    </label>
+                    <h4>Cities:</h4>
+                    {category.cities.map((city, index) => (
+                      <div key={index}>
+                        <label>
+                          City Name:
+                          <input
+                            type="text"
+                            placeholder="City Name"
+                            value={city}
+                            onChange={(e) => handleUpdateCity(index, e.target.value)}
+                          />
+                        </label>
+                        <button onClick={() => handleDeleteCity(index)}>Delete City</button>
+                      </div>
+                    ))}
+                    <button onClick={handleAddCity}>Add City</button>
+                    <button onClick={handleSaveEditedCategory}>Save</button>
+                    <button onClick={handleCancelEditCategory}>Cancel</button>
+                  </div>
                 ) : (
-                  category.name
-                )}
-              </span>
-              {!editingCategory ? (
-                <button onClick={() => toggleEditMode(category)}>Update Category</button>
-              ) : null}
-              {category === editingCategory && (
-                <div>
-                  <h3>Edit Category</h3>
-                  <label>
-                    Category Name:
-                    <input
-                      type="text"
-                      placeholder="Category Name"
-                      value={category.name}
-                      onChange={(e) => handleUpdateCity(index, e.target.value)}
-                    />
-                  </label>
-                  <h4>Cities:</h4>
-                  {category.cities.map((city, index) => (
-                    <div key={index}>
-                      <label>
-                        City Name:
-                        <input
-                          type="text"
-                          placeholder="City Name"
-                          value={city}
-                          onChange={(e) => handleUpdateCity(index, e.target.value)}
-                        />
-                      </label>
-                      <button onClick={() => handleDeleteCity(index)}>Delete City</button>
+                  // Non-editable mode
+                  <div>
+                    <button onClick={() => handleEditCategory(category)}>Update Category</button>
+                    <div>
+                      <strong>Category Name: {category.name}</strong>
                     </div>
-                  ))}
-                  <button onClick={handleAddCity}>Add City</button>
-                  <button onClick={handleSaveEditedCategory}>Save</button>
-                  <button onClick={handleCancelEditCategory}>Cancel</button>
-                </div>
-              )}
+                    <div>
+                      <strong>Cities:</strong>
+                      {category.cities.map((city, index) => (
+                        <div key={index}>{city}</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -174,9 +159,6 @@ const ManageCategories = () => {
             <label>
               Category Name:
               <input
-                type="text"
-                placeholder="Category Name"
-                value={newCategory.name}
                 type="text"
                 placeholder="Category Name"
                 value={newCategory.name}
