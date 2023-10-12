@@ -29,7 +29,7 @@ export default function StudentLogin() {
 
     try {
       const response = await axios.post(
-        `${API_ROUTE}/student/login`,
+        `${API_ROUTE}/api/student/login`,
         loginForm
       );
 

@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Navbar } from "../../components/shared/Navbar";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
@@ -29,7 +29,7 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        `${API_ROUTE}/employee/login`,
+        `${API_ROUTE}/api/employee/login`,
         loginForm
       );
 
@@ -113,6 +113,9 @@ export default function Login() {
                     "تسجيل دخول"
                   )}
                 </button>
+              </div>
+              <div>
+                <Link to="/studentLogin">بوابة الطالب</Link>
               </div>
             </div>
           </form>

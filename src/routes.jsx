@@ -23,6 +23,10 @@ import StudentLogin from "./pages/login/StudentLogin";
 export const routes = createBrowserRouter([
   {
     path: "",
+    element: <Login />,
+  },
+  {
+    path: "",
     element: <App />,
     children: [
       {
@@ -96,10 +100,6 @@ export const routes = createBrowserRouter([
         element: <ManageTables />,
       },
     ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
   },
   {
     path: "/studentLogin",

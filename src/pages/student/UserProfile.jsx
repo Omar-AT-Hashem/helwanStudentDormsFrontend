@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_ROUTE } from '../../config/env';
 
-function UserProfile({ nationalId }) {
+
+function UserProfile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -9,33 +11,46 @@ function UserProfile({ nationalId }) {
   const [errorMessage, setErrorMessage] = useState(null);
 
   // State variables for user data
-  const [userData, setUserData] = useState({
-    image: '',
-    nationalId: '',
-    name: '',
-    mobile: '',
-    email: '',
-    address: '',
-    religion: '',
-    residence: '',
-    fatherName: '',
-    fatherNationalId: '',
-    fatherNumber: '',
-    fatherJob: '',
-    guardianName: '',
-    guardianRelationship: '',
-    disabled: false,
-    familyAbroad: false,
-    apartmentType: '',
-    applicationStatus: '',
-  });
+  // const [userData, setUserData] = useState({
+  //   image: '', // Image URL
+  //   nationalId: '',
+  //   name: '',
+  //   birthday: '',
+  //   placeOfBirth: '',
+  //   gender: '',
+  //   telephone: '',
+  //   mobile: '',
+  //   email: '',
+  //   religion: '',
+  //   faculty: '',
+  //   fatherName: '',
+  //   fatherNationalId: '',
+  //   fatherOccupation: '',
+  //   fatherNumber: '',
+  //   guardianName: '',
+  //   guardianNationalId: '',
+  //   guardianRelationship: '',
+  //   residence: '',
+  //   addressDetails: '',
+  //   isDisabled: 0,
+  //   familyAbroad: 0,
+  //   highschoolAbroad: 0,
+  //   highschoolSpecialization: '',
+  //   highschoolGrade: '',
+  //   accomodationType: '',
+  //   accomodationWithNutrition: '',
+  //   password: '',
+  //   applicationStatus: '',
+  // });
+  
+  const [userData, setUserData] = useState()
 
   // State variable to track the selected image file
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     axios
-      .get(`${process.env.VITE_API_ROUTE}/user/${nationalId}`, {
+      .get(`${API_ROUTE}/students/${sessionStorage.getItem}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -49,7 +64,7 @@ function UserProfile({ nationalId }) {
         setError(err.response ? err.response.data.error : 'An error occurred');
         setLoading(false);
       });
-  }, [nationalId]);
+  }, []);
 
   // Function to handle the image selection
   const handleImageChange = (e) => {
