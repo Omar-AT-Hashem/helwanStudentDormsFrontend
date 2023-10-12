@@ -81,13 +81,10 @@ const ManageCategories = () => {
     }
   };
 
-  // Function to toggle edit mode for a category
   const toggleEditMode = (category) => {
     if (category === editingCategory) {
-      // The category is already in edit mode, cancel it
       setEditingCategory(null);
     } else {
-      // The category is not in edit mode, enter edit mode
       setEditingCategory(category);
     }
   };
@@ -122,14 +119,7 @@ const ManageCategories = () => {
                 onChange={() => toggleCategorySelection(category)}
                 checked={selectedCategories.includes(category.id)}
               />
-              <span onClick={() => toggleEditMode(category)}>
-                {category === editingCategory ? (
-                  <strong>{category.name}</strong>
-                ) : (
-                  category.name
-                )}
-              </span>
-              {category === editingCategory && (
+              {category === editingCategory ? (
                 <div>
                   <h3>Edit Category</h3>
                   <label>
@@ -158,7 +148,12 @@ const ManageCategories = () => {
                   ))}
                   <button onClick={handleAddCity}>Add City</button>
                   <button onClick={handleSaveEditedCategory}>Save</button>
-                  <button onClick={handleCancelEditCategory}>Cancel</button>
+                  <button onClick={() => toggleEditMode(category)}>Cancel</button>
+                </div>
+              ) : (
+                <div>
+                  <span>{category.name}</span>
+                  <button onClick={() => toggleEditMode(category)}>Edit</button>
                 </div>
               )}
             </div>
@@ -202,9 +197,8 @@ const ManageCategories = () => {
         <Loader2
           size={100}
           className="animate-spin duration-200 absolute left-[50%] top-[50%]"
-        />
-      )}
-    </div>
+       
+
   );
 };
 
