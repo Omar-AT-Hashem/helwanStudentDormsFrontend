@@ -9,7 +9,6 @@ const ManageCategories = () => {
   const [loading, setLoading] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  // Function to generate a unique ID
   const generateUniqueId = () => `${Date.now()}${Math.floor(Math.random() * 1000)}`;
 
   const handleAddCategory = () => {
@@ -82,6 +81,17 @@ const ManageCategories = () => {
     }
   };
 
+  // Function to toggle edit mode for a category
+  const toggleEditMode = (category) => {
+    if (category === editingCategory) {
+      // The category is already in edit mode, cancel it
+      setEditingCategory(null);
+    } else {
+      // The category is not in edit mode, enter edit mode
+      setEditingCategory(category);
+    }
+  };
+
   return (
     <div className="pt-16 flex flex-row w-full h-screen relative font-sans">
       <Toaster
@@ -112,7 +122,13 @@ const ManageCategories = () => {
                 onChange={() => toggleCategorySelection(category)}
                 checked={selectedCategories.includes(category.id)}
               />
-              <span onClick={() => handleEditCategory(category)}>{category.name}</span>
+              <span onClick={() => toggleEditMode(category)}>
+                {category === editingCategory ? (
+                  <strong>{category.name}</strong>
+                ) : (
+                  category.name
+                )}
+              </span>
               {category === editingCategory && (
                 <div>
                   <h3>Edit Category</h3>
