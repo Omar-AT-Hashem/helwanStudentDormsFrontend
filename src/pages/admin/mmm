@@ -1,0 +1,195 @@
+import React, { useState } from "react";
+import { Toaster } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
+
+const ManageCategories = () => {
+  const [categories, setCategories] = useState([]);
+  const [newCategory, setNewCategory] = useState(null);
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  // Function to generate a unique ID
+  const generateUniqueId = () => `${Date.now()}${Math.floor(Math.random() * 1000)}`;
+
+  const handleAddCategory = () => {
+    setNewCategory({ id: generateUniqueId(), name: "", cities: [""] });
+  };
+
+  const handleSaveCategory = () => {
+    setCategories([...categories, newCategory]);
+    setNewCategory(null);
+  };
+
+  const handleAddCity = () => {
+    if (newCategory) {
+      setNewCategory({
+        ...newCategory,
+        cities: [...newCategory.cities, ""],
+      });
+    }
+  };
+
+  const handleDeleteCity = (cityIndex) => {
+    if (newCategory) {
+      const updatedCities = [...newCategory.cities];
+      updatedCities.splice(cityIndex, 1);
+      setNewCategory({
+        ...newCategory,
+        cities: updatedCities,
+      });
+    }
+  };
+
+  const handleUpdateCity = (cityIndex, cityName) => {
+    if (newCategory) {
+      const updatedCities = [...newCategory.cities];
+      updatedCities[cityIndex] = cityName;
+      setNewCategory({
+        ...newCategory,
+        cities: updatedCities,
+      });
+    }
+  };
+
+  const handleEditCategory = (category) => {
+    setEditingCategory(category);
+  };
+
+  const handleCancelEditCategory = () => {
+    setEditingCategory(null);
+  };
+
+  const handleSaveEditedCategory = () => {
+    // Implement the logic to save the edited category here
+    // After saving, update the categories state
+    setEditingCategory(null);
+  };
+
+  const handleDeleteCategories = () => {
+    const updatedCategories = categories.filter(
+      (category) => !selectedCategories.includes(category.id)
+    );
+    setCategories(updatedCategories);
+    setSelectedCategories([]);
+  };
+
+  const toggleCategorySelection = (category) => {
+    if (selectedCategories.includes(category.id)) {
+      setSelectedCategories(selectedCategories.filter((id) => id !== category.id));
+    } else {
+      setSelectedCategories([...selectedCategories, category.id]);
+    }
+  };
+
+  return (
+    <div className="pt-16 flex flex-row w-full h-screen relative font-sans">
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            border: "1px solid #A9872D",
+            backgroundColor: "#A9872D",
+            padding: "16px",
+            color: "white",
+            fontWeight: "bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
+      <div className="flex-1">
+        <h1>Manage Categories</h1>
+
+        <div>
+          <h2>Categories</h2>
+          <button onClick={handleAddCategory}>Add Category</button>
+          <button onClick={handleDeleteCategories}>Delete Checked Categories</button>
+          {categories.map((category) => (
+            <div key={category.id}>
+              <input
+                type="checkbox"
+                onChange={() => toggleCategorySelection(category)}
+                checked={selectedCategories.includes(category.id)}
+              />
+              <span onClick={() => handleEditCategory(category)}>{category.name}</span>
+              {category === editingCategory && (
+                <div>
+                  <h3>Edit Category</h3>
+                  <label>
+                    Category Name:
+                    <input
+                      type="text"
+                      placeholder="Category Name"
+                      value={category.name}
+                      onChange={(e) => handleUpdateCity(index, e.target.value)}
+                    />
+                  </label>
+                  <h4>Cities:</h4>
+                  {category.cities.map((city, index) => (
+                    <div key={index}>
+                      <label>
+                        City Name:
+                        <input
+                          type="text"
+                          placeholder="City Name"
+                          value={city}
+                          onChange={(e) => handleUpdateCity(index, e.target.value)}
+                        />
+                      </label>
+                      <button onClick={() => handleDeleteCity(index)}>Delete City</button>
+                    </div>
+                  ))}
+                  <button onClick={handleAddCity}>Add City</button>
+                  <button onClick={handleSaveEditedCategory}>Save</button>
+                  <button onClick={handleCancelEditCategory}>Cancel</button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {newCategory && !editingCategory && (
+          <div>
+            <h3>Add New Category</h3>
+            <label>
+              Category Name:
+              <input
+                type="text"
+                placeholder="Category Name"
+                value={newCategory.name}
+                onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+              />
+            </label>
+            <h4>Cities:</h4>
+            {newCategory.cities.map((city, index) => (
+              <div key={index}>
+                <label>
+                  City Name:
+                  <input
+                    type="text"
+                    placeholder="City Name"
+                    value={city}
+                    onChange={(e) => handleUpdateCity(index, e.target.value)}
+                  />
+                </label>
+                <button onClick={() => handleDeleteCity(index)}>Delete City</button>
+              </div>
+            ))}
+            <button onClick={handleAddCity}>Add City</button>
+            <button onClick={handleSaveCategory}>Save</button>
+          </div>
+        )}
+      </div>
+
+      {loading && (
+        <Loader2
+          size={100}
+          className="animate-spin duration-200 absolute left-[50%] top-[50%]"
+        />
+      )}
+    </div>
+  );
+};
+
+export default ManageCategories;
