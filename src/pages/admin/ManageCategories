@@ -63,10 +63,12 @@ const ManageCategories = () => {
     setEditingCategory(null);
   };
 
-  const handleDeleteCategories = () => {
-    const updatedCategories = categories.filter(
-      (category, index) => !selectedCategories.includes(index)
-    );
+const handleDeleteCategories = () => {
+  const updatedCategories = categories.filter((category, index) => !selectedCategories.includes(index));
+  setCategories(updatedCategories);
+  setSelectedCategories([]); // Clear the selectedCategories array after deletion
+};
+
     setCategories(updatedCategories);
     setSelectedCategories([]);
   };
