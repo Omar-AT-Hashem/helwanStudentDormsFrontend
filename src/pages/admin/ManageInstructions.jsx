@@ -222,8 +222,9 @@ const ManageInsturctions = () => {
               {instructions.map((instruction, index) => (
                 <div key={111 + index}>
                   
-                  <div className="flex gap-2 mx-5 my-3   border-yellow-600 bg-yellow-50 w-[80vw] min- h-suto items-center  resize-none p-1 h-full  border rounded-2xl">
-                    <div> <span className="mx-2">{index + 1}-</span></div>
+                  <div className="flex gap-2 mx-5 my-3   border-yellow-300 bg-yellow-50 w-[80vw] min- h-suto items-center  resize-none p-1 h-full  border rounded-2xl text-slate-600">
+                    
+                    <div > <span className="mx-2">{index + 1}-</span></div>
                     {deletable && (
                       <input
                         type="checkbox"

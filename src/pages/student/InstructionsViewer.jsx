@@ -48,16 +48,20 @@ function InstructionsViewer() {
       />
 
       {instructions && instructions.length > 0 ? (
-        <div className="mt-20"> 
+        <div className="mt-20 bg-yellow-50 border rounded-2xl border-yellow-300 w-[80%] mr-40"> 
+        <h4 className="mr-4 text-3xl text-slate-700 mt-4 mb-4">- تعليمات هامه .....</h4>
+        
           {instructions.map((instruction,index) => (
-            <div key={index} className="w-[80%] resize-none p-1 h-full bg-slate-300">
+            <div key={index} className="  p-1 h-full text-slate-600 mr-14 text-xl">
+              <div> <span className="mx-2">{index + 1}-</span>
+
               {instruction.instruction}
-            </div>
+            </div></div>
           )
           )}
         </div>
       ) : (
-        <div>No available instruction</div>
+        <div className="flex justify-center items-center h-40"><p class="text-blue-600 text-center text-4xl">لا يوجد تعليمات لعرضها .</p></div>
       )}
 
       <div></div>
