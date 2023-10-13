@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 
 const ManageCategories = () => {
   const [categories, setCategories] = useState([]);
-  const [newCategories, setNewCategories] = useState([]); // State for new categories
+  const [newCategories, setNewCategories] = useState([]);
   const [editingCategory, setEditingCategory] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -73,6 +73,9 @@ const ManageCategories = () => {
       (category, index) => !selectedCategories.includes(index)
     );
     setCategories(updatedCategories);
+    setSelectedCategories([]); // Clear the selectedCategories array after deletion
+
+    setCategories(updatedCategories);
     setSelectedCategories([]);
   };
 
@@ -122,6 +125,7 @@ const ManageCategories = () => {
                   onChange={(e) =>
                     handleUpdateCategoryName(index, e.target.value)
                   }
+                  required
                 />
               </label>
               <h4>Cities:</h4>
@@ -136,6 +140,7 @@ const ManageCategories = () => {
                       onChange={(e) =>
                         handleUpdateCity(index, cityIndex, e.target.value)
                       }
+                      required
                     />
                   </label>
                   <button onClick={() => handleDeleteCity(index, cityIndex)}>
@@ -170,6 +175,7 @@ const ManageCategories = () => {
                       onChange={(e) =>
                         handleUpdateCategoryName(index, e.target.value)
                       }
+                      required
                     />
                   </label>
                   <h4>Cities:</h4>
@@ -184,6 +190,7 @@ const ManageCategories = () => {
                           onChange={(e) =>
                             handleUpdateCity(index, cityIndex, e.target.value)
                           }
+                          required
                         />
                       </label>
                       <button
