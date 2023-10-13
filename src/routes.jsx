@@ -16,13 +16,13 @@ import WhenToApply from "./pages/student/WhenToApply";
 import UserProfile from "./pages/student/UserProfile";
 import StudentApplicationForm from "./pages/student/StudentApplicationForm";
 import InstructionsViewer from "./pages/student/InstructionsViewer";
-
 import IdCardGenerator from "./pages/admin/IdCardGenerator";
 import ManageInsturctions from "./pages/admin/ManageInstructions";
 import ManageTables from "./pages/admin/ManageTables";
 import StudentLogin from "./pages/login/StudentLogin";
 import Student from "./pages/student/student";
 import Admin from "./pages/admin/Admin";
+
 export const routes = createBrowserRouter([
   {
     path: "",
@@ -80,12 +80,12 @@ export const routes = createBrowserRouter([
             path: "asbsenteeism",
             element: <Asbsenteeism />,
           },
-    
+
           {
             path: "penalties",
             element: <Penalties />,
           },
-    
+
           {
             path: "manageInstructions",
             element: <ManageInsturctions />,
@@ -94,7 +94,7 @@ export const routes = createBrowserRouter([
             path: "manageTables",
             element: <ManageTables />,
           },
-        ]
+        ],
       },
       {
         path: "student",
@@ -122,8 +122,6 @@ export const routes = createBrowserRouter([
           },
         ],
       },
-      
     ],
   },
-  
 ]);

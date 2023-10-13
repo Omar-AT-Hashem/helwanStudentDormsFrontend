@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 
@@ -9,10 +9,15 @@ const ManageCategories = () => {
   const [loading, setLoading] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const generateUniqueId = () => `${Date.now()}${Math.floor(Math.random() * 1000)}`;
+  const generateUniqueId = () =>
+    `${Date.now()}${Math.floor(Math.random() * 1000)}`;
 
   const handleAddCategory = () => {
-    const newUnsavedCategory = { id: generateUniqueId(), name: "", cities: [""] };
+    const newUnsavedCategory = {
+      id: generateUniqueId(),
+      name: "",
+      cities: [""],
+    };
     setNewCategories([...newCategories, newUnsavedCategory]);
   };
 
@@ -101,7 +106,9 @@ const ManageCategories = () => {
         <div>
           <h2>Categories</h2>
           <button onClick={handleAddCategory}>Add Category</button>
-          <button onClick={handleDeleteCategories}>Delete Checked Categories</button>
+          <button onClick={handleDeleteCategories}>
+            Delete Checked Categories
+          </button>
 
           {newCategories.map((unsavedCategory, index) => (
             <div key={unsavedCategory.id}>
@@ -112,7 +119,9 @@ const ManageCategories = () => {
                   type="text"
                   placeholder="Category Name"
                   value={unsavedCategory.name}
-                  onChange={(e) => handleUpdateCategoryName(index, e.target.value)}
+                  onChange={(e) =>
+                    handleUpdateCategoryName(index, e.target.value)
+                  }
                 />
               </label>
               <h4>Cities:</h4>
@@ -124,15 +133,25 @@ const ManageCategories = () => {
                       type="text"
                       placeholder="City Name"
                       value={city}
-                      onChange={(e) => handleUpdateCity(index, cityIndex, e.target.value)}
+                      onChange={(e) =>
+                        handleUpdateCity(index, cityIndex, e.target.value)
+                      }
                     />
                   </label>
-                  <button onClick={() => handleDeleteCity(index, cityIndex)}>Delete City</button>
+                  <button onClick={() => handleDeleteCity(index, cityIndex)}>
+                    Delete City
+                  </button>
                 </div>
               ))}
               <button onClick={() => handleAddCity(index)}>Add City</button>
-              <button onClick={() => handleSaveCategory(unsavedCategory, index)}>Save</button>
-              <button onClick={() => handleCancelAddCategory(index)}>Cancel</button>
+              <button
+                onClick={() => handleSaveCategory(unsavedCategory, index)}
+              >
+                Save
+              </button>
+              <button onClick={() => handleCancelAddCategory(index)}>
+                Cancel
+              </button>
             </div>
           ))}
 
@@ -148,7 +167,9 @@ const ManageCategories = () => {
                       type="text"
                       placeholder="Category Name"
                       value={category.name}
-                      onChange={(e) => handleUpdateCategoryName(index, e.target.value)}
+                      onChange={(e) =>
+                        handleUpdateCategoryName(index, e.target.value)
+                      }
                     />
                   </label>
                   <h4>Cities:</h4>
@@ -160,20 +181,30 @@ const ManageCategories = () => {
                           type="text"
                           placeholder="City Name"
                           value={city}
-                          onChange={(e) => handleUpdateCity(index, cityIndex, e.target.value)}
+                          onChange={(e) =>
+                            handleUpdateCity(index, cityIndex, e.target.value)
+                          }
                         />
                       </label>
-                      <button onClick={() => handleDeleteCity(index, cityIndex)}>Delete City</button>
+                      <button
+                        onClick={() => handleDeleteCity(index, cityIndex)}
+                      >
+                        Delete City
+                      </button>
                     </div>
                   ))}
                   <button onClick={() => handleAddCity(index)}>Add City</button>
-                  <button onClick={() => handleSaveEditedCategory(index)}>Save</button>
+                  <button onClick={() => handleSaveEditedCategory(index)}>
+                    Save
+                  </button>
                   <button onClick={handleCancelEditCategory}>Cancel</button>
                 </div>
               ) : (
                 // Non-editable mode
                 <div>
-                  <button onClick={() => handleEditCategory(index)}>Update Category</button>
+                  <button onClick={() => handleEditCategory(index)}>
+                    Update Category
+                  </button>
                   <div>
                     <strong>Category Name: {category.name}</strong>
                   </div>
@@ -181,7 +212,7 @@ const ManageCategories = () => {
                     <strong>Cities:</strong>
                     {category.cities.map((city, cityIndex) => (
                       <div key={cityIndex}>{city}</div>
-                    )}
+                    ))}
                   </div>
                 </div>
               )}
@@ -189,15 +220,14 @@ const ManageCategories = () => {
           ))}
         </div>
       </div>
+      {loading && (
+        <Loader2
+          size={100}
+          className="animate-spin duration-200 absolute left-[50%] top-[50%]"
+        />
+      )}
     </div>
-
-    {loading && (
-      <Loader2
-        size={100}
-        className="animate-spin duration-200 absolute left-[50%] top-[50%]"
-      />
-    )}
-  </div>
-);
+  );
+};
 
 export default ManageCategories;
