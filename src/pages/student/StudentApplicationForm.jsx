@@ -57,6 +57,7 @@ function StudentApplicationForm() {
   //   });
   // };
 
+  console.log(formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
@@ -126,7 +127,7 @@ function StudentApplicationForm() {
           isDisabled: 0,
           familyAbroad: 0,
           highschoolAbroad: 0,
-          highschoolSpecialization: "",
+           highschoolSpecialization: "",
           highschoolGrade: "",
           accomodationType: "",
           accomodationWithNutrition: 0,
@@ -171,6 +172,7 @@ function StudentApplicationForm() {
         <form
           onSubmit={handleSubmit}
           className="mt-20 flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8 	"
+          noValidate
         >
           <div className="flex flex-col items-start">
             <label className="mb-4 ">
@@ -461,16 +463,16 @@ function StudentApplicationForm() {
             </div>
 
             <div className="mb-4">
-              <select >
+              <select 
+                name="highschoolSpecialization"
+                value={formData.highschoolSpecialization}
+                onChange={handleChange}
+                required
+                className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+          focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-7"
+              >
                 الشعبه بالثانويه العامه:
-                <input
-                  name="highschoolSpecialization"
-                  value={formData.highschoolSpecialization}
-                  onChange={handleChange}
-                  required
-                  className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-7"
-                /><option>---</option>
+                <option>---</option>
                 <option>علمى علوم</option>
                 <option>علمى رياضة</option>
                 <option>أدبى</option>
@@ -515,6 +517,7 @@ function StudentApplicationForm() {
                   required
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24">
+              <option>----</option>
               <option>سكن عادى</option>
                 </select>
               </label>

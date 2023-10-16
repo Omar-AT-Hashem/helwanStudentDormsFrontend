@@ -9,7 +9,7 @@ import SeparateStudunts from "./pages/admin/SeparateStudunts";
 import Status from "./pages/admin/Status";
 import BlockMeals from "./pages/admin/BlockMeals";
 import TaxesStatment from "./pages/admin/TaxesStatment";
-import ManageCategories from "./pages/admin/ManageCategories";
+// import ManageCategories from "./pages/admin/ManageCategories";
 import Asbsenteeism from "./pages/admin/asbsenteeism";
 import Penalties from "./pages/admin/penalties";
 import WhenToApply from "./pages/student/WhenToApply";
@@ -56,10 +56,10 @@ export const routes = createBrowserRouter([
             path: "separateStudunts",
             element: <SeparateStudunts />,
           },
-          {
-            path: "managecategories",
-            element: <ManageCategories />,
-          },
+          // {
+          //   path: "managecategories",
+          //   element: <ManageCategories />,
+          // },
           {
             path: "blockmeals",
             element: <BlockMeals />,
