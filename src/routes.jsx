@@ -22,6 +22,7 @@ import ManageTables from "./pages/admin/ManageTables";
 import StudentLogin from "./pages/login/StudentLogin";
 import Student from "./pages/student/student";
 import Admin from "./pages/admin/Admin";
+import AdminHome from "./pages/admin/AdminHome.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const routes = createBrowserRouter([
         path: "admin",
         element: <Admin />,
         children: [
+          {
+            path: "home",
+            element: <AdminHome />,
+          },
           {
             path: "emp",
             element: <Emp />,

@@ -49,13 +49,6 @@ function StudentApplicationForm() {
     });
   };
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setFormData({
-  //     ...formData,
-  //     image: file,
-  //   });
-  // };
 
   console.log(formData);
   const handleSubmit = async (e) => {
@@ -65,38 +58,6 @@ function StudentApplicationForm() {
       return toast("كلمة المرور وتأكيد كلمة المرور غير متطابقين");
     }
 
-    // Send formData to your backend API to insert into the database and create an account
-
-    // const form = new FormData();
-    // form.set("image", formData.image);
-    // form.set("nationalId", formData.nationalId);
-    // form.set("name", formData.name);
-    // form.set("birthday", formData.birthday);
-    // form.set("placeOfBirth", formData.placeOfBirth);
-    // form.set("gender", formData.gender);
-    // form.set("telephone", formData.telephone);
-    // form.set("mobile", formData.mobile);
-    // form.set("email", formData.email);
-    // form.set("religion", formData.religion);
-    // form.set("address", formData.address);
-    // form.set("faculty", formData.faculty);
-    // form.set("fatherName", formData.fatherName);
-    // form.set("fatherNationalId", formData.fatherNationalId);
-    // form.set("fatherOccupation", formData.fatherOccupation);
-    // form.set("fatherNumber", formData.fatherNumber);
-    // form.set("guardianName", formData.guardianName);
-    // form.set("guardianNationalId", formData.guardianNationalId);
-    // form.set("guardianRelationship", formData.guardianRelationship);
-    // form.set("residence", formData.residence);
-    // form.set("addressDetails", formData.addressDetails);
-    // form.set("isDisabled", formData.isDisabled);
-    // form.set("familyAbroad", formData.familyAbroad);
-    // form.set("highschoolSpecialization", formData.highschoolSpecialization);
-    // form.set("highschoolAbroad", formData.highschoolAbroad);
-    // form.set("highschoolGrade", formData.highschoolGrade);
-    // form.set("accomodationType", formData.accomodationType);
-    // form.set("accomodationWithNutrition", formData.accomodationWithNutrition);
-    // form.set("password", formData.password);
 
     setLoading(true);
 
