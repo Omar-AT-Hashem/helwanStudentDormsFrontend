@@ -1,10 +1,11 @@
 import { Outlet } from "react-router-dom";
-import { Navbar } from "../../components/shared/Navbar";
+import { AdminNavbar } from "../../components/shared/AdminNavbar";
 
 const Admin = () => {
   return (
     <>
-      <Navbar />
+      <AdminNavbar />
+      
       <Outlet />
     </>
   );
