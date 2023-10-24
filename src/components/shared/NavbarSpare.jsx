@@ -262,3 +262,4 @@ export const Navbar = () => {
     </>
   );
 };
+ `absolute top-20 transition-all duration-200 ${studentSliderOpen ? "right-[0%]" : "right-[-100%]"}`
