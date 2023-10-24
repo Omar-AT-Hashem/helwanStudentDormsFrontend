@@ -1,16 +1,16 @@
-import mainImage from "../../assets/login/loginMainImage.jpeg";
+// import mainImage from "../../assets/login/loginMainImage.jpeg";
 import axios from "axios";
 import { API_ROUTE } from "../../config/env.js";
 import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
-import { Navbar } from "../../components/shared/Navbar.jsx";
+// import { Loader2 } from "lucide-react";
+// import { AdminNavbar } from "../../components/shared/AdminNavbar.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import logoImg from "../../assets/login/logo-removebg.png";
 
 export default function Login() {
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
-  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginLoading , setLoginLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -132,9 +132,11 @@ export default function Login() {
                 <p className="text-xl  font-semibold  flex  justify-end lg:w-3/4 ">
                   تقديم الطلاب للمدن الجامعيه{" "}
                 </p>
-                <button className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01]  ease-in-out transform w-20 h-10 bg-mainBlue rounded-md text-white font-semibold text-center">
+                <Link
+                to= "/student/application"
+                 className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] flex items-center justify-center ease-in-out transform w-20 h-10 bg-mainBlue rounded-md text-white font-semibold text-center">
                   استمرار
-                </button>
+                </Link>
               </div>
             </div>
           </form>

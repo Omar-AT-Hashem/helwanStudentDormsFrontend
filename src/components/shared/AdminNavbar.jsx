@@ -1,13 +1,30 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import AdminSystemSlider from './AdminSystemSlider'
+// import AdminStudentSlider from './AdminStudentSlider';
+import AdminStudentSlider from './AdminStudentSlider'
+
 
 import logoImg from "../../assets/login/logo-removebg.png";
 
-export const Navbar = () => {
+export const AdminNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [studentSliderOpen , setStudentSliderOpen] = useState(false);
+  const [adminSliderOpen , setAdminSliderOpen] = useState(false);
+
+  const handleStudentSlider = () => {
+    setAdminSliderOpen(false)
+    setStudentSliderOpen(!studentSliderOpen)
+    
+  }
+
+  const handleAdminSlider = () => {
+    setStudentSliderOpen(false)
+    setAdminSliderOpen(!adminSliderOpen)
+  }
   return (
     <div>
-      <nav className="bg-mainBlue h-20">
+      <nav className="bg-mainBlue h-20 fixed w-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className=" items-center  justify-between h-17">
             <div className="flex items-center flex-row-reverse">
@@ -24,25 +41,28 @@ export const Navbar = () => {
               </div>
               <div className="hidden md:block ">
                 <div className="mr-10 w-2/3 flex items-baseline flex-row-reverse space-x-4">
-                  <a
-                    href="#"
+                  <button
+                  onClick={handleStudentSlider}
+                   
                     className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
                     بيانات الطلاب
-                  </a>
-                  <a
-                    href="#"
+                  </button>
+                  <button
+                  onClick={handleStudentSlider}
+                    
                     className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
                     بيانات الطالبات
-                  </a>
+                  </button>
 
-                  <a
-                    href="#"
+                  <button
+                  onClick={handleAdminSlider}
+                    
                     className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
                     الإشراف على النظام
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -92,9 +112,18 @@ export const Navbar = () => {
             </div>
           </div>
         </div>
+        <div className={`absolute top-20 transition-all duration-200 ${studentSliderOpen ? "right-[0%]" : "right-[-100%]"}`}>
+        <AdminStudentSlider/>
+        </div>
+        <div className={`absolute top-20 transition-all duration-200 ${adminSliderOpen ? "right-[0%]" : "right-[-100%]"}`}>
+        <AdminSystemSlider/>
+        </div>
+        
       </nav>
+      
+      
     </div>
   );
 }
 
-export default Navbar
+export default AdminNavbar;

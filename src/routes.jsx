@@ -9,6 +9,23 @@ import SeparateStudunts from "./pages/admin/SeparateStudunts";
 import Status from "./pages/admin/Status";
 import BlockMeals from "./pages/admin/BlockMeals";
 import TaxesStatment from "./pages/admin/TaxesStatment";
+////////////////////////////////////////////////////
+import AdminReports from './pages/admin/AdminReports';
+import AppDeadlines from './pages/admin/AppDeadlines';
+import Categories from './pages/admin/Categories';
+import Country from './pages/admin/Country';
+import Fees from './pages/admin/Fees';
+import GeneralStatistics from './pages/admin/GeneralStatistics';
+import Meals from './pages/admin/Meals';
+import Rooms from './pages/admin/Rooms';
+import StudentApp from './pages/admin/StudentApp';
+import SubmissionInstructions from './pages/admin/SubmissionInstructions';
+import TypeOfHousing from './pages/admin/TypeOfHousing';
+import UniversityPic from './pages/admin/UniversityPic';
+import UsersInApp from './pages/admin/UsersInApp';
+
+
+
 // import ManageCategories from "./pages/admin/ManageCategories";
 import Asbsenteeism from "./pages/admin/asbsenteeism";
 import Penalties from "./pages/admin/penalties";
@@ -99,6 +116,61 @@ export const routes = createBrowserRouter([
             path: "manageTables",
             element: <ManageTables />,
           },
+          //////////////////////////////////////////////
+          {
+            path: "usersinapp",
+            element: <UsersInApp />,
+          },
+          {
+            path: "universitypic",
+            element: <UniversityPic />,
+          },
+          {
+            path: "typeofhousing",
+            element: <TypeOfHousing />,
+          },
+          {
+            path: "submissioninstructions",
+            element: <SubmissionInstructions />,
+          },
+          {
+            path: "studentapp",
+            element: <StudentApp />,
+          },
+          {
+            path: "rooms",
+            element: <Rooms />,
+          },
+          {
+            path: "meals",
+            element: <Meals />,
+          },
+          {
+            path: "generalstatistics",
+            element: <GeneralStatistics />,
+          },
+          {
+            path: "fees",
+            element: <Fees />,
+          },
+          {
+            path: "country",
+            element: <Country />,
+          },
+          {
+            path: "appdeadlines",
+            element: <AppDeadlines />,
+          },
+          {
+            path: "categories",
+            element: <Categories />,
+          },
+          {
+            path: "reports",
+            element: <AdminReports />,
+          },
+          
+
         ],
       },
       {

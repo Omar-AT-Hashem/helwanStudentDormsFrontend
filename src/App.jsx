@@ -1,5 +1,5 @@
 // import Footer from "./components/shared/Footer.jsx";
-import { Navbar } from "./components/shared/Navbar.jsx";
+// import { AdminNavbar } from "./components/shared/AdminNavbar.jsx";
 import { Outlet } from "react-router-dom";
 
 function App() {
