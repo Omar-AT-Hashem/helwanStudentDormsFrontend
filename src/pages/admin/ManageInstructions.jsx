@@ -11,11 +11,11 @@ const ManageInsturctions = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [instructions, setInstructions] = useState();
-  const [preservedInstructions, setPreservedInstructions] = useState();
-  const [updatedInstructions, setUpdatedInstructions] = useState([]);
-  const [deletedInstruction, setDeletedInstructions] = useState([]);
-  const [addedInstructions, setAddedInstructions] = useState([]);
+  const [objects, setObjects] = useState();
+  const [preservedObjects, setPreservedObjects] = useState();
+  const [updatedObjects, setUpdatedObjects] = useState([]);
+  const [addedObjects, setAddedObjects] = useState([]);
+  const [deletedObjects, setDeletedObjects] = useState([]);
   const [editable, setEditable] = useState(false);
   const [deletable, setDeletable] = useState(false);
   const [loading, setLoading] = useState(0);
@@ -24,7 +24,7 @@ const ManageInsturctions = () => {
     axios
       .get(`${API_ROUTE}/v1/instruction`)
       .then((res) => {
-        return setInstructions(res.data);
+        return setObjects(res.data);
       })
       .catch((err) => {
         if (err && err.code === "ERR_BAD_REQUEST") {
@@ -37,18 +37,18 @@ const ManageInsturctions = () => {
 
   const handleCheckboxChange = (e) => {
     if (e.target.checked === true) {
-      setDeletedInstructions((prev) => [...prev, e.target.value]);
+      setDeletedObjects((prev) => [...prev, e.target.value]);
     } else if (e.target.checked === false) {
-      let updateDeleted = deletedInstruction;
+      let updateDeleted = deletedObjects;
       updateDeleted = updateDeleted.filter((ele) => {
         return ele !== e.target.value;
       });
-      setDeletedInstructions(updateDeleted);
+      setDeletedObjects(updateDeleted);
     }
   };
 
   const handleTextChange = (e) => {
-    setInstructions((prev) => {
+    setObjects((prev) => {
       prev[e.target.name] = {
         id: parseInt(e.target.id),
         instruction: e.target.value,
@@ -56,11 +56,11 @@ const ManageInsturctions = () => {
       return [...prev];
     });
 
-    setUpdatedInstructions((prev) => [...prev, e.target.name]);
+    setUpdatedObjects((prev) => [...prev, e.target.name]);
   };
 
   const handleEdit = () => {
-    setPreservedInstructions([...instructions]);
+    setPreservedObjects([...objects]);
     setEditable(!editable);
   };
 
@@ -70,8 +70,10 @@ const ManageInsturctions = () => {
 
   const handleCancel = () => {
     if (editable) {
-      setInstructions(preservedInstructions);
+      setObjects(preservedObjects);
     }
+    setAddedObjects([]);
+    setDeletedObjects([]);
     setDeletable(false);
     setEditable(false);
   };
@@ -79,7 +81,7 @@ const ManageInsturctions = () => {
   const handleSubmit = async () => {
     if (deletable) {
       try {
-        deletedInstruction.forEach((id) => {
+        deletedObjects.forEach((id) => {
           setLoading((prev) => prev + 1);
           axios
             .delete(`${API_ROUTE}/v1/instruction/${id}`)
@@ -91,22 +93,22 @@ const ManageInsturctions = () => {
             });
         });
 
-        let deleted = instructions;
+        let deleted = objects;
         deleted = deleted.filter((instruction) => {
-          return !deletedInstruction.includes(`${instruction.id}`);
+          return !deletedObjects.includes(`${instruction.id}`);
         });
-        setInstructions(deleted);
+        setObjects(deleted);
       } catch (err) {
         toast.dismiss();
         toast("Something went wrong");
       }
     }
     if (editable) {
-      let unique = [...new Set(updatedInstructions)];
+      let unique = [...new Set(updatedObjects)];
       let updates = unique.map((ele) => {
         return {
-          id: instructions[ele].id,
-          instruction: instructions[ele].instruction,
+          id: objects[ele].id,
+          instruction: objects[ele].instruction,
         };
       });
       try {
@@ -135,16 +137,16 @@ const ManageInsturctions = () => {
   };
 
   const handleAdd = () => {
-    setAddedInstructions((prev) => [...prev, ""]);
+    setAddedObjects((prev) => [...prev, ""]);
   };
   const handleAddDelete = (e) => {
-    setAddedInstructions((prev) => {
+    setAddedObjects((prev) => {
       prev.splice(e.target.name, 1);
       return [...prev];
     });
   };
   const handleAddChange = (e) => {
-    setAddedInstructions((prev) => {
+    setAddedObjects((prev) => {
       prev[e.target.name] = e.target.value;
       return [...prev];
     });
@@ -152,14 +154,14 @@ const ManageInsturctions = () => {
 
   const handleAddAll = async () => {
     //removes any empty instruction boxes before submission
-    setAddedInstructions((prev) => {
+    setAddedObjects((prev) => {
       prev = prev.filter((ele) => {
         return ele !== "";
       });
       return [...prev];
     });
 
-    let filteredAdded = addedInstructions.filter((ele) => {
+    let filteredAdded = addedObjects.filter((ele) => {
       return ele !== "";
     });
     try {
@@ -172,7 +174,7 @@ const ManageInsturctions = () => {
           .then((res) => {
             setLoading((prev) => prev - 1);
 
-            setInstructions((prev) => {
+            setObjects((prev) => {
               return [
                 ...prev,
                 {
@@ -187,7 +189,7 @@ const ManageInsturctions = () => {
           });
       });
 
-      setAddedInstructions([]);
+      setAddedObjects([]);
     } catch (err) {
       toast.dismiss();
       toast("Something went wrong");
@@ -212,19 +214,26 @@ const ManageInsturctions = () => {
       />
       <div className=" flex-1">
         <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl ">
-         اداره التعليمات
+          اداره التعليمات
         </div>
 
-        {instructions ? (
+        {objects ? (
           <div className="flex flex-col  font-sans">
             <div>
-              {instructions.length === 0 && <div className="flex justify-center items-center h-40"><p class="text-blue-600 text-center text-4xl">لا يوجد تعليمات لعرضها .</p></div>}
-              {instructions.map((instruction, index) => (
+              {objects.length === 0 && (
+                <div className="flex justify-center items-center h-40">
+                  <p class="text-blue-600 text-center text-4xl">
+                    لا يوجد تعليمات لعرضها .
+                  </p>
+                </div>
+              )}
+              {objects.map((instruction, index) => (
                 <div key={111 + index}>
-                  
                   <div className="flex gap-2 mx-5 my-3   border-yellow-300 bg-yellow-50 w-[80vw] min- h-suto items-center  resize-none p-1 h-full  border rounded-2xl text-slate-600">
-                    
-                    <div > <span className="mx-2">{index + 1}-</span></div>
+                    <div>
+                      {" "}
+                      <span className="mx-2">{index + 1}-</span>
+                    </div>
                     {deletable && (
                       <input
                         type="checkbox"
@@ -247,7 +256,7 @@ const ManageInsturctions = () => {
                 </div>
               ))}
             </div>
-            {instructions.length > 0 && (
+            {objects.length > 0 && (
               <div className="mx-auto flex gap-10 ">
                 {editable || deletable ? (
                   <>
@@ -263,7 +272,7 @@ const ManageInsturctions = () => {
                       onClick={handleCancel}
                       name="cancel"
                     >
-                      الغاء 
+                      الغاء
                     </button>
                   </>
                 ) : (
@@ -280,7 +289,7 @@ const ManageInsturctions = () => {
                       onClick={handleDelete}
                       name="delete"
                     >
-                      حذف 
+                      حذف
                     </button>
                   </>
                 )}
@@ -294,9 +303,9 @@ const ManageInsturctions = () => {
           />
         )}
 
-        {addedInstructions && (
+        {addedObjects && (
           <div>
-            {addedInstructions.map((addedInstruction, index) => (
+            {addedObjects.map((addedInstruction, index) => (
               <div key={index + 2000} className="flex  m-10">
                 <button
                   className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
@@ -317,13 +326,13 @@ const ManageInsturctions = () => {
         )}
 
         <div className="mx-auto w-64 my-10 flex gap-10">
-          {addedInstructions.length > 0 && (
+          {addedObjects.length > 0 && (
             <button
               className="bg-orange-500 hover:bg-orange-400 text-white font-bold py-2 px-4 border-b-4 border-orange-700 hover:border-orange-500 rounded"
               onClick={handleAddAll}
               name="add"
             >
-              اضافه الكل 
+              اضافه الكل
             </button>
           )}
           <button
