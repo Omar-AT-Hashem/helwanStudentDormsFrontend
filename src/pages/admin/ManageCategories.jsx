@@ -3,7 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { API_ROUTE } from "../../config/env";
 import axios from "axios";
 
-export default function ManageApplicationDates() {
+export default function ManageCategories() {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
       "Authorization"
@@ -37,31 +37,22 @@ export default function ManageApplicationDates() {
     const elementName = e.target.name.split("-")[1];
 
     if (e.target.type == "text") {
-      if (elementName == "studentType") {
+      if (elementName == "categoryName") {
         setObjects((prev) => {
           prev[elementIndex] = {
             ...prev[elementIndex],
-            studentType: e.target.value,
+            name: e.target.value,
           };
           return [...prev];
         });
       }
     }
-    if (e.target.type == "date") {
-      if (elementName == "startDate") {
+    if (e.target.type == "select-one") {
+      if (elementName == "categoryGovernorate") {
         setObjects((prev) => {
           prev[elementIndex] = {
             ...prev[elementIndex],
-            startDate: e.target.value,
-          };
-          return [...prev];
-        });
-      }
-      if (elementName == "endDate") {
-        setObjects((prev) => {
-          prev[elementIndex] = {
-            ...prev[elementIndex],
-            endDate: e.target.value,
+            governorate: e.target.value,
           };
           return [...prev];
         });
@@ -85,7 +76,7 @@ export default function ManageApplicationDates() {
       setObjects(preservedObjects);
     }
     setAddedObjects([]);
-    setDeletedObjects([])
+    setDeletedObjects([]);
     setDeletable(false);
     setEditable(false);
   };
@@ -96,7 +87,7 @@ export default function ManageApplicationDates() {
         deletedObjects.forEach((id) => {
           setLoading((prev) => prev + 1);
           axios
-            .delete(`${API_ROUTE}/v1/application-date/${id}`)
+            .delete(`${API_ROUTE}/v1/category/${id}`)
             .then(() => {
               setLoading((prev) => prev - 1);
             })
@@ -121,20 +112,18 @@ export default function ManageApplicationDates() {
         const i = parseInt(ele.split("-")[0]);
         return {
           id: objects[i].id,
-          studentType: objects[i].studentType,
-          startDate: objects[i].startDate,
-          endDate: objects[i].endDate,
+          name: objects[i].name,
+          governorate: objects[i].governorate,
         };
       });
       try {
         updates.forEach((update) => {
           setLoading((prev) => prev + 1);
           axios
-            .put(`${API_ROUTE}/v1/application-date`, {
+            .put(`${API_ROUTE}/v1/category`, {
               id: update.id,
-              studentType: update.studentType,
-              startDate: update.startDate,
-              endDate: update.endDate,
+              name: update.name,
+              governorate: update.governorate,
             })
             .then(() => {
               setLoading((prev) => prev - 1);
@@ -154,10 +143,7 @@ export default function ManageApplicationDates() {
   };
 
   const handleAdd = () => {
-    setAddedObjects((prev) => [
-      ...prev,
-      { startDate: "", endDate: "", studentType: "" },
-    ]);
+    setAddedObjects((prev) => [...prev, { name: "", governorate: "" }]);
   };
   const handleAddDelete = (e) => {
     setAddedObjects((prev) => {
@@ -170,31 +156,22 @@ export default function ManageApplicationDates() {
     const elementName = e.target.name.split("-")[1];
 
     if (e.target.type == "text") {
-      if (elementName == "studentType") {
+      if (elementName == "categoryName") {
         setAddedObjects((prev) => {
           prev[elementIndex] = {
             ...prev[elementIndex],
-            studentType: e.target.value,
+            name: e.target.value,
           };
           return [...prev];
         });
       }
     }
-    if (e.target.type == "date") {
-      if (elementName == "startDate") {
+    if (e.target.type == "select-one") {
+      if (elementName == "categoryGovernorate") {
         setAddedObjects((prev) => {
           prev[elementIndex] = {
             ...prev[elementIndex],
-            startDate: e.target.value,
-          };
-          return [...prev];
-        });
-      }
-      if (elementName == "endDate") {
-        setAddedObjects((prev) => {
-          prev[elementIndex] = {
-            ...prev[elementIndex],
-            endDate: e.target.value,
+            governorate: e.target.value,
           };
           return [...prev];
         });
@@ -206,26 +183,21 @@ export default function ManageApplicationDates() {
     //removes any empty instruction boxes before submission
     setAddedObjects((prev) => {
       prev = prev.filter((ele) => {
-        return (
-          ele.startDate !== "" && ele.endDate !== "" && ele.studentType !== ""
-        );
+        return ele.name !== "" && ele.governorate !== "";
       });
       return [...prev];
     });
 
     let filteredAdded = addedObjects.filter((ele) => {
-      return (
-        ele.startDate !== "" && ele.endDate !== "" && ele.studentType !== ""
-      );
+      return ele.name !== "" && ele.governorate !== "";
     });
     try {
       filteredAdded.forEach((addedObject) => {
         setLoading((prev) => prev + 1);
         axios
-          .post(`${API_ROUTE}/v1/application-date`, {
-            studentType: addedObject.studentType,
-            startDate: addedObject.startDate,
-            endDate: addedObject.endDate,
+          .post(`${API_ROUTE}/v1/category`, {
+            name: addedObject.name,
+            governorate: addedObject.governorate,
           })
           .then((res) => {
             setLoading((prev) => prev - 1);
@@ -235,9 +207,8 @@ export default function ManageApplicationDates() {
                 ...prev,
                 {
                   id: res.data.id,
-                  studentType: addedObject.studentType,
-                  startDate: addedObject.startDate,
-                  endDate: addedObject.endDate,
+                  name: addedObject.name,
+                  governorate: addedObject.governorate,
                 },
               ];
             });
@@ -256,7 +227,7 @@ export default function ManageApplicationDates() {
 
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/v1/application-date`)
+      .get(`${API_ROUTE}/v1/category`)
       .then((res) => {
         return setObjects(res.data);
       })
@@ -287,7 +258,8 @@ export default function ManageApplicationDates() {
       />
 
       <div className="mx-auto w-fit mt-20">
-        {(objects && objects.length > 0) || (addedObjects && addedObjects.length > 0) ? (
+        {(objects && objects.length > 0) ||
+        (addedObjects && addedObjects.length > 0) ? (
           <div className="flex flex-col">
             <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
@@ -296,13 +268,10 @@ export default function ManageApplicationDates() {
                     <thead className="border-b font-medium dark:border-neutral-500">
                       <tr>
                         <th scope="col" className="px-6 py-4">
-                          تاريخ الانتهاء
+                          المحافظة
                         </th>
                         <th scope="col" className="px-6 py-4">
-                          تاريخ البدء
-                        </th>
-                        <th scope="col" className="px-6 py-4">
-                          نوع الطالب
+                          الاسم
                         </th>
                         {deletable && (
                           <th scope="col" className="px-6 py-4"></th>
@@ -310,46 +279,66 @@ export default function ManageApplicationDates() {
                       </tr>
                     </thead>
                     <tbody>
-                      {objects.map((date, index) => (
+                      {objects.map((category, index) => (
                         <tr
-                          key={`${date.id}--date-${index}`}
+                          key={`${category.id}--categ-${index}`}
                           className="border-b border-neutral-100 bg-neutral-50 text-neutral-800 dark:bg-neutral-50"
                         >
                           <td className="whitespace-nowrap px-6 py-4">
                             {!editable ? (
-                              date.endDate
+                              category.governorate
                             ) : (
-                              <input
-                                type="date"
-                                disabled={!editable}
+                              <select
+                                name={`${index}-categoryGovernorate`}
                                 onChange={handleInputChange}
-                                name={`${index}-endDate`}
-                              />
+                                id="governorate"
+                                value={category.governorate}
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                              >
+                                <option selected>اختار محافظة</option>
+                                <option value="القاهرة">القاهرة</option>
+                                <option value="الإسكندرية">الإسكندرية</option>
+                                <option value="الجيزة">الجيزة</option>
+                                <option value="بورسعيد">بورسعيد</option>
+                                <option value="السويس">السويس</option>
+                                <option value="الإسماعيلية">الإسماعيلية</option>
+                                <option value="أسيوط">أسيوط</option>
+                                <option value="الزقازيق">الزقازيق</option>
+                                <option value="دمياط">دمياط</option>
+                                <option value="المنصورة">المنصورة</option>
+                                <option value="سوهاج">سوهاج</option>
+                                <option value="الأقصر">الأقصر</option>
+                                <option value="بني سويف">بني سويف</option>
+                                <option value="منيا">منيا</option>
+                                <option value="قنا">قنا</option>
+                                <option value="أسوان">أسوان</option>
+                                <option value="البحيرة">البحيرة</option>
+                                <option value="الفيوم">الفيوم</option>
+                                <option value="كفر الشيخ">كفر الشيخ</option>
+                                <option value="الغربية">الغربية</option>
+                                <option value="الشرقية">الشرقية</option>
+                                <option value="شمال سيناء">شمال سيناء</option>
+                                <option value="جنوب سيناء">جنوب سيناء</option>
+                                <option value="الوادي الجديد">
+                                  الوادي الجديد
+                                </option>
+                                <option value="البحر الأحمر">
+                                  البحر الأحمر
+                                </option>
+                              </select>
                             )}
                           </td>
                           <td className="whitespace-nowrap px-6 py-4">
                             {!editable ? (
-                              date.startDate
-                            ) : (
-                              <input
-                                type="date"
-                                disabled={!editable}
-                                onChange={handleInputChange}
-                                name={`${index}-startDate`}
-                              />
-                            )}
-                          </td>
-                          <td className="whitespace-nowrap px-6 py-4">
-                            {!editable ? (
-                              date.studentType
+                              category.name
                             ) : (
                               <input
                                 type="text"
-                                value={date.studentType}
+                                value={category.name}
                                 disabled={!editable}
                                 className="bg-slate-400"
                                 onChange={handleInputChange}
-                                name={`${index}-studentType`}
+                                name={`${index}-categoryName`}
                               />
                             )}
                           </td>
@@ -358,7 +347,7 @@ export default function ManageApplicationDates() {
                               <div className="flex items-center">
                                 <input
                                   type="checkbox"
-                                  value={date.id}
+                                  value={category.id}
                                   onClick={handleCheckboxChange}
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "
                                 />
@@ -375,27 +364,50 @@ export default function ManageApplicationDates() {
                           >
                             <td className="whitespace-nowrap px-6 py-4">
                               {" "}
-                              <input
-                                type="date"
-                                value={addedObject.endDate}
-                                name={`${index}-endDate`}
+                              <select
+                                name={`${index}-categoryGovernorate`}
                                 onChange={handleAddChange}
-                              />
-                            </td>
-                            <td className="whitespace-nowrap px-6 py-4">
-                              {" "}
-                              <input
-                                type="date"
-                                value={addedObject.startDate}
-                                name={`${index}-startDate`}
-                                onChange={handleAddChange}
-                              />
+                                value={addedObject.governorate}
+                                id="governorate"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                              >
+                                <option selected>اختار محافظة</option>
+                                <option value="القاهرة">القاهرة</option>
+                                <option value="الإسكندرية">الإسكندرية</option>
+                                <option value="الجيزة">الجيزة</option>
+                                <option value="بورسعيد">بورسعيد</option>
+                                <option value="السويس">السويس</option>
+                                <option value="الإسماعيلية">الإسماعيلية</option>
+                                <option value="أسيوط">أسيوط</option>
+                                <option value="الزقازيق">الزقازيق</option>
+                                <option value="دمياط">دمياط</option>
+                                <option value="المنصورة">المنصورة</option>
+                                <option value="سوهاج">سوهاج</option>
+                                <option value="الأقصر">الأقصر</option>
+                                <option value="بني سويف">بني سويف</option>
+                                <option value="منيا">منيا</option>
+                                <option value="قنا">قنا</option>
+                                <option value="أسوان">أسوان</option>
+                                <option value="البحيرة">البحيرة</option>
+                                <option value="الفيوم">الفيوم</option>
+                                <option value="كفر الشيخ">كفر الشيخ</option>
+                                <option value="الغربية">الغربية</option>
+                                <option value="الشرقية">الشرقية</option>
+                                <option value="شمال سيناء">شمال سيناء</option>
+                                <option value="جنوب سيناء">جنوب سيناء</option>
+                                <option value="الوادي الجديد">
+                                  الوادي الجديد
+                                </option>
+                                <option value="البحر الأحمر">
+                                  البحر الأحمر
+                                </option>
+                              </select>
                             </td>
                             <td className="whitespace-nowrap px-6 py-4">
                               <input
                                 type="text"
-                                value={addedObject.studentType}
-                                name={`${index}-studentType`}
+                                value={addedObject.name}
+                                name={`${index}-categoryName`}
                                 className="bg-slate-300"
                                 onChange={handleAddChange}
                               />
@@ -475,15 +487,15 @@ export default function ManageApplicationDates() {
           </div>
         ) : (
           <>
-          <div>لا تتوفر بيانات</div>
-          {!editable && !deletable && (
-            <button
-              onClick={handleAdd}
-              className="bg-blue-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
-            >
-              إضافة
-            </button>
-          )}
+            <div>لا تتوفر بيانات</div>
+            {!editable && !deletable && (
+              <button
+                onClick={handleAdd}
+                className="bg-blue-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
+              >
+                إضافة
+              </button>
+            )}
           </>
         )}
       </div>

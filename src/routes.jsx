@@ -10,21 +10,19 @@ import Status from "./pages/admin/Status";
 import BlockMeals from "./pages/admin/BlockMeals";
 import TaxesStatment from "./pages/admin/TaxesStatment";
 ////////////////////////////////////////////////////
-import AdminReports from './pages/admin/AdminReports';
-import AppDeadlines from './pages/admin/AppDeadlines';
-import Categories from './pages/admin/Categories';
-import Country from './pages/admin/Country';
-import Fees from './pages/admin/Fees';
-import GeneralStatistics from './pages/admin/GeneralStatistics';
-import Meals from './pages/admin/Meals';
-import Rooms from './pages/admin/Rooms';
-import StudentApp from './pages/admin/StudentApp';
-import SubmissionInstructions from './pages/admin/SubmissionInstructions';
-import TypeOfHousing from './pages/admin/TypeOfHousing';
-import UniversityPic from './pages/admin/UniversityPic';
-import UsersInApp from './pages/admin/UsersInApp';
-
-
+import AdminReports from "./pages/admin/AdminReports";
+import AppDeadlines from "./pages/admin/AppDeadlines";
+import Categories from "./pages/admin/Categories";
+import Country from "./pages/admin/Country";
+import Fees from "./pages/admin/Fees";
+import GeneralStatistics from "./pages/admin/GeneralStatistics";
+import Meals from "./pages/admin/Meals";
+import Rooms from "./pages/admin/Rooms";
+import StudentApp from "./pages/admin/StudentApp";
+import SubmissionInstructions from "./pages/admin/SubmissionInstructions";
+import TypeOfHousing from "./pages/admin/TypeOfHousing";
+import UniversityPic from "./pages/admin/UniversityPic";
+import UsersInApp from "./pages/admin/UsersInApp";
 
 // import ManageCategories from "./pages/admin/ManageCategories";
 import Asbsenteeism from "./pages/admin/asbsenteeism";
@@ -41,6 +39,7 @@ import Student from "./pages/student/student";
 import Admin from "./pages/admin/Admin";
 import AdminHome from "./pages/admin/AdminHome.jsx";
 import ManageApplicationDates from "./pages/admin/ManageApplicationDates";
+import ManageCategories from "./pages/admin/ManageCategories";
 
 export const routes = createBrowserRouter([
   {
@@ -79,10 +78,10 @@ export const routes = createBrowserRouter([
             path: "separateStudunts",
             element: <SeparateStudunts />,
           },
-          // {
-          //   path: "managecategories",
-          //   element: <ManageCategories />,
-          // },
+          {
+            path: "manageCategories",
+            element: <ManageCategories />,
+          },
           {
             path: "blockmeals",
             element: <BlockMeals />,
@@ -170,8 +169,6 @@ export const routes = createBrowserRouter([
             path: "reports",
             element: <AdminReports />,
           },
-          
-
         ],
       },
       {
