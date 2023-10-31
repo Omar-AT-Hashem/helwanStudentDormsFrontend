@@ -192,7 +192,7 @@ export const routes = createBrowserRouter([
             element: <StudentApplicationForm />,
           },
           {
-            path: "whentoapply",
+            path: "whenToApply",
             element: <WhenToApply />,
           },
         ],

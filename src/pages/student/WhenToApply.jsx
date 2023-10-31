@@ -1,57 +1,73 @@
-import { useState, useEffect } from 'react';
-
+import { useState, useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { API_ROUTE } from "../../config/env";
+import axios from "axios";
 
 function WhenToApply() {
-  // State to hold the applying time data and error messages
-  const [applyingTime, setApplyingTime] = useState([]);
-  const [error, setError] = useState(null);
+  if (sessionStorage.getItem("token")) {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
+  }
 
-  // Effect to fetch college application schedule data from the server
+  const [objects, setObjects] = useState([]);
+
   useEffect(() => {
-    fetch('/api/college-data') // Replace with actual API endpoint
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
+    axios
+      .get(`${API_ROUTE}/v1/application-date`)
+      .then((res) => {
+        return setObjects(res.data);
       })
-      .then((data) => setApplyingTime(data)) // Update state with the fetched data
-      .catch((error) => {
-        console.error('Error fetching college data:', error);
-        setError('An error occurred while fetching data. Please try again later.');
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
       });
-  }, []); // Empty dependency array, runs once on component mount
+  }, []);
 
   return (
-    <div className="ApplyDate">
-      <h1>College Application Schedule</h1>
-      {error ? (
-        // Display an error message if there's an error
-        <p className="error">{error}</p>
-      ) : (
-        // Display the table if there's no error
-        <table>
-          <thead>
-            <tr>
-              <th>Gender</th>
-              <th>Status</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {applyingTime.map((entry, index) => (
-              // Map through the applyingTime data and render table rows
-              <tr key={index}>
-                <td>{entry.gender}</td>
-                <td>{entry.status}</td>
-                <td>{entry.start_date}</td>
-                <td>{entry.end_date}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+    <div className="pt-32 min-w-[500px] md:min-w-[800px] w-fit mx-auto">
+      <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
+        <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+          <div className="overflow-hidden">
+            <table className="min-w-full text-center text-sm font-light">
+              <thead className="border-b font-medium dark:border-neutral-500">
+                <tr>
+                  <th scope="col" className="px-6 py-4">
+                    تاريخ الانتهاء
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    تاريخ البدء
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    نوع الطالب
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {objects.map((date, index) => (
+                  <tr
+                    key={`${date.id}--da-${index}`}
+                    className="border-b border-neutral-300 bg-neutral-50 text-neutral-800 dark:bg-neutral-50"
+                  >
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {date.endDate}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {date.startDate}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {date.studentType}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
