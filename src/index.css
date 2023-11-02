@@ -22,3 +22,7 @@
   margin: 0;
   padding: 0;
 }
+
+.ltr-local {
+  direction: ltr;
+}

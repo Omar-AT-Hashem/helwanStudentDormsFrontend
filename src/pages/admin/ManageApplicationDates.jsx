@@ -270,7 +270,7 @@ export default function ManageApplicationDates() {
   }, []);
 
   return (
-    <div className="pt-20 w-screen min-h-screen">
+    <div className="pt-20 w-screen min-h-screen ltr-local">
       <Toaster
         toastOptions={{
           className: "",

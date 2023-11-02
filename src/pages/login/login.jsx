@@ -10,7 +10,7 @@ import logoImg from "../../assets/login/logo-removebg.png";
 
 export default function Login() {
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
-  const [loginLoading , setLoginLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -76,7 +76,7 @@ export default function Login() {
         }}
       />
 
-      <div className="flex w-full h-screen">
+      <div className="flex w-full h-screen ltr-local">
         <div className="hidden  relative w-1/2 h-full lg:flex items-center justify-center bg-gray-200">
           <img
             className=" w-60 h-60 rounded-xl bg-mainBlue animate-none"
@@ -133,8 +133,9 @@ export default function Login() {
                   تقديم الطلاب للمدن الجامعيه{" "}
                 </p>
                 <Link
-                to= "/student/application"
-                 className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] flex items-center justify-center ease-in-out transform w-20 h-10 bg-mainBlue rounded-md text-white font-semibold text-center">
+                  to="/student/application"
+                  className="active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] flex items-center justify-center ease-in-out transform w-20 h-10 bg-mainBlue rounded-md text-white font-semibold text-center"
+                >
                   استمرار
                 </Link>
               </div>

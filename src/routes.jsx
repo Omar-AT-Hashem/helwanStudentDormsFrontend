@@ -40,11 +40,15 @@ import Admin from "./pages/admin/Admin";
 import AdminHome from "./pages/admin/AdminHome.jsx";
 import ManageApplicationDates from "./pages/admin/ManageApplicationDates";
 import ManageCategories from "./pages/admin/ManageCategories";
-
+import { Test } from "./pages/test.jsx";
 export const routes = createBrowserRouter([
   {
     path: "",
     element: <Login />,
+  },
+  {
+    path: "/test",
+    element: <Test />,
   },
   {
     path: "",

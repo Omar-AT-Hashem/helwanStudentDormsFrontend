@@ -10,9 +10,9 @@ export default function ManageCategories() {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [objects, setObjects] = useState();
+  const [objects, setObjects] = useState([]);
   const [deletedObjects, setDeletedObjects] = useState([]);
-  const [preservedObjects, setPreservedObjects] = useState();
+  const [preservedObjects, setPreservedObjects] = useState([]);
   const [updatedObjects, setUpdatedObjects] = useState([]);
   const [addedObjects, setAddedObjects] = useState([]);
   const [loading, setLoading] = useState([]);
@@ -31,6 +31,13 @@ export default function ManageCategories() {
       setDeletedObjects(updateDeleted);
     }
   };
+
+  console.log(objects);
+  console.log(deletedObjects);
+  console.log(updatedObjects);
+  console.log(addedObjects);
+
+
 
   const handleInputChange = (e) => {
     const elementIndex = parseInt(e.target.name.split("-")[0]);
@@ -151,6 +158,7 @@ export default function ManageCategories() {
       return [...prev];
     });
   };
+  
   const handleAddChange = (e) => {
     const elementIndex = parseInt(e.target.name.split("-")[0]);
     const elementName = e.target.name.split("-")[1];
@@ -241,7 +249,7 @@ export default function ManageCategories() {
   }, []);
 
   return (
-    <div className="pt-20 w-screen min-h-screen">
+    <div className="pt-20 w-screen min-h-screen ltr-local">
       <Toaster
         toastOptions={{
           className: "",

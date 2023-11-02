@@ -2,24 +2,42 @@ import { useState } from "react";
 import SearchForStudents from "../../components/minicomponent/SearchForStudents";
 import Records from "../../assets/fakeData/Records.json";
 
-
 const BlockMeals = () => {
-  const [student, setStudent] = useState({ name: "wrwer" });
-  return (
-    <div className="pt-16 flex flex-row w-full h-screen ">
-      <div className="w-64">
-        <SearchForStudents setStudent={setStudent} />
-      </div>
-      <div className=" flex-1">
-        <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl ">
-          حجب الوجبات - جامعة حلوان
-        </div>
+  const [form, setForm] = useState({});
+  const [objects, setObjects] = useState([]);
 
+  const handleChange = (e) => {
+    e.preventDefault();
+    setForm((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+  console.log(objects);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setObjects((prev) => {
+      return [...prev, form];
+    });
+    setForm({
+      toDate: "",
+      fromDate: "",
+      reason: "",
+      meal: "",
+    });
+  };
+
+  return (
+    <div className="pt-20 flex flex-row w-full h-screen ">
+      <div className=" flex-1">
         <div className="Data">
           {Records.map((record) => {
             return (
               <div className="box" key={record.id}>
-                <form className="flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8	">
+                <div className="flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8">
                   <label className="mb-4 ">
                     <span className="text-red-700">اسم المستخدم :</span>{" "}
                     <strong>{record.الاسم}</strong>
@@ -28,7 +46,10 @@ const BlockMeals = () => {
                   <div className="mb-4">
                     <label className=" ml-10"> من تاريخ : </label>
                     <input
-                      type="text"
+                      type="date"
+                      name="fromDate"
+                      onChange={handleChange}
+                      required
                       className="border border-gray-400"
                     ></input>
                   </div>
@@ -36,7 +57,10 @@ const BlockMeals = () => {
                   <div className="mb-2">
                     <label className="ml-10"> الى تاريخ :</label>
                     <input
-                      type="text"
+                      type="date"
+                      name="toDate"
+                      required
+                      onChange={handleChange}
                       className="border border-gray-400"
                     ></input>
                   </div>
@@ -46,17 +70,19 @@ const BlockMeals = () => {
                     <input
                       id="radio1"
                       type="radio"
-                      name="radio-group"
-                      class="form-radio h-5 w-5 text-gray-600 mr-10"
+                      name="meal"
+                      className="form-radio h-5 w-5 text-gray-600 mr-10"
                       value="lunch"
+                      onChange={handleChange}
                     ></input>
                     <label>غداء</label>
                     <input
                       id="radio2"
                       type="radio"
-                      name="radio-group"
-                      class="form-radio h-5 w-5 text-gray-600 mr-10"
+                      name="meal"
+                      className="form-radio h-5 w-5 text-gray-600 mr-10"
                       value="dinner"
+                      onChange={handleChange}
                     ></input>
                     <label>عشاء</label>
                   </div>
@@ -65,31 +91,45 @@ const BlockMeals = () => {
                     <label className="ml-10">السبب :</label>
                     <input
                       type="text"
+                      required
+                      value={form.reason}
+                      name="reason"
+                      onChange={handleChange}
                       className="border border-gray-400 "
                     ></input>
                   </div>
-                  <button class="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2 w-20 mt-10 ">
-                    تعديل
-                  </button>
-                </form>
+                  <div>
+                    <button className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2 w-20 mt-10 ">
+                      ازاله
+                    </button>
+                    <button
+                      className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2 w-20 mt-10"
+                      onClick={handleSubmit}
+                    >
+                      اضافه
+                    </button>
+                  </div>
+                </div>
                 <div>
                   <table className="table-auto w-4/5 mx-auto">
                     <thead>
                       <tr>
                         <th className="px-4 py-2">من تاريخ</th>
                         <th className="px-4 py-2">الى تاريخ</th>
-                        <th className="px-4 py-2">
-                          الوجبه
-                          <button class="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 mr-10">
-                            اضافه
-                          </button>
-                        </th>
+                        <th className="px-4 py-2">الوجبه</th>
+                        <th className="px-4 py-2">السبب</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr></tr>
-                      <tr></tr>
-                      <tr></tr>
+                      {objects.length > 0 &&
+                        objects.map((object, index) => (
+                          <tr key={`blk-meal-ind${index}`}>
+                            <td>{object.fromDate}</td>
+                            <td>{object.toDate}</td>
+                            <td>{object.meal}</td>
+                            <td>{object.reason}</td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

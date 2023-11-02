@@ -28,7 +28,7 @@ function WhenToApply() {
   }, []);
 
   return (
-    <div className="pt-32 min-w-[500px] md:min-w-[800px] w-fit mx-auto">
+    <div className="pt-32 min-w-[500px] md:min-w-[800px] w-fit mx-auto ltr-local">
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
         <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
           <div className="overflow-hidden">

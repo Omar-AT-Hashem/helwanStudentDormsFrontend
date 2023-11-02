@@ -14,7 +14,7 @@ export default function StudentNavbar() {
   }
 
   return (
-    <div>
+    <div className="ltr-local">
     <nav className="bg-mainBlue h-20 fixed w-screen">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className=" items-center  justify-between h-17">
