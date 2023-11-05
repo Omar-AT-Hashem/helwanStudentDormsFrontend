@@ -75,30 +75,30 @@ const SearchForStudents = ({ setSelectedStudent }) => {
   };
 
   return (
-    <div className="fixed bg-gray-800 flex flex-col w-64 z-30 h-[100vh]">
-      <form className="mt-12 text-slate-50">
-        <div className="m-1 ">
-          <label className="  text-white" htmlFor="years">
+    <div className="fixed flex flex-col w-64 z-30  mt-4 border h-full">
+      <form className="mt-4 text-slate-50 text-gray-200">
+        <div className="m-1 text-gray-500">
+          <label className="  text-gray-900" htmlFor="years">
             العام الدراسي{" "}
           </label>
 
-          <select className=" mr-2" name="years" id="years">
-            <option value="">2022-2023</option>
+          <select className=" mr-2 text-gray-500 border w-54" name="years" id="years">
+            <option className ="text-gray-500"value="">2022-2023</option>
             <option value="">2023-2024</option>
           </select>
         </div>
-        <div className=" m-1">
-          <label className="  text-white ro" htmlFor="college">
+        <div className="text-gray-500 m-1">
+          <label className="ro text-gray-900" htmlFor="college">
             {" "}
             الكلية
           </label>
 
-          <select className=" mx-2" name="college" id="college">
+          <select className=" text-gray-500 mx-2 border" name="college" id="college">
             <option value="">الحاسبات والذكاء الاصطناعي</option>
             <option value="">الاداب</option>
           </select>
         </div>
-        <div className=" text-white">
+        <div className=" text-gray-900">
           <input
             className="mx-2 "
             type="radio"
@@ -106,10 +106,10 @@ const SearchForStudents = ({ setSelectedStudent }) => {
             name="checkInUniversity"
             value="inuniversity"
           ></input>
-          <label htmlFor="inuniversity">طلاب الجامعة</label>
+          <label htmlFor="inuniversity text-gray-900">طلاب الجامعة</label>
 
           <input
-            className=" mx-2"
+            className=" mx-2 "
             type="radio"
             id="outuniversity"
             name="checkInUniversity"
@@ -117,7 +117,7 @@ const SearchForStudents = ({ setSelectedStudent }) => {
           ></input>
           <label htmlFor="outuniversity">من خارج الجامعة</label>
         </div>
-        <div className=" text-white">
+        <div className=" text-gray-900">
           <input
             className=" mx-2"
             type="radio"
@@ -136,7 +136,7 @@ const SearchForStudents = ({ setSelectedStudent }) => {
           ></input>
           <label htmlFor="outegyption">وافد</label>
         </div>
-        <div className=" text-white">
+        <div className=" text-gray-900">
           <input
             className=" mx-2"
             type="radio"
@@ -155,7 +155,7 @@ const SearchForStudents = ({ setSelectedStudent }) => {
           ></input>
           <label htmlFor="accepted">مقبولين</label>
         </div>
-        <div className=" text-slate-50 grid grid-cols-4">
+        <div className="text-gray-900 grid grid-cols-4 mt-4 mr-0">
           <input type="checkbox" id="old" name="old" value="old"></input>
           <label htmlFor="old"> قدامي</label>
 
@@ -167,8 +167,9 @@ const SearchForStudents = ({ setSelectedStudent }) => {
             id="normal"
             name="normal"
             value="normal"
+            
           ></input>
-          <label htmlFor="normal"> سكن عادي</label>
+          <label  htmlFor="normal"> سكن عادي</label>
 
           <input
             type="checkbox"
@@ -199,11 +200,11 @@ const SearchForStudents = ({ setSelectedStudent }) => {
         </div>
         {/* Search bar */}
         <div>
-          <label className="text-slate-50 mr-3" htmlFor="nationalId">
+          <label className="text-gray-900 mr-3" htmlFor="nationalId">
             البحث بالرقم القومي
           </label>
           <input
-            className="m-2"
+            className="mt-0  border text-gray-500"
             type="text"
             id="nationalId"
             name="nationalId"
@@ -212,7 +213,7 @@ const SearchForStudents = ({ setSelectedStudent }) => {
           />
           {/* Add a "Search" button */}
           <button
-            className="text-slate-50 mr-2 px-1 border-2 rounded bg-orange-500 hover:bg-lime-900"
+            className="text-slate-50 mr-2 px-1 border-2 rounded bg-mainBlue hover:bg-lime-900"
             type="button"
             onClick={searchStudents}
           >
@@ -222,14 +223,14 @@ const SearchForStudents = ({ setSelectedStudent }) => {
 
         {/* Add a "تطبيق الفلتر" (Apply Filter) button */}
         <button
-          className="text-slate-50 mr-2 px-1 border-2 rounded bg-orange-500 hover:bg-lime-900"
+          className="text-slate-50 mr-2 px-1 border-2 rounded bg-mainBlue hover:bg-lime-900"
           type="button"
           onClick={applyFilters}
         >
           تطبيق الفلتر
         </button>
 
-        <div className="mr-5 mt-5 h-64 overflow-y-scroll">
+        <div className="mr-5 mt-4 h-64 overflow-y-scroll border text-gray-500">
           <ul>
             {searchResults.length > 0
               ? searchResults &&

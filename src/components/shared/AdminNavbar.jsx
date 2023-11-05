@@ -24,7 +24,7 @@ export const AdminNavbar = () => {
   }
   return (
     <div className="ltr-local">
-      <nav className="bg-mainBlue h-20 fixed w-screen">
+      <nav className="bg-mainBlue h-20 fixed w-screen border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className=" items-center  justify-between h-17">
             <div className="flex items-center flex-row-reverse">
@@ -34,7 +34,7 @@ export const AdminNavbar = () => {
                   لإدارة المدن الجامعية{" "}
                 </h2>
                 <img
-                  className="h-20 w-20  bg-mainBlue"
+                  className="h-20 w-20  "
                   src={logoImg}
                   alt="logo"
                 />

@@ -52,10 +52,10 @@ const BasicData = () => {
         <SearchForStudents setSelectedStudent={setSelectedStudent} />
       </div>
       {/* Main content area */}
-      <div className="bg-zinc-900 h-full flex-1">
+      <div className=" h-full flex-1">
         {/* Header */}
-        <div className="bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl">
-          بيانات اساسية - جامعة حلوان
+        <div className="bg-mainBlue w-full h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+            بيانات اساسية - جامعة حلوان   
         </div>
         <div className="text-white px-5">
           {/* Conditional rendering based on whether a student is selected */}
@@ -175,7 +175,7 @@ const BasicData = () => {
             </div>
           ) : (
             // Display a message if no student is selected
-            <p>Select a student from the sidebar to view their details.</p>
+            <p className="text-gray-900">Select a student from the sidebar to view their details.</p>
           )}
         </div>
       </div>
