@@ -12,6 +12,7 @@ const Taxes = () => {
         <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl">
           الرسوم - جامعة حلوان
         </div>
+        
 
         <div className="text-white px-5">{student.name}</div>
       </div>

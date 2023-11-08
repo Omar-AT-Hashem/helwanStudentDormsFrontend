@@ -5,6 +5,7 @@ import Records from "../../assets/fakeData/Records.json";
 const BlockMeals = () => {
   const [form, setForm] = useState({});
   const [objects, setObjects] = useState([]);
+  //const [deletedObjects, setDeletedObjects] = useState([]);/////////////////////////////////
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -16,6 +17,15 @@ const BlockMeals = () => {
     });
   };
   console.log(objects);
+
+  const handleAddDelete = (e) => {
+    setObjects((prev) => {
+      prev.splice(e.target.name, 1);
+      return [...prev];
+    });
+  };
+  
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -99,7 +109,10 @@ const BlockMeals = () => {
                     ></input>
                   </div>
                   <div>
-                    <button className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2 w-20 mt-10 ">
+                    <button 
+                    className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2 w-20 mt-10 "
+                    onClick={handleAddDelete}
+                    >
                       ازاله
                     </button>
                     <button
@@ -128,9 +141,17 @@ const BlockMeals = () => {
                             <td>{object.toDate}</td>
                             <td>{object.meal}</td>
                             <td>{object.reason}</td>
+              
+                           <button
+                              className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
+                              onClick={handleAddDelete}
+                              name={index}
+                            ></button>
                           </tr>
                         ))}
-                    </tbody>
+                        
+
+                    </tbody>    
                   </table>
                 </div>
               </div>
