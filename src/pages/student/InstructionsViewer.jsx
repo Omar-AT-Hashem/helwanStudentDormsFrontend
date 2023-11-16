@@ -61,7 +61,7 @@ function InstructionsViewer() {
           )}
         </div>
       ) : (
-        <div className="flex justify-center items-center h-40"><p class="text-blue-600 text-center text-4xl">لا يوجد تعليمات لعرضها .</p></div>
+        <div className="flex justify-center items-center h-40"><p className="text-blue-600 text-center text-4xl">لا يوجد تعليمات لعرضها .</p></div>
       )}
 
       <div></div>

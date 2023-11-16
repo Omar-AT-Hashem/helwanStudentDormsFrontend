@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
-import SearchForStudents from "../../components/minicomponent/SearchForStudents";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
-const BasicData = () => {
+export const ApplicationApprovals = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
       "Authorization"
@@ -12,13 +11,27 @@ const BasicData = () => {
   }
 
   // State to store the selected student's data
-  const [selectedStudent, setSelectedStudent] = useState();
+  const [studentList, setStudentList] = useState([]);
   const [selectedStudentData, setSelectedStudentData] = useState();
-  console.log(selectedStudentData);
 
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/v1/student/get-by-id/${selectedStudent}`)
+      .get(`${API_ROUTE}/v1/student/unapproved`)
+      .then((res) => {
+        return setStudentList(res.data);
+      })
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
+  }, []);
+
+  const handleStudentSelect = (studentId) => {
+    axios
+      .get(`${API_ROUTE}/v1/student/get-by-id/${parseInt(studentId)}`)
       .then((res) => {
         return setSelectedStudentData(res.data);
       })
@@ -29,7 +42,7 @@ const BasicData = () => {
         toast.dismiss();
         return toast("Something went wrong");
       });
-  }, [selectedStudent]);
+  };
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen">
@@ -49,33 +62,44 @@ const BasicData = () => {
         }}
       />
       <div className="w-64">
-        {/* Pass setSelectedStudent function to SearchForStudents to update selected student */}
-        <SearchForStudents setSelectedStudent={setSelectedStudent} />
+        <div className="bg-slate-300 h-screen pt-32">
+          <div className="w-full h-64 bg-red-300 overflow-y-scroll">
+            {studentList.map((student) => (
+              <div
+                key={`${student.id}-unapprr`}
+                className="hover:cursor-pointer hover:bg-mainYellow"
+                onClick={() => handleStudentSelect(student.id)}
+              >
+                {student.name}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
       {/* Main content area */}
       <div className=" h-full flex-1">
-        {/* Header */}
-        <div className="bg-mainBlue w-full h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
-          بيانات اساسية - جامعة حلوان
-        </div>
         <div className="text-white px-5">
           {/* Conditional rendering based on whether a student is selected */}
           {selectedStudentData ? (
             // Display student details when a student is selected
-           <div className="text-black">
+            <div className="text-black">
               <div>
-                <span>الاسم: </span><span>{selectedStudentData.name}</span>
+                <span>الاسم: </span>
+                <span>{selectedStudentData.name}</span>
               </div>
               <div>
-                <span>الاسم: </span><span>{selectedStudentData.dateOfApplying}</span>
+                <span>الاسم: </span>
+                <span>{selectedStudentData.dateOfApplying}</span>
               </div>
               <div>
-                <span>الاسم: </span><span>{selectedStudentData.nationalId}</span>
+                <span>الاسم: </span>
+                <span>{selectedStudentData.nationalId}</span>
               </div>
               <div>
-                <span>الاسم: </span><span>{selectedStudentData.username}</span>
+                <span>الاسم: </span>
+                <span>{selectedStudentData.username}</span>
               </div>
-           </div>
+            </div>
           ) : (
             // Display a message if no student is selected
             <p className="text-gray-900">
@@ -87,5 +111,3 @@ const BasicData = () => {
     </div>
   );
 };
-
-export default BasicData;

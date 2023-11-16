@@ -22,9 +22,10 @@ export const AdminNavbar = () => {
     setStudentSliderOpen(false)
     setAdminSliderOpen(!adminSliderOpen)
   }
+
   return (
-    <div className="ltr-local">
-      <nav className="bg-mainBlue h-20 fixed w-screen border">
+    <div className="ltr-local z-50">
+      <nav className="bg-mainBlue h-20 fixed w-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className=" items-center  justify-between h-17">
             <div className="flex items-center flex-row-reverse">
@@ -113,7 +114,7 @@ export const AdminNavbar = () => {
           </div>
         </div>
         <div className={`absolute top-20 transition-all duration-200 ${studentSliderOpen ? "right-[0%]" : "right-[-100%]"}`}>
-        <AdminStudentSlider/>
+        <AdminStudentSlider setAdminSliderOpen={setAdminSliderOpen} />
         </div>
         <div className={`absolute top-20 transition-all duration-200 ${adminSliderOpen ? "right-[0%]" : "right-[-100%]"}`}>
         <AdminSystemSlider/>

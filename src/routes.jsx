@@ -41,6 +41,7 @@ import AdminHome from "./pages/admin/AdminHome.jsx";
 import ManageApplicationDates from "./pages/admin/ManageApplicationDates";
 import ManageCategories from "./pages/admin/ManageCategories";
 import { Test } from "./pages/test.jsx";
+import { ApplicationApprovals } from "./pages/admin/applicationApprovals.jsx";
 export const routes = createBrowserRouter([
   {
     path: "",
@@ -119,6 +120,10 @@ export const routes = createBrowserRouter([
           {
             path: "manageApplicationDates",
             element: <ManageApplicationDates />,
+          },
+          {
+            path: "applicationApprovals",
+            element: <ApplicationApprovals />,
           },
           //////////////////////////////////////////////
           {

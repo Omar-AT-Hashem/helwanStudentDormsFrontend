@@ -75,8 +75,8 @@ const SearchForStudents = ({ setSelectedStudent }) => {
   };
 
   return (
-    <div className="fixed flex flex-col w-64 z-30  mt-4 border h-full">
-      <form className="mt-4 text-slate-50 text-gray-200">
+    <div className="flex flex-col w-64 z-30 mt-4 border h-full">
+      <form className="mt-4 text-gray-200">
         <div className="m-1 text-gray-500">
           <label className="  text-gray-900" htmlFor="years">
             العام الدراسي{" "}
