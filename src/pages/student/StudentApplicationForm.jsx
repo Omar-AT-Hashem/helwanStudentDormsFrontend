@@ -49,6 +49,8 @@ function StudentApplicationForm() {
     });
   };
 
+  console.log(formData.gender);
+
 
   console.log(formData);
   const handleSubmit = async (e) => {
@@ -200,8 +202,8 @@ function StudentApplicationForm() {
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-36">
                             <option>----</option>
-                            <option>انثى</option>
-                            <option>ذكر</option>
+                            <option value="F">انثى</option>
+                            <option value="M">ذكر</option>
 
             </select>
             
