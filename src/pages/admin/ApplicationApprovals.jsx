@@ -11,7 +11,9 @@ export const ApplicationApprovals = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const fieldContainer = "flex gap-3";
+  const fieldContainer = "flex gap-3 p-3 border border-slate-600";
+  const fieldTitle = "font-bold text-xl";
+  const fieldValue = "text-xl";
 
   // State to store the selected student's data
   const [selectedStudent, setSelectedStudent] = useState();
@@ -33,6 +35,45 @@ export const ApplicationApprovals = () => {
       });
   }, [selectedStudent]);
 
+  const accept = () => {
+    axios
+      .post(`${API_ROUTE}/v1/student/asess/approve`, {
+        id: selectedStudentData.id,
+        grade: selectedStudentData.grade,
+      })
+      .then(() => {
+        setSelectedStudent();
+        setSelectedStudentData();
+        return;
+      })
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
+  };
+  const reject = () => {
+    axios
+      .post(`${API_ROUTE}/v1/student/asess/reject`, {
+        id: selectedStudentData.id,
+        grade: selectedStudentData.grade,
+      })
+      .then(() => {
+        setSelectedStudent();
+        setSelectedStudentData();
+        return;
+      })
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
+  };
+
   return (
     <div className="pt-20 flex flex-row w-full h-screen">
       {/* Sidebar with student search */}
@@ -53,119 +94,162 @@ export const ApplicationApprovals = () => {
       <Descriminator
         setSelectedStudent={setSelectedStudent}
         descriminator="gender"
-        dbColumn="unapproved"
+        dbColumn="isApproved"
+        refresher={selectedStudent}
       />
       {/* Main content area */}
       <div className=" h-full flex-1">
-        <div className=" px-5">
+        <div className="px-5 mt-10">
           {/* Conditional rendering based on whether a student is selected */}
           {selectedStudentData ? (
             <div>
-              <div className="flex flex-col items-start">
+              <div className="grid grid-cols-2 gap bg-slate-200 p-4 border border-black">
                 <div className={fieldContainer}>
-                  <span>الرقم القومى :</span>
-                  <span>{selectedStudentData.nationalId}</span>
+                  <span className={fieldTitle}>الرقم القومى :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.nationalId}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>الاسم :</span>
-                  <span>{selectedStudentData.name}</span>
+                  <span className={fieldTitle}>تاريخ الميلاد :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.birthday}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>تاريخ الميلاد :</span>
-                  <span>{selectedStudentData.birthday}</span>
+                  <span className={fieldTitle}>الاسم :</span>
+                  <span className={fieldValue}>{selectedStudentData.name}</span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>محل الميلاد :</span>
-                  <span>{selectedStudentData.placeOfBirth}</span>
+                  <span className={fieldTitle}>محل الميلاد :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.placeOfBirth}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>النوع : </span>
-                  <span>
+                  <span className={fieldTitle}>النوع : </span>
+                  <span className={fieldValue}>
                     {selectedStudentData.gender == "M" ? "ذكر" : "انثى"}
                   </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>الديانه :</span>
-                  <span>{selectedStudentData.religion}</span>
+                  <span className={fieldTitle}>الديانه :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.religion}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>محل الاقامه :</span>
-                  <span>{selectedStudentData.residence}</span>
+                  <span className={fieldTitle}>البريد الالكترونى :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.email}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>العنوان بالتفصيل :</span>
-                  <span>{selectedStudentData.addressDetails}</span>
+                  <span className={fieldTitle}>العنوان بالتفصيل :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.addressDetails}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>البريد الالكترونى :</span>
-                  <span>{selectedStudentData.email}</span>
+                  <span className={fieldTitle}>محل الاقامه :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.residence}
+                  </span>
+                </div>
+                <div className={fieldContainer}>
+                  <span className={fieldTitle}>التليفون : </span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.telephone}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>التليفون : </span>
-                  <span>{selectedStudentData.telephone}</span>
+                  <span className={fieldTitle}> الموبايل :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.mobile}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span> الموبايل :</span>
-                  <span>{selectedStudentData.mobile}</span>
+                  <span className={fieldTitle}>الكليه :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.faculty}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>الكليه :</span>
-                  <span>{selectedStudentData.faculty}</span>
+                  <span className={fieldTitle}>اسم الاب :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.fatherName}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>اسم الاب :</span>
-                  <span>{selectedStudentData.fatherName}</span>
+                  <span className={fieldTitle}>الرقم القومى للاب :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.fatherNationalId}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>الرقم القومى للاب :</span>
-                  <span>{selectedStudentData.fatherNationalId}</span>
+                  <span className={fieldTitle}>وظيفه الاب :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.fatherOccupation}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>وظيفه الاب :</span>
-                  <span>{selectedStudentData.fatherOccupation}</span>
+                  <span className={fieldTitle}>رقم هاتف الاب :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.fatherNumber}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>رقم هاتف الاب :</span>
-                  <span>{selectedStudentData.fatherNumber}</span>
+                  <span className={fieldTitle}>اسم ولى الامر :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.guardianName}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>اسم ولى الامر :</span>
-                  <span>{selectedStudentData.guardianName}</span>
+                  <span className={fieldTitle}>الرقم القومى لولى الامر :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.guardianNationalId}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>الرقم القومى لولى الامر :</span>
-                  <span>{selectedStudentData.guardianNationalId}</span>
+                  <span className={fieldTitle}>صله ولى الامر :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.guardianRelationship}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>صله ولى الامر :</span>
-                  <span>{selectedStudentData.guardianRelationship}</span>
+                  <span className={fieldTitle}>الشعبه بالثانويه العامه:</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.highschoolSpecialization}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>الشعبه بالثانويه العامه:</span>
-                  <span>{selectedStudentData.highschoolSpecialization}</span>
+                  <span className={fieldTitle}>الدرجه :</span>
+                  <span className={fieldValue}>
+                    {selectedStudentData.grade}
+                  </span>
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>ذوى الاحتياجات الخاصه :</span>
+                  <span className={fieldTitle}>ذوى الاحتياجات الخاصه :</span>
                   <input
                     type="checkbox"
                     name="isDisabled"
@@ -174,7 +258,7 @@ export const ApplicationApprovals = () => {
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>الاسره بالخارج :</span>
+                  <span className={fieldTitle}>الاسره بالخارج :</span>
                   <input
                     type="checkbox"
                     name="familyAbroad"
@@ -183,7 +267,7 @@ export const ApplicationApprovals = () => {
                 </div>
 
                 <div className={fieldContainer}>
-                  <span>الثانويه بالخارج :</span>
+                  <span className={fieldTitle}>الثانويه بالخارج :</span>
                   <input
                     type="checkbox"
                     name="highschoolAbroad"
@@ -192,9 +276,19 @@ export const ApplicationApprovals = () => {
                 </div>
               </div>
 
-              <div className="flex gap-10 mt-10 text-white font-bold">
-                <button className="w-40 h-10 bg-green-600">قبول</button>
-                <button className="w-40 h-10 bg-red-600">رفض</button>
+              <div className="flex gap-10 mt-10 text-white font-bold w-1/2 m-auto">
+                <button
+                  className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200"
+                  onClick={accept}
+                >
+                  قبول
+                </button>
+                <button
+                  className="w-40 h-10 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200"
+                  onClick={reject}
+                >
+                  رفض
+                </button>
               </div>
             </div>
           ) : (

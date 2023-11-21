@@ -9,16 +9,42 @@ export const Descriminator = ({
   dbColumn,
 }) => {
   const [studentList, setStudentList] = useState([]);
+  
+  const [refreshString, setRefreshString] = useState();
 
   const handleStudentSelect = (studentId) => {
     setSelectedStudent(studentId);
   };
 
+  useEffect(() => {
+    if (refreshString) {
+      const descriminatorExtracted = refreshString.split("-")[0];
+      const optionExtracted = refreshString.split("-")[1];
+      axios
+        .get(
+          `${API_ROUTE}/v1/student/column/${dbColumn}/${descriminatorExtracted}/${optionExtracted}`
+        )
+        .then((res) => {
+          return setStudentList(res.data);
+        })
+        .catch((err) => {
+          if (err && err.code === "ERR_BAD_REQUEST") {
+            return;
+          }
+          toast.dismiss();
+          return toast("Something went wrong");
+        });
+    }
+  }, []);
+
   const handleChange = (e) => {
     if (descriminator == "gender") {
       if (e.target.value == "m") {
+        setRefreshString(`${descriminator}-${e.target.value}`);
         axios
-          .get(`${API_ROUTE}/v1/student/${dbColumn}/${descriminator}/${"m"}`)
+          .get(
+            `${API_ROUTE}/v1/student/column/${dbColumn}/${descriminator}/${"m"}`
+          )
           .then((res) => {
             return setStudentList(res.data);
           })
@@ -32,8 +58,11 @@ export const Descriminator = ({
       }
 
       if (e.target.value == "f") {
+        setRefreshString(`${descriminator}-${e.target.value}`);
         axios
-          .get(`${API_ROUTE}/v1/student/${dbColumn}/${descriminator}/${"f"}`)
+          .get(
+            `${API_ROUTE}/v1/student/column/${dbColumn}/${descriminator}/${"f"}`
+          )
           .then((res) => {
             return setStudentList(res.data);
           })

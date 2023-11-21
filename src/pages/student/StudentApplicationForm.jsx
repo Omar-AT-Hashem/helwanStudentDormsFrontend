@@ -30,7 +30,7 @@ function StudentApplicationForm() {
     familyAbroad: 0,
     highschoolAbroad: 0,
     highschoolSpecialization: "",
-    highschoolGrade: "",
+    grade: "",
     accomodationType: "",
     accomodationWithNutrition: 0,
     password: "",
@@ -90,8 +90,8 @@ function StudentApplicationForm() {
           isDisabled: 0,
           familyAbroad: 0,
           highschoolAbroad: 0,
-           highschoolSpecialization: "",
-          highschoolGrade: "",
+          highschoolSpecialization: "",
+          grade: "",
           accomodationType: "",
           accomodationWithNutrition: 0,
           password: "",
@@ -463,8 +463,8 @@ function StudentApplicationForm() {
               مجموع الثانويه العامه :
               <input
                 onChange={handleChange}
-                name="highschoolGrade"
-                value={formData.highschoolGrade}
+                name="grade"
+                value={formData.grade}
                 required
                 className="mr-4  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
@@ -535,7 +535,7 @@ function StudentApplicationForm() {
           <div className="items-center">
           <div className="text-neutral-500 flex gap-2 mx-5 my-3   border-yellow-600 bg-yellow-50 w-[80vw] min- h-suto   resize-none p-1 h-full  border rounded-2xl ml-96">
             <h3 className=" mt-0 mr-2">ملاحظات هامة </h3>
-            <ul class="list-disc mt-8 text-2xl">
+            <ul className="list-disc mt-8 text-2xl">
               <li>التقدم للمدن الجامعية من خلال استمارة التقديم الالكترونى مجانى بالكامل.</li>
               <li>يجب الاحتفاظ بكلمة المرور لأهميتها فى تعديل بياناتك كما سيتم استخدامها لاحقا عند إقامتك بالمدينة .</li>
               <li>لوحظ أن العديد من الطلاب يختارون السكن المميز ويجب الإشارة بأن السكن المميز له تكلفة عالية بالنسبة للسكن العادى .</li>

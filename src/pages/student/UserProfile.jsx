@@ -577,8 +577,8 @@ function UserProfile() {
               مجموع الثانويه العامه :
               <input
                 onChange={handleChange}
-                name="highschoolGrade"
-                value={formData.highschoolGrade}
+                name="grade"
+                value={formData.grade}
                 disabled={!isEditable}
                 required
                 className="mr-4  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
