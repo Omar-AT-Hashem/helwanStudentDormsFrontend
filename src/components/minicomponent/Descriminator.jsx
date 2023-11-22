@@ -9,7 +9,7 @@ export const Descriminator = ({
   dbColumn,
 }) => {
   const [studentList, setStudentList] = useState([]);
-  
+
   const [refreshString, setRefreshString] = useState();
 
   const handleStudentSelect = (studentId) => {
