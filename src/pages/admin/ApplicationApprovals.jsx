@@ -82,7 +82,7 @@ export const ApplicationApprovals = () => {
   const handleChange = (e) => {
     if (e.target.value == "m") {
       axios
-        .get(`${API_ROUTE}/v1/student/column/isApproved/gender/${"m"}`)
+        .get(`${API_ROUTE}/v1/student/column/isApproved/0/gender/${"m"}`)
         .then((res) => {
           return setStudentList(res.data);
         })
@@ -97,7 +97,7 @@ export const ApplicationApprovals = () => {
 
     if (e.target.value == "f") {
       axios
-        .get(`${API_ROUTE}/v1/student/column/isApproved/gender/${"f"}`)
+        .get(`${API_ROUTE}/v1/student/column/isApproved/0/gender/${"f"}`)
         .then((res) => {
           return setStudentList(res.data);
         })
