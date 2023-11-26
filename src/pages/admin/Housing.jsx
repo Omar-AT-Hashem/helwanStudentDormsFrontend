@@ -15,28 +15,18 @@ const Housing = () => {
   const [selectedStudentData, setSelectedStudentData] = useState();
 
   const [towns, setTowns] = useState([]);
-  const [selectedBuilding, setSelectedBuilding] = useState();
+
+  const [selectedFloorData, setSelectedFloorData] = useState()
+  
   const [housingData, setHousingData] = useState();
   const [selectedHousingData, setSelectedHousingData] = useState();
+
 
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/v1/housing/`)
-      .then((res) => {
-        setHousingData(res.data);
-      })
-      .catch((err) => {
-        if (err && err.code === "ERR_BAD_REQUEST") {
-          return;
-        }
-        toast.dismiss();
-        return toast("Something went wrong");
-      });
-
-    axios
-      .get(`${API_ROUTE}/v1/housing/get-towns-buildings`)
+      .get(`${API_ROUTE}/v1/housing/get-towns-buildings-floors`)
       .then((res) => {
         setTowns(res.data);
         const isOpen = Array(res.data.length).fill(false);
@@ -126,7 +116,15 @@ const Housing = () => {
     });
   };
 
-  console.log(sideBarTownsOpen);
+  const handleBuildingClick = (e) => {
+    console.log(e.target.nextElementSibling.className);
+    if (!e.target.nextElementSibling.className.includes("hidden")) {
+      e.target.nextElementSibling.className = "hidden";
+    } else {
+      e.target.nextElementSibling.className = "flex flex-col";
+    }
+  };
+  const handleFloorClick = (floorId) => {};
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen ">
@@ -134,7 +132,7 @@ const Housing = () => {
         {/*------------------------- Sidebar ------------------------*/}
         <div className="w-64">
           <div className="bg-slate-300 h-screen pt-32">
-            {/*------------------------- Sidebar student start ----------------*/}
+            {/*-------------------------start Sidebar student  ----------------*/}
             <div className="flex gap-10" onChange={handleChange}>
               <div className="flex gap-2">
                 <input type="radio" id="gender" name="gender" value="m" />
@@ -157,34 +155,59 @@ const Housing = () => {
                 </div>
               ))}
             </div>
-            {/*------------------------- Sidebar student end ----------------*/}
+            {/*-------------------------end Sidebar student  ----------------*/}
 
-            {/*------------------------- Sidebar towns start----------------*/}
-            <div className="mt-10 ">
+            {/*-------------------------start Sidebar towns ----------------*/}
+            <div className="mt-10 select-none">
               <div className="flex flex-col">
                 {/*------- towns menu start-----*/}
                 {towns.map((town, index) => (
                   <>
-                    <span className="hover:cursor-pointer hover:bg-mainYellow pr-5 select-none" onClick={() => handleSideBarTownClick(index)}>
+                    <span
+                      className="hover:cursor-pointer hover:bg-mainYellow pr-5 select-none font-bold text-xl"
+                      onClick={() => handleSideBarTownClick(index)}
+                    >
                       {town.name}
                     </span>
-                    {/*------- buildings menu start-----*/}
+                    {/*-------start buildings menu -----*/}
                     {sideBarTownsOpen[index] && (
                       <div className="flex flex-col gap-1 pr-7 pt-1 ">
                         {town.buildings.map((building) => (
-                          <span className="hover:cursor-pointer hover:bg-mainYellow" key={`Build-town-${building.id}`}>
-                            {building.name}
-                          </span>
+                          <div
+                            key={`Build-town-${building.id}`}
+                            className="flex flex-col"
+                          >
+                            <span
+                              className="hover:cursor-pointer hover:bg-mainYellow text-red-600 font-bold"
+                              onClick={handleBuildingClick}
+                            >
+                              {building.name}
+                            </span>
+
+                            {/*-------start floors menu -----*/}
+                            <div className="hidden flex-col">
+                              {building.floors.map((floor) => (
+                                <span
+                                  key={`floor-${floor.id}`}
+                                  className="hover:cursor-pointer hover:bg-mainYellow pr-5 text-blue-600 font-bold"
+                                  onClick={() => handleFloorClick(floor.id)}
+                                >
+                                  {floor.number}
+                                </span>
+                              ))}
+                            </div>
+                            {/*-------end floors menu -----*/}
+                          </div>
                         ))}
                       </div>
                     )}
-                    {/*------- buildings menu end-----*/}
+                    {/*-------end buildings menu -----*/}
                   </>
                 ))}
-                {/*------- towns menu end-----*/}
+                {/*-------end towns menu -----*/}
               </div>
             </div>
-            {/*------------------------- Sidebar towns end ----------------*/}
+            {/*-------------------------end  Sidebar towns ----------------*/}
           </div>
         </div>
         {/* -------------------end Sidebar ---------------------*/}
