@@ -212,9 +212,9 @@ const ManageInsturctions = () => {
           },
         }}
       />
-      <div className=" flex-1">
-        <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl ">
-          اداره التعليمات
+      <div className=" flex-1 mt-4 snap-x ">
+      <div className="bg-mainBlue w-3/4 h-10  mr-56 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+          اداره التعليمات  - جامعة حلوان
         </div>
 
         {objects ? (
