@@ -627,7 +627,7 @@ function UserProfile() {
                   {loading ? (
                     <Loader2 className="animate-spin duration-200" />
                   ) : (
-                    <span> تقديم طلب الالحتحاق </span>
+                    <span>حفظ التعديل </span>
                   )}
                 </button>
               }

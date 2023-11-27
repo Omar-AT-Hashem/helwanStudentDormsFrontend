@@ -16,17 +16,17 @@ const Housing = () => {
 
   const [towns, setTowns] = useState([]);
 
-  const [selectedFloorData, setSelectedFloorData] = useState()
-  
-  const [housingData, setHousingData] = useState();
-  const [selectedHousingData, setSelectedHousingData] = useState();
+  const [selectedFloorData, setSelectedFloorData] = useState([]);
 
+  const [selectedBed, setSelectedBed] = useState();
 
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
 
+  console.log(selectedStudent);
+
   useEffect(() => {
     axios
-      .get(`${API_ROUTE}/v1/housing/get-towns-buildings-floors`)
+      .get(`${API_ROUTE}/v1/housing/towns-buildings-floors`)
       .then((res) => {
         setTowns(res.data);
         const isOpen = Array(res.data.length).fill(false);
@@ -124,7 +124,51 @@ const Housing = () => {
       e.target.nextElementSibling.className = "flex flex-col";
     }
   };
-  const handleFloorClick = (floorId) => {};
+  const handleFloorClick = (floorId) => {
+    axios
+      .get(`${API_ROUTE}/v1/housing/floor-rooms-beds/${floorId}`)
+      .then((res) => {
+        return setSelectedFloorData(res.data);
+      })
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
+  };
+
+  const handleHouseClick = () => {
+    axios
+      .post(`${API_ROUTE}/v1/bed/occupy`, {
+        studentId: selectedStudent,
+        bedId: selectedBed,
+      })
+      .then(() => {
+        setStudentList((prev) =>
+          prev.filter((student) => student.id != selectedStudent)
+        );
+        setSelectedBed();
+        setSelectedFloorData([]);
+        setSelectedStudent();
+        setSelectedStudentData([]);
+
+        return;
+      })
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
+  };
+
+  const handleRadioChange = (e) => {
+    setSelectedBed(e.target.value);
+    console.log(e.target.value);
+  };
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen ">
@@ -213,8 +257,104 @@ const Housing = () => {
         {/* -------------------end Sidebar ---------------------*/}
       </div>
       <div className=" flex-1 pt-4">
-        gdf
-        <div className="text-white px-5"></div>
+        {/* -------------------start student info ---------------------*/}
+
+        {selectedStudentData && (
+          <div className="border-2 border-black mt-5 h-48 px-2 mx-2">
+            <div className="flex justify-between items-center h-full">
+              <div className="flex flex-col ">
+                <div>
+                  <span className="font bold text-2xl ">الاسم: </span>
+                  <span className="font text-xl text-sky-700">
+                    {selectedStudentData.name}
+                  </span>
+                </div>
+                <div>
+                  <span className="font bold text-2xl">الرقم القومي: </span>
+                  <span className="font text-xl text-sky-700">
+                    {selectedStudentData.nationalId}
+                  </span>
+                </div>
+
+                <div>
+                  <span className="font bold text-2xl">نوع السكن : </span>
+                  <span className="font text-xl text-sky-700">
+                    {selectedStudentData.accomodationType}
+                  </span>
+                </div>
+              </div>
+              <div>
+                {" "}
+                <img
+                  src={
+                    selectedStudentData.image
+                      ? selectedStudentData.image
+                      : "/default-photo.jpg"
+                  }
+                  className="w-36 border-2 border-black"
+                  alt="default image"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* -------------------end student info ---------------------*/}
+
+        {/* -------------------start Rooms-Beds ---------------------*/}
+        <div className="mt-10">
+          <div className="flex flex-wrap gap-10 justify-center">
+            {selectedFloorData.map((room) => (
+              <div key={`room-beds-${room.id}`} className="flex flex-col">
+                <div className="flex justify-center items-center text-white text-xl font-bold bg-mainBlue w-20 h-10 ">
+                  {room.number}
+                </div>
+                <div className="flex flex-col mt-2">
+                  {/* -------------------start Beds menu ---------------------*/}
+                  {room.beds.map((bed) => (
+                    <div key={`bed-${bed.id}`}>
+                      {bed.isOccupied == 1 ? (
+                        <div className="flex justify-center items-center text-white font-bold bg-blue-400 opacity-40 w-20 h-10 border">
+                          {bed.number}
+                        </div>
+                      ) : (
+                        <div>
+                          <input
+                            type="radio"
+                            name="bed"
+                            id={`bed-${bed.id}`}
+                            value={bed.id}
+                            className="peer hidden"
+                            onChange={handleRadioChange}
+                          />
+                          <label
+                            htmlFor={`bed-${bed.id}`}
+                            className="block cursor-pointer select-none p-2 border text-center hover:opacity-80 bg-blue-400 peer-checked:bg-red-800 font-bold text-white transition-all duration-200"
+                          >
+                            {bed.number}
+                          </label>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  {/* -------------------end Beds menu ---------------------*/}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* -------------------end Rooms-Beds ---------------------*/}
+
+        <div className="flex justify-center mt-20">
+          {selectedBed && selectedStudent && (
+            <button
+              className="bg-green-600 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded"
+              onClick={handleHouseClick}
+            >
+              تسكين
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
