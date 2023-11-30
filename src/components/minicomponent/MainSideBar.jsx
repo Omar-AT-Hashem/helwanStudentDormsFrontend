@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import { PropTypes } from "prop-types";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
 
-const SearchForStudents = ({ setSelectedStudent }) => {
+const MainSideBar = ({ studentList, setStudentList, setSelectedStudent }) => {
   // State variables for filters
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedCollege, setSelectedCollege] = useState("");
@@ -260,4 +261,6 @@ const SearchForStudents = ({ setSelectedStudent }) => {
   );
 };
 
-export default SearchForStudents;
+
+
+export default MainSideBar;

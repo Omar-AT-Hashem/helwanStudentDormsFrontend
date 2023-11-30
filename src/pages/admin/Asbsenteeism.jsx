@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SearchForStudents from "../../components/minicomponent/SearchForStudents";
+import MainSideBar from "../../components/minicomponent/MainSideBar";
 import Records from "../../assets/fakeData/Records.json";
 import holidayData from "../../assets/fakeDaTA/holidatData.json";
 
@@ -8,7 +8,7 @@ const Asbsenteeism = () => {
   return (
     <div className=" pt-16 flex flex-row w-full h-screen ">
       <div className="w-64">
-        <SearchForStudents setStudent={setStudent} />
+        <MainSideBar setStudent={setStudent} />
       </div>
 
       <div className=" flex-1">

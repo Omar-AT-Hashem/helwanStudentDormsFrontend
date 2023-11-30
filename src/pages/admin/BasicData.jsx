@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
-import SearchForStudents from "../../components/minicomponent/SearchForStudents";
+import MainSideBar from "../../components/minicomponent/MainSideBar";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -50,7 +50,7 @@ const BasicData = () => {
       />
       <div className="w-64">
         {/* Pass setSelectedStudent function to SearchForStudents to update selected student */}
-        <SearchForStudents setSelectedStudent={setSelectedStudent} />
+        <MainSideBar setSelectedStudent={setSelectedStudent} />
       </div>
       {/* Main content area */}
       <div className=" h-full flex-1">

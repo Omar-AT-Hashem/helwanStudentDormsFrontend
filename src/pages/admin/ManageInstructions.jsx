@@ -222,7 +222,7 @@ const ManageInsturctions = () => {
             <div>
               {objects.length === 0 && (
                 <div className="flex justify-center items-center h-40">
-                  <p class="text-blue-600 text-center text-4xl">
+                  <p className="text-blue-600 text-center text-4xl">
                     لا يوجد تعليمات لعرضها .
                   </p>
                 </div>

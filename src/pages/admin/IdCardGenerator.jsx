@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import SearchForStudents from "../../components/minicomponent/SearchForStudents";
+import MainSideBar from "../../components/minicomponent/MainSideBar";
 
 const IDCardGenerator = () => {
   const [studentDataList, setStudentDataList] = useState([]); // State to store multiple student data
@@ -50,7 +50,7 @@ const IDCardGenerator = () => {
     <div className="id-card-container mt-10">
       {/* Display multiple student ID cards */}
       <div className="w-64">
-        <SearchForStudents setStudent={setSelectedStudent} />
+        <MainSideBar setStudent={setSelectedStudent} />
       </div>
 
       {studentDataList.map((studentData, index) => (

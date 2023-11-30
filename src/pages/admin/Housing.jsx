@@ -124,6 +124,7 @@ const Housing = () => {
       e.target.nextElementSibling.className = "flex flex-col";
     }
   };
+
   const handleFloorClick = (floorId) => {
     axios
       .get(`${API_ROUTE}/v1/housing/floor-rooms-beds/${floorId}`)
