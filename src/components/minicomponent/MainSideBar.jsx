@@ -1,90 +1,93 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { PropTypes } from "prop-types";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
-const MainSideBar = ({ studentList, setStudentList, setSelectedStudent }) => {
+const MainSideBar = ({
+  studentList,
+  setStudentList,
+  setSelectedStudentData,
+}) => {
   // State variables for filters
-  const [selectedYear, setSelectedYear] = useState("");
-  const [selectedCollege, setSelectedCollege] = useState("");
-  const [selectedNationality, setSelectedNationality] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("");
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  const [initialStudents, setInitialStudents] = useState();
 
   // State variable for search query
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
 
-  // State variable to hold the list of students based on filters
-  const [filteredStudents, setFilteredStudents] = useState(initialStudents);
+  const [filteredList, setFilteredList] = useState([]);
+  const [filters, setFilters] = useState({ applicants: null });
 
-  useEffect(() => {
+  const searchClick = () => {
     axios
-      .get(`${API_ROUTE}/v1/student`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        },
+      .get(`${API_ROUTE}/v1/student/`)
+      .then((res) => {
+        setStudentList(res.data);
       })
-      .then((res) => setInitialStudents(res.data));
-  }, []);
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        toast("Something went wrong");
+      });
 
-  // Function to apply filters and update filteredStudents
-  const applyFilters = () => {
-    // Implement the logic to filter students based on selected filters
-    let filteredList = initialStudents;
-
-    if (selectedYear) {
-      filteredList = filteredList.filter(
-        (student) => student.year === selectedYear
-      );
+    if (filters.applicants) {
+      if (filters.applicants == "accepted") {
+        setFilteredList(() => {
+          const newArr = studentList.filter((ele) => ele.isAccepted == 1);
+          return newArr;
+        });
+      } else if (filters.applicants == "applied") {
+        setFilteredList(() => {
+          const newArr = studentList.filter((ele) => ele.isAccepted == 0);
+          return newArr;
+        });
+      }
     }
+  };
 
-    if (selectedCollege) {
-      filteredList = filteredList.filter(
-        (student) => student.college === selectedCollege
-      );
+  const chooseFilters = (e) => {
+    setFilteredList(studentList);
+    if (e.target.type == "radio") {
+      if (e.target.name == "applicants") {
+        setFilters((prev) => {
+          return { ...prev, applicants: e.target.value };
+        });
+      }
     }
-
-    if (selectedNationality) {
-      filteredList = filteredList.filter(
-        (student) => student.nationality === selectedNationality
-      );
-    }
-
-    if (selectedStatus) {
-      filteredList = filteredList.filter(
-        (student) => student.applicationStatus === selectedStatus
-      );
-    }
-
-    setFilteredStudents(filteredList);
   };
 
   // Function to search for students by national ID
-  const searchStudents = () => {
-    // Implement the logic to search for students by national ID
-    const results = filteredStudents.filter((student) =>
-      student.name.includes(searchQuery)
-    );
-    setSearchResults(results);
-  };
-
-  // Function to handle selecting a student
-  const handleStudentClick = (studentId) => {
-    setSelectedStudent(studentId);
-  };
 
   return (
     <div className="flex flex-col w-64 z-30 mt-4 border h-full">
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            border: "1px solid #A9872D",
+            backgroundColor: "#A9872D",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
       <form className="mt-4 text-gray-200">
         <div className="m-1 text-gray-500">
           <label className="  text-gray-900" htmlFor="years">
             العام الدراسي{" "}
           </label>
 
-          <select className=" mr-2 text-gray-500 border w-54" name="years" id="years">
-            <option className ="text-gray-500"value="">2022-2023</option>
+          <select
+            className=" mr-2 text-gray-500 border w-54"
+            name="years"
+            id="years"
+          >
+            <option className="text-gray-500" value="">
+              2022-2023
+            </option>
             <option value="">2023-2024</option>
           </select>
         </div>
@@ -94,12 +97,16 @@ const MainSideBar = ({ studentList, setStudentList, setSelectedStudent }) => {
             الكلية
           </label>
 
-          <select className=" text-gray-500 mx-2 border" name="college" id="college">
+          <select
+            className=" text-gray-500 mx-2 border"
+            name="college"
+            id="college"
+          >
             <option value="">الحاسبات والذكاء الاصطناعي</option>
             <option value="">الاداب</option>
           </select>
         </div>
-        <div className=" text-gray-900">
+        {/* <div className=" text-gray-900">
           <input
             className="mx-2 "
             type="radio"
@@ -117,8 +124,9 @@ const MainSideBar = ({ studentList, setStudentList, setSelectedStudent }) => {
             value="outuniversity"
           ></input>
           <label htmlFor="outuniversity">من خارج الجامعة</label>
-        </div>
-        <div className=" text-gray-900">
+        </div> */}
+
+        {/* <div className=" text-gray-900">
           <input
             className=" mx-2"
             type="radio"
@@ -136,23 +144,26 @@ const MainSideBar = ({ studentList, setStudentList, setSelectedStudent }) => {
             value="outegyption"
           ></input>
           <label htmlFor="outegyption">وافد</label>
-        </div>
+        </div> */}
+
         <div className=" text-gray-900">
           <input
             className=" mx-2"
             type="radio"
             id="applicants"
-            name="checkapplicants"
-            value="applicants"
+            name="applicants"
+            value="applied"
+            onChange={chooseFilters}
           ></input>
           <label htmlFor="applicants">متقدمين</label>
 
           <input
             className=" mx-2 mr-10"
             type="radio"
-            id="accepted"
-            name="checkapplicants"
+            id="applicants"
+            name="applicants"
             value="accepted"
+            onChange={chooseFilters}
           ></input>
           <label htmlFor="accepted">مقبولين</label>
         </div>
@@ -168,9 +179,8 @@ const MainSideBar = ({ studentList, setStudentList, setSelectedStudent }) => {
             id="normal"
             name="normal"
             value="normal"
-            
           ></input>
-          <label  htmlFor="normal"> سكن عادي</label>
+          <label htmlFor="normal"> سكن عادي</label>
 
           <input
             type="checkbox"
@@ -209,58 +219,41 @@ const MainSideBar = ({ studentList, setStudentList, setSelectedStudent }) => {
             type="text"
             id="nationalId"
             name="nationalId"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
           />
           {/* Add a "Search" button */}
           <button
             className="text-slate-50 mr-2 px-1 border-2 rounded bg-mainBlue hover:bg-lime-900"
             type="button"
-            onClick={searchStudents}
+            onClick={searchClick}
           >
             بحث
           </button>
         </div>
 
         {/* Add a "تطبيق الفلتر" (Apply Filter) button */}
-        <button
+        {/* <button
           className="text-slate-50 mr-2 px-1 border-2 rounded bg-mainBlue hover:bg-lime-900"
           type="button"
-          onClick={applyFilters}
         >
           تطبيق الفلتر
-        </button>
+        </button> */}
 
         <div className="mr-5 mt-4 h-64 overflow-y-scroll border text-gray-500">
-          <ul>
-            {searchResults.length > 0
-              ? searchResults &&
-                searchResults.map((student, index) => (
-                  <li
-                    key={index}
-                    className="hover:cursor-pointer hover:bg-mainYellow"
-                    onClick={() => handleStudentClick(student.id)}
-                  >
-                    {student.name}
-                  </li>
-                ))
-              : filteredStudents &&
-                filteredStudents.map((student, index) => (
-                  <li
-                    key={index}
-                    className="hover:cursor-pointer hover:bg-mainYellow"
-                    onClick={() => handleStudentClick(student.id)}
-                  >
-                    {student.name}
-                  </li>
-                ))}
+          <ul className="flex flex-col">
+            {filteredList.map((student) => (
+              <span
+                key={`student-list-${student.id}`}
+                className="text-slate-700 hover:cursor-pointer hover:bg-mainYellow"
+                onClick={() => setSelectedStudentData(student)}
+              >
+                {student.name}
+              </span>
+            ))}
           </ul>
         </div>
       </form>
     </div>
   );
 };
-
-
 
 export default MainSideBar;
