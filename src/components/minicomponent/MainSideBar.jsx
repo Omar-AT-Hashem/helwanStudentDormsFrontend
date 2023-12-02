@@ -13,8 +13,8 @@ const MainSideBar = ({
 
   // State variable for search query
 
+  const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
-  const [faculty, setFaculty] = useState()
   const [filters, setFilters] = useState({
     isAccepted: null,
     gender: null,
@@ -22,27 +22,96 @@ const MainSideBar = ({
     housed: false,
   });
 
-  const returnFilteredList = (list, filters) => {
-    let filtered = [];
-    filtered = list.filter(
-      (ele) =>
-        ele.isAccepted == filters.isAccepted && ele.gender == filters.gender
-    );
+  useEffect(() => {
+    if(search.length == 0){
+    axios
+      .get(`${API_ROUTE}/v1/student/`)
+      .then((res) => {
+        setStudentList(res.data);
+        const filtered = returnFilteredList(res.data, filters);
+        setFilteredList(filtered.length > 0 ? filtered : []);
+      })
 
-    console.log(filtered);
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        toast("Something went wrong");
+      });
+    }
+  }, [studentList]);
+
+  const returnFilteredList = (list, filters) => {
+    const { isAccepted, gender, notHoused, housed } = filters;
+
+    let filtered = [];
+    let overlayArray = [];
+    filtered = list.filter(
+      (ele) => ele.isAccepted == isAccepted && ele.gender == gender
+    );
+    overlayArray = filtered;
+
+    if (!notHoused && !housed) {
+      return filtered;
+    }
+
+    if (notHoused) {
+      filtered.push(
+        ...overlayArray.filter(
+          (ele) =>
+            ele.isAccepted == isAccepted &&
+            ele.gender == gender &&
+            ele.isHoused == 0 &&
+            !filtered.includes(ele)
+        )
+      );
+    } else if (!notHoused) {
+      filtered = filtered.filter((ele) => ele.isHoused != 0);
+    }
+
+    if (housed) {
+      filtered.push(
+        ...overlayArray.filter(
+          (ele) =>
+            ele.isAccepted == isAccepted &&
+            ele.gender == gender &&
+            ele.isHoused == 1 &&
+            !filtered.includes(ele)
+        )
+      );
+    } else if (!housed) {
+      filtered = filtered.filter((ele) => ele.isHoused != 1);
+    }
 
     return filtered;
   };
 
   const searchClick = () => {
+    if (search.length > 0) {
+      axios
+        .get(`${API_ROUTE}/v1/student/get-by-nationalId/${search}`)
+        .then((res) => {
+          setStudentList(res.data);
+          setFilteredList(res.data.length > 0 ? res.data : []);
+        })
+        .catch((err) => {
+          if (err && err.code === "ERR_BAD_REQUEST") {
+            return;
+          }
+          toast.dismiss();
+          toast("Something went wrong");
+        });
+      return;
+    }
     axios
       .get(`${API_ROUTE}/v1/student/`)
       .then((res) => {
         setStudentList(res.data);
 
         //------------ start filter for applicants --------------
-
-        setFilteredList(returnFilteredList(res.data, filters));
+        const filtered = returnFilteredList(res.data, filters);
+        setFilteredList(filtered.length > 0 ? filtered : []);
 
         //------------ end filter for applicants --------------
       })
@@ -57,34 +126,35 @@ const MainSideBar = ({
   };
 
   const chooseFilters = (e) => {
-    //------------ start filter for applicants --------------
     if (e.target.type == "radio") {
-      if (e.target.name == "isAccepted") {
-        setFilters((prev) => {
-          return { ...prev, isAccepted: e.target.value };
-        });
+      setFilters((prev) => {
+        return { ...prev, [e.target.name]: e.target.value };
+      });
 
-        setFilteredList(
-          returnFilteredList(studentList, {
-            ...filters,
-            isAccepted: e.target.value,
-          })
-        );
-      }
-      if (e.target.name == "gender") {
-        setFilters((prev) => {
-          return { ...prev, gender: e.target.value };
-        });
-
-        setFilteredList(
-          returnFilteredList(studentList, {
-            ...filters,
-            gender: e.target.value,
-          })
-        );
-      }
+      const filtered = returnFilteredList(studentList, {
+        ...filters,
+        [e.target.name]: e.target.value,
+      });
+      setFilteredList(filtered.length > 0 ? filtered : []);
     }
-    //------------ end filter for applicants --------------
+  };
+
+  const chooseSecondaryFilter = (e) => {
+    if (e.target.type == "checkbox") {
+      setFilters((prev) => {
+        return { ...prev, [e.target.name]: e.target.checked ? true : false };
+      });
+
+      const filtered = returnFilteredList(studentList, {
+        ...filters,
+        [e.target.name]: e.target.checked ? true : false,
+      });
+      setFilteredList(filtered.length > 0 ? filtered : []);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
   };
 
   // Function to search for students by national ID
@@ -210,14 +280,25 @@ const MainSideBar = ({
 
           <input
             type="checkbox"
-            id="unstill"
-            name="unstill"
-            value="unstill"
+            id="notHoused"
+            name="notHoused"
+            onChange={chooseSecondaryFilter}
           ></input>
-          <label htmlFor="unstill"> غير ساكنين</label>
+          <label htmlFor="notHoused" className="-mr-4">
+            {" "}
+            غير ساكنين
+          </label>
 
-          <input type="checkbox" id="still" name="still" value="still"></input>
-          <label htmlFor="still"> ساكنين</label>
+          <input
+            type="checkbox"
+            id="housed"
+            name="housed"
+            onChange={chooseSecondaryFilter}
+          ></input>
+          <label htmlFor="still" className="-mr-4">
+            {" "}
+            ساكنين
+          </label>
 
           {/* <input
             type="checkbox"
@@ -228,15 +309,15 @@ const MainSideBar = ({
           <label htmlFor="evacution"> اخلاء</label> */}
         </div>
         {/* Search bar */}
-        <div>
-          <label className="text-gray-900 mr-3" htmlFor="nationalId">
-            البحث بالرقم القومي
-          </label>
+        <div className="mt-5 mr-5 px-1">
           <input
-            className="mt-0  border text-gray-500"
+            className="border text-slate-700"
             type="text"
             id="nationalId"
             name="nationalId"
+            placeholder="البحث بالرقم القومي"
+            value={search}
+            onChange={handleSearchChange}
           />
           {/* Add a "Search" button */}
           <button
@@ -247,14 +328,6 @@ const MainSideBar = ({
             بحث
           </button>
         </div>
-
-        {/* Add a "تطبيق الفلتر" (Apply Filter) button */}
-        {/* <button
-          className="text-slate-50 mr-2 px-1 border-2 rounded bg-mainBlue hover:bg-lime-900"
-          type="button"
-        >
-          تطبيق الفلتر
-        </button> */}
 
         <div className="mr-5 mt-4 h-64 overflow-y-scroll border text-gray-500">
           <ul className="flex flex-col">

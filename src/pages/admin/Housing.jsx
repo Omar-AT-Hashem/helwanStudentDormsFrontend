@@ -3,6 +3,7 @@ import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
 import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import MainSideBar from "../../components/minicomponent/MainSideBar.jsx";
 
 const Housing = () => {
   if (sessionStorage.getItem("token")) {
@@ -11,8 +12,10 @@ const Housing = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
+  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
   const [studentList, setStudentList] = useState([]);
-  const [selectedStudent, setSelectedStudent] = useState();
+
+  // const [selectedStudent, setSelectedStudent] = useState();
 
   const [towns, setTowns] = useState([]);
 
@@ -21,10 +24,6 @@ const Housing = () => {
   const [selectedBed, setSelectedBed] = useState();
 
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
-
-  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
-
-  console.log(selectedStudentData);
 
   useEffect(() => {
     axios
@@ -74,41 +73,41 @@ const Housing = () => {
   //     });
   // }, [selectedStudent]);
 
-  const handleChange = (e) => {
-    if (e.target.value == "m") {
-      axios
-        .get(`${API_ROUTE}/v1/student/column/isAccepted/1/gender/${"m"}`)
-        .then((res) => {
-          return setStudentList(res.data.filter((ele) => ele.isHoused !== 1));
-        })
-        .catch((err) => {
-          if (err && err.code === "ERR_BAD_REQUEST") {
-            return;
-          }
-          toast.dismiss();
-          return toast("Something went wrong");
-        });
-    }
+  // const handleChange = (e) => {
+  //   if (e.target.value == "m") {
+  //     axios
+  //       .get(`${API_ROUTE}/v1/student/column/isAccepted/1/gender/${"m"}`)
+  //       .then((res) => {
+  //         return setStudentList(res.data.filter((ele) => ele.isHoused !== 1));
+  //       })
+  //       .catch((err) => {
+  //         if (err && err.code === "ERR_BAD_REQUEST") {
+  //           return;
+  //         }
+  //         toast.dismiss();
+  //         return toast("Something went wrong");
+  //       });
+  //   }
 
-    if (e.target.value == "f") {
-      axios
-        .get(`${API_ROUTE}/v1/student/column/isAccepted/1/gender/${"f"}`)
-        .then((res) => {
-          return setStudentList(res.data.filter((ele) => ele.isHoused !== 1));
-        })
-        .catch((err) => {
-          if (err && err.code === "ERR_BAD_REQUEST") {
-            return;
-          }
-          toast.dismiss();
-          return toast("Something went wrong");
-        });
-    }
-  };
+  //   if (e.target.value == "f") {
+  //     axios
+  //       .get(`${API_ROUTE}/v1/student/column/isAccepted/1/gender/${"f"}`)
+  //       .then((res) => {
+  //         return setStudentList(res.data.filter((ele) => ele.isHoused !== 1));
+  //       })
+  //       .catch((err) => {
+  //         if (err && err.code === "ERR_BAD_REQUEST") {
+  //           return;
+  //         }
+  //         toast.dismiss();
+  //         return toast("Something went wrong");
+  //       });
+  //   }
+  // };
 
-  const handleStudentSelect = (studentId) => {
-    setSelectedStudent(studentId);
-  };
+  // const handleStudentSelect = (studentId) => {
+  //   setSelectedStudent(studentId);
+  // };
 
   const handleSideBarTownClick = (index) => {
     setSideBarTownsOpen((prev) => {
@@ -145,16 +144,16 @@ const Housing = () => {
   const handleHouseClick = () => {
     axios
       .post(`${API_ROUTE}/v1/bed/occupy`, {
-        studentId: selectedStudent,
+        studentId: selectedStudentData.id,
         bedId: selectedBed,
       })
       .then(() => {
         setStudentList((prev) =>
-          prev.filter((student) => student.id != selectedStudent)
+          prev.filter((student) => student.id != selectedStudentData.id)
         );
         setSelectedBed();
         setSelectedFloorData([]);
-        setSelectedStudent();
+        // setSelectedStudent();
         setSelectedStudentData([]);
 
         return;
@@ -178,9 +177,9 @@ const Housing = () => {
       <div className="w-64">
         {/*------------------------- Sidebar ------------------------*/}
         <div className="w-64">
-          <div className="bg-slate-300 h-screen pt-32">
+          <div>
             {/*-------------------------start Sidebar student  ----------------*/}
-            <div className="flex gap-10" onChange={handleChange}>
+            {/* <div className="flex gap-10" onChange={handleChange}>
               <div className="flex gap-2">
                 <input type="radio" id="gender" name="gender" value="m" />
                 <label htmlFor="gender">طلاب</label>
@@ -196,12 +195,17 @@ const Housing = () => {
                 <div
                   key={`${student.id}-unapprr`}
                   className="hover:cursor-pointer hover:bg-mainYellow"
-                  onClick={() => handleStudentSelect(student.id)}
+                  // onClick={() => handleStudentSelect(student.id)}
                 >
                   {student.name}
                 </div>
               ))}
-            </div>
+            </div> */}
+            <MainSideBar
+              studentList={studentList}
+              setStudentList={setStudentList}
+              setSelectedStudentData={setSelectedStudentData}
+            />
             {/*-------------------------end Sidebar student  ----------------*/}
 
             {/*-------------------------start Sidebar towns ----------------*/}
@@ -349,7 +353,7 @@ const Housing = () => {
         {/* -------------------end Rooms-Beds ---------------------*/}
 
         <div className="flex justify-center mt-20">
-          {selectedBed && selectedStudent && (
+          {selectedBed && selectedStudentData.id && (
             <button
               className="bg-green-600 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded"
               onClick={handleHouseClick}

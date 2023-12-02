@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const Admin = () => {
   const [selectedStudentData, setSelectedStudentData] = useState();
+  
   return (
     <>
       <AdminNavbar />

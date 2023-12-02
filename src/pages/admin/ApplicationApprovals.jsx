@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import MainSideBar from "../../components/minicomponent/MainSideBar.jsx";
+import { useOutletContext } from "react-router-dom";
 
 export const ApplicationApprovals = () => {
   if (sessionStorage.getItem("token")) {
@@ -10,29 +12,15 @@ export const ApplicationApprovals = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const fieldContainer = "flex gap-3 p-3  min-w-full text-left text-sm font-ligh";
+  const fieldContainer =
+    "flex gap-3 p-3  min-w-full text-left text-sm font-ligh";
   const fieldTitle = "font-bold text-2xl ";
   const fieldValue = "text-xl text-gray-400";
 
   // State to store the selected student's data
-  const [selectedStudent, setSelectedStudent] = useState();
-  const [selectedStudentData, setSelectedStudentData] = useState();
-  const [studentList, setStudentList] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get(`${API_ROUTE}/v1/student/get-by-id/${parseInt(selectedStudent)}`)
-      .then((res) => {
-        return setSelectedStudentData(res.data);
-      })
-      .catch((err) => {
-        if (err && err.code === "ERR_BAD_REQUEST") {
-          return;
-        }
-        toast.dismiss();
-        return toast("Something went wrong");
-      });
-  }, [selectedStudent]);
+  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
+  const [studentList, setStudentList] = useState([]);
 
   const accept = () => {
     axios
@@ -44,7 +32,6 @@ export const ApplicationApprovals = () => {
         setStudentList((prev) => {
           return prev.filter((e) => e.id !== selectedStudentData.id);
         });
-        setSelectedStudent();
         setSelectedStudentData();
         return;
       })
@@ -66,7 +53,7 @@ export const ApplicationApprovals = () => {
         setStudentList((prev) => {
           return prev.filter((e) => e.id !== selectedStudentData.id);
         });
-        setSelectedStudent();
+
         setSelectedStudentData();
         return;
       })
@@ -77,42 +64,6 @@ export const ApplicationApprovals = () => {
         toast.dismiss();
         return toast("Something went wrong");
       });
-  };
-
-  const handleChange = (e) => {
-    if (e.target.value == "m") {
-      axios
-        .get(`${API_ROUTE}/v1/student/column/isApproved/0/gender/${"m"}`)
-        .then((res) => {
-          return setStudentList(res.data);
-        })
-        .catch((err) => {
-          if (err && err.code === "ERR_BAD_REQUEST") {
-            return;
-          }
-          toast.dismiss();
-          return toast("Something went wrong");
-        });
-    }
-
-    if (e.target.value == "f") {
-      axios
-        .get(`${API_ROUTE}/v1/student/column/isApproved/0/gender/${"f"}`)
-        .then((res) => {
-          return setStudentList(res.data);
-        })
-        .catch((err) => {
-          if (err && err.code === "ERR_BAD_REQUEST") {
-            return;
-          }
-          toast.dismiss();
-          return toast("Something went wrong");
-        });
-    }
-  };
-
-  const handleStudentSelect = (studentId) => {
-    setSelectedStudent(studentId);
   };
 
   return (
@@ -133,7 +84,7 @@ export const ApplicationApprovals = () => {
       />
       {/*------------------------- Sidebar ------------------------*/}
       <div className="w-64  mt-4 rounded-lg">
-        <div className=" h-screen pt-4 ">
+        {/* <div className=" h-screen pt-4 ">
           <div className="flex gap-10 " onChange={handleChange}>
             <div className="flex gap-2 text-2xl">
               <input type="radio" id="gender" name="gender" value="m" />
@@ -156,16 +107,22 @@ export const ApplicationApprovals = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
+
+        <MainSideBar
+          studentList={studentList}
+          setStudentList={setStudentList}
+          setSelectedStudentData={setSelectedStudentData}
+        />
       </div>
       {/* -------------------end Sidebar ---------------------*/}
 
       {/*----------------- Main content area----------------- */}
       <div className=" h-full flex-1 ">
         <div className="px-5   ">
-        <div className="bg-mainBlue	rounded  mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
-          قبول الطلب - جامعة حلوان
-        </div>
+          <div className="bg-mainBlue	rounded  mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+            قبول الطلب - جامعة حلوان
+          </div>
           {selectedStudentData ? (
             <div>
               <div className="grid grid-cols-2 gap  p-4 border rounded-lg border-mainBlue mt-2">

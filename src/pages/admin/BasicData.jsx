@@ -13,10 +13,7 @@ const BasicData = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
-
-  // State to store the selected student's data
-
+  const [selectedStudentData, setSelectedStudentData] = useOutletContext()
   const [studentList, setStudentList] = useState([]);
 
   return (
