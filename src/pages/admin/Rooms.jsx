@@ -15,28 +15,42 @@ function Rooms() {
     typeOfHousing: 'students',
   });
 
-  const citiesData = [
-    {
-      name: 'City A',
-      type: 'sakan',
-      buildings: [
-        {
-          name: 'Building 1',
-          levels: [
-            {
-              name: 'Level 1',
-              rooms: ['Room 101', 'Room 102', 'Room 103'],
-            },
-            {
-              name: 'Level 2',
-              rooms: ['Room 201', 'Room 202'],
-            },
-          ],
-        },
-        
-      ],
-    },
-  ];
+const citiesData = [
+  {
+    name: 'City A',
+    type: 'sakan',
+    buildings: [
+      {
+        name: 'Building 1',
+        levels: [
+          {
+            name: 'Level 1',
+            rooms: [
+              {
+                name: 'Room 101',
+                numberOfBeds: 2,
+                type: 'normal',
+                typeOfHousing: 'students',
+              },
+            ],
+          },
+          {
+            name: 'Level 2',
+            rooms: [
+              {
+                name: 'Room 201',
+                numberOfBeds: 3,
+                type: 'special',
+                typeOfHousing: 'notstudents',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
 
   const handleCityClick = (cityName) => {
     setSelectedCity(cityName);
