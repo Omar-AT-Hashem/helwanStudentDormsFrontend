@@ -10,9 +10,9 @@ export const ApplicationApprovals = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const fieldContainer = "flex gap-3 p-3 border border-slate-600";
-  const fieldTitle = "font-bold text-xl";
-  const fieldValue = "text-xl";
+  const fieldContainer = "flex gap-3 p-3  min-w-full text-left text-sm font-ligh";
+  const fieldTitle = "font-bold text-2xl ";
+  const fieldValue = "text-xl text-gray-400";
 
   // State to store the selected student's data
   const [selectedStudent, setSelectedStudent] = useState();
@@ -82,7 +82,7 @@ export const ApplicationApprovals = () => {
   const handleChange = (e) => {
     if (e.target.value == "m") {
       axios
-        .get(`${API_ROUTE}/v1/student/column/isApproved/gender/${"m"}`)
+        .get(`${API_ROUTE}/v1/student/column/isApproved/0/gender/${"m"}`)
         .then((res) => {
           return setStudentList(res.data);
         })
@@ -97,7 +97,7 @@ export const ApplicationApprovals = () => {
 
     if (e.target.value == "f") {
       axios
-        .get(`${API_ROUTE}/v1/student/column/isApproved/gender/${"f"}`)
+        .get(`${API_ROUTE}/v1/student/column/isApproved/0/gender/${"f"}`)
         .then((res) => {
           return setStudentList(res.data);
         })
@@ -132,20 +132,20 @@ export const ApplicationApprovals = () => {
         }}
       />
       {/*------------------------- Sidebar ------------------------*/}
-      <div className="w-64">
-        <div className="bg-slate-300 h-screen pt-32">
-          <div className="flex gap-10" onChange={handleChange}>
-            <div className="flex gap-2">
+      <div className="w-64  mt-4 rounded-lg">
+        <div className=" h-screen pt-4 ">
+          <div className="flex gap-10 " onChange={handleChange}>
+            <div className="flex gap-2 text-2xl">
               <input type="radio" id="gender" name="gender" value="m" />
               <label htmlFor="gender">طلاب</label>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 text-2xl">
               <input type="radio" id="gender" name="gender" value="f" />
               <label htmlFor="gender">طالبات</label>
             </div>
           </div>
 
-          <div className="w-full h-64 bg-red-300 overflow-y-scroll">
+          <div className="w-full h-3/4 text-mainBlue overflow-y-scroll mt-8 ">
             {studentList.map((student) => (
               <div
                 key={`${student.id}-unapprr`}
@@ -161,11 +161,14 @@ export const ApplicationApprovals = () => {
       {/* -------------------end Sidebar ---------------------*/}
 
       {/*----------------- Main content area----------------- */}
-      <div className=" h-full flex-1">
-        <div className="px-5 mt-10">
+      <div className=" h-full flex-1 ">
+        <div className="px-5   ">
+        <div className="bg-mainBlue	rounded  mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+          قبول الطلب - جامعة حلوان
+        </div>
           {selectedStudentData ? (
             <div>
-              <div className="grid grid-cols-2 gap bg-slate-200 p-4 border border-black">
+              <div className="grid grid-cols-2 gap  p-4 border rounded-lg border-mainBlue mt-2">
                 <div className={fieldContainer}>
                   <span className={fieldTitle}>الرقم القومى :</span>
                   <span className={fieldValue}>
@@ -340,13 +343,13 @@ export const ApplicationApprovals = () => {
 
               <div className="flex gap-10 mt-10 text-white font-bold w-1/2 m-auto">
                 <button
-                  className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200"
+                  className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
                   onClick={accept}
                 >
                   قبول
                 </button>
                 <button
-                  className="w-40 h-10 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200"
+                  className="w-40 h-10 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
                   onClick={reject}
                 >
                   رفض

@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
-import SearchForStudents from "../../components/minicomponent/SearchForStudents";
+import MainSideBar from "../../components/minicomponent/MainSideBar";
 import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 const BasicData = () => {
@@ -11,25 +13,11 @@ const BasicData = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  // State to store the selected student's data
-  const [selectedStudent, setSelectedStudent] = useState();
-  const [selectedStudentData, setSelectedStudentData] = useState();
-  console.log(selectedStudentData);
+  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
 
-  useEffect(() => {
-    axios
-      .get(`${API_ROUTE}/v1/student/get-by-id/${selectedStudent}`)
-      .then((res) => {
-        return setSelectedStudentData(res.data);
-      })
-      .catch((err) => {
-        if (err && err.code === "ERR_BAD_REQUEST") {
-          return;
-        }
-        toast.dismiss();
-        return toast("Something went wrong");
-      });
-  }, [selectedStudent]);
+  // State to store the selected student's data
+
+  const [studentList, setStudentList] = useState([]);
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen">
@@ -50,7 +38,11 @@ const BasicData = () => {
       />
       <div className="w-64">
         {/* Pass setSelectedStudent function to SearchForStudents to update selected student */}
-        <SearchForStudents setSelectedStudent={setSelectedStudent} />
+        <MainSideBar
+          studentList={studentList}
+          setStudentList={setStudentList}
+          setSelectedStudentData={setSelectedStudentData}
+        />
       </div>
       {/* Main content area */}
       <div className=" h-full flex-1">
@@ -62,20 +54,24 @@ const BasicData = () => {
           {/* Conditional rendering based on whether a student is selected */}
           {selectedStudentData ? (
             // Display student details when a student is selected
-           <div className="text-black">
+            <div className="text-black">
               <div>
-                <span>الاسم: </span><span>{selectedStudentData.name}</span>
+                <span>الاسم: </span>
+                <span>{selectedStudentData.name}</span>
               </div>
               <div>
-                <span>الاسم: </span><span>{selectedStudentData.dateOfApplying}</span>
+                <span>الاسم: </span>
+                <span>{selectedStudentData.dateOfApplying}</span>
               </div>
               <div>
-                <span>الاسم: </span><span>{selectedStudentData.nationalId}</span>
+                <span>الاسم: </span>
+                <span>{selectedStudentData.nationalId}</span>
               </div>
               <div>
-                <span>الاسم: </span><span>{selectedStudentData.username}</span>
+                <span>الاسم: </span>
+                <span>{selectedStudentData.username}</span>
               </div>
-           </div>
+            </div>
           ) : (
             // Display a message if no student is selected
             <p className="text-gray-900">

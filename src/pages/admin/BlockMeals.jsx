@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SearchForStudents from "../../components/minicomponent/SearchForStudents";
+import MainSideBar from "../../components/minicomponent/MainSideBar";
 import Records from "../../assets/fakeData/Records.json";
 
 const BlockMeals = () => {
