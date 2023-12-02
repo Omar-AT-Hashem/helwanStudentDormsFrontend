@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 const Housing = () => {
@@ -12,7 +13,6 @@ const Housing = () => {
 
   const [studentList, setStudentList] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState();
-  const [selectedStudentData, setSelectedStudentData] = useState();
 
   const [towns, setTowns] = useState([]);
 
@@ -22,7 +22,9 @@ const Housing = () => {
 
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
 
-  console.log(selectedStudent);
+  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
+
+  console.log(selectedStudentData);
 
   useEffect(() => {
     axios
@@ -42,35 +44,35 @@ const Housing = () => {
       });
   }, []);
 
-  useEffect(() => {
-    axios
-      .get(`${API_ROUTE}/v1/student/get-by-id/${parseInt(selectedStudent)}`)
-      .then((res) => {
-        return setSelectedStudentData(res.data);
-      })
-      .catch((err) => {
-        if (err && err.code === "ERR_BAD_REQUEST") {
-          return;
-        }
-        toast.dismiss();
-        return toast("Something went wrong");
-      });
-  }, [selectedStudent]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${API_ROUTE}/v1/student/get-by-id/${parseInt(selectedStudent)}`)
+  //     .then((res) => {
+  //       return setSelectedStudentData(res.data);
+  //     })
+  //     .catch((err) => {
+  //       if (err && err.code === "ERR_BAD_REQUEST") {
+  //         return;
+  //       }
+  //       toast.dismiss();
+  //       return toast("Something went wrong");
+  //     });
+  // }, [selectedStudent]);
 
-  useEffect(() => {
-    axios
-      .get(`${API_ROUTE}/v1/student/get-by-id/${parseInt(selectedStudent)}`)
-      .then((res) => {
-        return setSelectedStudentData(res.data);
-      })
-      .catch((err) => {
-        if (err && err.code === "ERR_BAD_REQUEST") {
-          return;
-        }
-        toast.dismiss();
-        return toast("Something went wrong");
-      });
-  }, [selectedStudent]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${API_ROUTE}/v1/student/get-by-id/${parseInt(selectedStudent)}`)
+  //     .then((res) => {
+  //       return setSelectedStudentData(res.data);
+  //     })
+  //     .catch((err) => {
+  //       if (err && err.code === "ERR_BAD_REQUEST") {
+  //         return;
+  //       }
+  //       toast.dismiss();
+  //       return toast("Something went wrong");
+  //     });
+  // }, [selectedStudent]);
 
   const handleChange = (e) => {
     if (e.target.value == "m") {

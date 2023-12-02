@@ -14,14 +14,39 @@ const MainSideBar = ({
   // State variable for search query
 
   const [filteredList, setFilteredList] = useState([]);
-  const [filters, setFilters] = useState({ applicants: null });
+  const [faculty, setFaculty] = useState()
+  const [filters, setFilters] = useState({
+    isAccepted: null,
+    gender: null,
+    notHoused: false,
+    housed: false,
+  });
+
+  const returnFilteredList = (list, filters) => {
+    let filtered = [];
+    filtered = list.filter(
+      (ele) =>
+        ele.isAccepted == filters.isAccepted && ele.gender == filters.gender
+    );
+
+    console.log(filtered);
+
+    return filtered;
+  };
 
   const searchClick = () => {
     axios
       .get(`${API_ROUTE}/v1/student/`)
       .then((res) => {
         setStudentList(res.data);
+
+        //------------ start filter for applicants --------------
+
+        setFilteredList(returnFilteredList(res.data, filters));
+
+        //------------ end filter for applicants --------------
       })
+
       .catch((err) => {
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
@@ -29,31 +54,37 @@ const MainSideBar = ({
         toast.dismiss();
         toast("Something went wrong");
       });
-
-    if (filters.applicants) {
-      if (filters.applicants == "accepted") {
-        setFilteredList(() => {
-          const newArr = studentList.filter((ele) => ele.isAccepted == 1);
-          return newArr;
-        });
-      } else if (filters.applicants == "applied") {
-        setFilteredList(() => {
-          const newArr = studentList.filter((ele) => ele.isAccepted == 0);
-          return newArr;
-        });
-      }
-    }
   };
 
   const chooseFilters = (e) => {
-    setFilteredList(studentList);
+    //------------ start filter for applicants --------------
     if (e.target.type == "radio") {
-      if (e.target.name == "applicants") {
+      if (e.target.name == "isAccepted") {
         setFilters((prev) => {
-          return { ...prev, applicants: e.target.value };
+          return { ...prev, isAccepted: e.target.value };
         });
+
+        setFilteredList(
+          returnFilteredList(studentList, {
+            ...filters,
+            isAccepted: e.target.value,
+          })
+        );
+      }
+      if (e.target.name == "gender") {
+        setFilters((prev) => {
+          return { ...prev, gender: e.target.value };
+        });
+
+        setFilteredList(
+          returnFilteredList(studentList, {
+            ...filters,
+            gender: e.target.value,
+          })
+        );
       }
     }
+    //------------ end filter for applicants --------------
   };
 
   // Function to search for students by national ID
@@ -106,53 +137,39 @@ const MainSideBar = ({
             <option value="">الاداب</option>
           </select>
         </div>
-        {/* <div className=" text-gray-900">
-          <input
-            className="mx-2 "
-            type="radio"
-            id="inuniversity"
-            name="checkInUniversity"
-            value="inuniversity"
-          ></input>
-          <label htmlFor="inuniversity text-gray-900">طلاب الجامعة</label>
 
-          <input
-            className=" mx-2 "
-            type="radio"
-            id="outuniversity"
-            name="checkInUniversity"
-            value="outuniversity"
-          ></input>
-          <label htmlFor="outuniversity">من خارج الجامعة</label>
-        </div> */}
-
-        {/* <div className=" text-gray-900">
-          <input
-            className=" mx-2"
-            type="radio"
-            id="egyption"
-            name="checkegyption"
-            value="egyption"
-          ></input>
-          <label htmlFor="egyption">مصري</label>
-
-          <input
-            className=" mx-2 mr-10"
-            type="radio"
-            id="outegyption"
-            name="checkegyption"
-            value="outegyption"
-          ></input>
-          <label htmlFor="outegyption">وافد</label>
-        </div> */}
-
+        {/*------------ start filter for gender --------------*/}
         <div className=" text-gray-900">
           <input
             className=" mx-2"
             type="radio"
-            id="applicants"
-            name="applicants"
-            value="applied"
+            id="gender"
+            name="gender"
+            value="M"
+            onChange={chooseFilters}
+          ></input>
+          <label htmlFor="applicants">طلاب</label>
+
+          <input
+            className=" mx-2 mr-10"
+            type="radio"
+            id="gender"
+            name="gender"
+            value="F"
+            onChange={chooseFilters}
+          ></input>
+          <label htmlFor="accepted">طالبات</label>
+        </div>
+        {/*------------ end filter for gender  --------------*/}
+
+        {/*------------ start filter for applicants --------------*/}
+        <div className=" text-gray-900">
+          <input
+            className=" mx-2"
+            type="radio"
+            id="isAccepted"
+            name="isAccepted"
+            value={0}
             onChange={chooseFilters}
           ></input>
           <label htmlFor="applicants">متقدمين</label>
@@ -160,21 +177,22 @@ const MainSideBar = ({
           <input
             className=" mx-2 mr-10"
             type="radio"
-            id="applicants"
-            name="applicants"
-            value="accepted"
+            id="isAccepted"
+            name="isAccepted"
+            value={1}
             onChange={chooseFilters}
           ></input>
           <label htmlFor="accepted">مقبولين</label>
         </div>
+        {/*------------ end filter for applicants --------------*/}
         <div className="text-gray-900 grid grid-cols-4 mt-4 mr-0">
-          <input type="checkbox" id="old" name="old" value="old"></input>
+          {/* <input type="checkbox" id="old" name="old" value="old"></input>
           <label htmlFor="old"> قدامي</label>
 
           <input type="checkbox" id="new" name="new" value="new"></input>
-          <label htmlFor="new"> جدد</label>
+          <label htmlFor="new"> جدد</label> */}
 
-          <input
+          {/* <input
             type="checkbox"
             id="normal"
             name="normal"
@@ -188,7 +206,7 @@ const MainSideBar = ({
             name="special"
             value="special"
           ></input>
-          <label htmlFor="special"> سكن مميز</label>
+          <label htmlFor="special"> سكن مميز</label> */}
 
           <input
             type="checkbox"
@@ -201,13 +219,13 @@ const MainSideBar = ({
           <input type="checkbox" id="still" name="still" value="still"></input>
           <label htmlFor="still"> ساكنين</label>
 
-          <input
+          {/* <input
             type="checkbox"
             id="evacution"
             name="evacution"
             value="evacution"
           ></input>
-          <label htmlFor="evacution"> اخلاء</label>
+          <label htmlFor="evacution"> اخلاء</label> */}
         </div>
         {/* Search bar */}
         <div>

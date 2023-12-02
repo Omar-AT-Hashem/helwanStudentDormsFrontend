@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
 import MainSideBar from "../../components/minicomponent/MainSideBar";
 import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 const BasicData = () => {
@@ -11,26 +13,11 @@ const BasicData = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
+  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
+
   // State to store the selected student's data
 
   const [studentList, setStudentList] = useState([]);
-  const [selectedStudent, setSelectedStudent] = useState();
-  const [selectedStudentData, setSelectedStudentData] = useState();
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`${API_ROUTE}/v1/student/get-by-id/${selectedStudent}`)
-  //     .then((res) => {
-  //       return setSelectedStudentData(res.data);
-  //     })
-  //     .catch((err) => {
-  //       if (err && err.code === "ERR_BAD_REQUEST") {
-  //         return;
-  //       }
-  //       toast.dismiss();
-  //       return toast("Something went wrong");
-  //     });
-  // }, [selectedStudent]);
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen">
