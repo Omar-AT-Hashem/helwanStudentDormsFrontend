@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 
 function Rooms() {
-  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCity, setSelectedCity] = useState({});
   const [selectedBuilding, setSelectedBuilding] = useState({});
   const [selectedLevel, setSelectedLevel] = useState({});
   const [roomsInLevel, setRoomsInLevel] = useState([]);
@@ -15,45 +14,45 @@ function Rooms() {
     typeOfHousing: 'students',
   });
 
-const citiesData = [
-  {
-    name: 'City A',
-    type: 'sakan',
-    buildings: [
-      {
-        name: 'Building 1',
-        levels: [
-          {
-            name: 'Level 1',
-            rooms: [
-              {
-                name: 'Room 101',
-                numberOfBeds: 2,
-                type: 'normal',
-                typeOfHousing: 'students',
-              },
-            ],
-          },
-          {
-            name: 'Level 2',
-            rooms: [
-              {
-                name: 'Room 201',
-                numberOfBeds: 3,
-                type: 'special',
-                typeOfHousing: 'notstudents',
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
+  const citiesData = [
+    {
+      name: 'City A',
+      type: 'sakan',
+      buildings: [
+        {
+          name: 'Building 1',
+          numberOfLevels: 2,
+          levels: [
+            {
+              name: 'Level 1',
+              rooms: [
+                {
+                  name: 'Room 101',
+                  numberOfBeds: 2,
+                  type: 'normal',
+                  typeOfHousing: 'students',
+                },
+              ],
+            },
+            {
+              name: 'Level 2',
+              rooms: [
+                {
+                  name: 'Room 201',
+                  numberOfBeds: 3,
+                  type: 'special',
+                  typeOfHousing: 'notstudents',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ];
 
-
-  const handleCityClick = (cityName) => {
-    setSelectedCity(cityName);
+  const handleCityClick = (city) => {
+    setSelectedCity(city);
     setSelectedBuilding({});
     setSelectedLevel({});
     setRoomsInLevel([]);
@@ -75,7 +74,7 @@ const citiesData = [
   };
 
   const handleSaveRoom = () => {
-    // Logic to save new room data
+    // Add logic to save new room data
     setRoomFormVisible(false);
   };
 
@@ -95,26 +94,26 @@ const citiesData = [
 
   return (
     <div className="rooms-container">
-      {/* Your JSX structure... */}
       <div className="sidebar">
         <h2>Cities</h2>
         <ul>
           {citiesData.map((city, index) => (
             <li key={index}>
-              <button onClick={() => handleCityClick(city.name)}>{city.name}</button>
-              {selectedCity === city.name && (
+              <button onClick={() => handleCityClick(city)}>
+                {city.name} - {city.type}
+              </button>
+              {selectedCity.name === city.name && (
                 <ul>
                   {city.buildings.map((building, index) => (
                     <li key={index}>
-                      <button onClick={() => handleBuildingClick(building)}>{building.name}</button>
+                      <button onClick={() => handleBuildingClick(building)}>
+                        {building.name} - Levels: {building.numberOfLevels}
+                      </button>
                       {selectedBuilding.name === building.name && (
-                        <ul>
-                          {building.levels.map((level, index) => (
-                            <li key={index}>
-                              <button onClick={() => handleLevelClick(level)}>{level.name}</button>
-                            </li>
-                          ))}
-                        </ul>
+                        <div>
+                          <button onClick={handleAddRoom}>Add Room</button>
+                          {/* Logic for updating and deleting building */}
+                        </div>
                       )}
                     </li>
                   ))}
@@ -125,18 +124,16 @@ const citiesData = [
         </ul>
       </div>
       <div className="main-content">
-        {/* Your displayed content... */}
         {selectedLevel.name && (
           <div>
             <h3>Rooms in {selectedLevel.name}</h3>
             <ul>
               {roomsInLevel.map((room, index) => (
                 <li key={index} onClick={() => handleRoomClick(room)}>
-                  {room}
+                  {room.name}
                 </li>
               ))}
             </ul>
-            <button onClick={handleAddRoom}>Add Room</button>
           </div>
         )}
         {roomFormVisible && (
@@ -157,7 +154,7 @@ const citiesData = [
               <option value={3}>3 beds</option>
               <option value={4}>4 beds</option>
             </select>
-            {/* Other inputs and selectors for type, typeOfHousing */}
+            {/* Other selectors for type and typeOfHousing */}
             <button onClick={handleSaveRoom}>Save</button>
           </div>
         )}
@@ -165,7 +162,9 @@ const citiesData = [
           <div>
             <h3>Selected Room</h3>
             <p>Name: {selectedRoom.name}</p>
-            {/* Display other room details */}
+            <p>Type: {selectedRoom.type}</p>
+            <p>Type of Housing: {selectedRoom.typeOfHousing}</p>
+            <p>Number of Beds: {selectedRoom.numberOfBeds}</p>
             <button onClick={handleUpdateRoom}>Update Room</button>
             <button onClick={handleDeleteRoom}>Delete Room</button>
           </div>
