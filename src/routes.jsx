@@ -19,7 +19,8 @@ import ManageApplicationDates from "./pages/admin/ManageApplicationDates";
 import ManageCategories from "./pages/admin/ManageCategories";
 import { ApplicationApprovals } from "./pages/admin/applicationApprovals.jsx";
 import HousedStudentsEdit from "./pages/admin/HousedStudentsEdit.jsx";
-import Rooms from"./pages/admin/Rooms.jsx";
+import Rooms from "./pages/admin/Rooms.jsx";
+import Penalties from "./pages/admin/Penalties.jsx";
 export const routes = createBrowserRouter([
   {
     path: "",
@@ -81,6 +82,10 @@ export const routes = createBrowserRouter([
           {
             path: "applicationApprovals",
             element: <ApplicationApprovals />,
+          },
+          {
+            path: "penalties",
+            element: <Penalties />,
           },
         ],
       },

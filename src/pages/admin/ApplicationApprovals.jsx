@@ -22,6 +22,7 @@ export const ApplicationApprovals = () => {
   const [selectedStudentData, setSelectedStudentData] = useOutletContext();
   const [studentList, setStudentList] = useState([]);
 
+ 
   const accept = () => {
     axios
       .post(`${API_ROUTE}/v1/student/asess/approve`, {
