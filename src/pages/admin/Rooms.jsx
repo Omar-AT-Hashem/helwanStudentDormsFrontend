@@ -14,7 +14,7 @@ function Rooms() {
     typeOfHousing: 'students',
   });
 
-  const citiesData = [
+ const citiesData = [
     {
       name: 'City A',
       type: 'sakan',
@@ -74,7 +74,7 @@ function Rooms() {
   };
 
   const handleSaveRoom = () => {
-    // Add logic to save new room data
+    // Logic to save new room data
     setRoomFormVisible(false);
   };
 
@@ -94,21 +94,27 @@ function Rooms() {
 
   return (
     <div className="rooms-container">
+      {/* Sidebar */}
       <div className="sidebar">
+        {/* City list */}
         <h2>Cities</h2>
         <ul>
+          {/* Mapping through cities */}
           {citiesData.map((city, index) => (
             <li key={index}>
               <button onClick={() => handleCityClick(city)}>
                 {city.name} - {city.type}
               </button>
+              {/* Show buildings if city is selected */}
               {selectedCity.name === city.name && (
                 <ul>
+                  {/* Mapping through buildings */}
                   {city.buildings.map((building, index) => (
                     <li key={index}>
                       <button onClick={() => handleBuildingClick(building)}>
                         {building.name} - Levels: {building.numberOfLevels}
                       </button>
+                      {/* Show room adding form if building is selected */}
                       {selectedBuilding.name === building.name && (
                         <div>
                           <button onClick={handleAddRoom}>Add Room</button>
@@ -123,7 +129,10 @@ function Rooms() {
           ))}
         </ul>
       </div>
+
+      {/* Main content */}
       <div className="main-content">
+        {/* Display rooms in the selected level */}
         {selectedLevel.name && (
           <div>
             <h3>Rooms in {selectedLevel.name}</h3>
@@ -136,6 +145,8 @@ function Rooms() {
             </ul>
           </div>
         )}
+
+        {/* Form for adding a room */}
         {roomFormVisible && (
           <div>
             <h3>Add Room</h3>
@@ -154,10 +165,28 @@ function Rooms() {
               <option value={3}>3 beds</option>
               <option value={4}>4 beds</option>
             </select>
-            {/* Other selectors for type and typeOfHousing */}
+            {/* Selector for room type */}
+            <select
+              value={newRoomData.type}
+              onChange={(e) => setNewRoomData({ ...newRoomData, type: e.target.value })}
+            >
+              <option value="normal">Normal</option>
+              <option value="special">Special</option>
+            </select>
+            {/* Selector for type of housing */}
+            <select
+              value={newRoomData.typeOfHousing}
+              onChange={(e) => setNewRoomData({ ...newRoomData, typeOfHousing: e.target.value })}
+            >
+              <option value="students">Students</option>
+              <option value="notstudents">Not Students</option>
+            </select>
+            {/* Save button */}
             <button onClick={handleSaveRoom}>Save</button>
           </div>
         )}
+
+        {/* Display selected room details */}
         {selectedRoom.name && (
           <div>
             <h3>Selected Room</h3>
@@ -165,6 +194,7 @@ function Rooms() {
             <p>Type: {selectedRoom.type}</p>
             <p>Type of Housing: {selectedRoom.typeOfHousing}</p>
             <p>Number of Beds: {selectedRoom.numberOfBeds}</p>
+            {/* Buttons for updating and deleting room */}
             <button onClick={handleUpdateRoom}>Update Room</button>
             <button onClick={handleDeleteRoom}>Delete Room</button>
           </div>
