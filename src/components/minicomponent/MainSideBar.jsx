@@ -22,23 +22,24 @@ const MainSideBar = ({
     housed: false,
   });
 
-  useEffect(() => {
-    if(search.length == 0){
-    axios
-      .get(`${API_ROUTE}/v1/student/`)
-      .then((res) => {
-        setStudentList(res.data);
-        const filtered = returnFilteredList(res.data, filters);
-        setFilteredList(filtered.length > 0 ? filtered : []);
-      })
+  console.log("rerender");
 
-      .catch((err) => {
-        if (err && err.code === "ERR_BAD_REQUEST") {
-          return;
-        }
-        toast.dismiss();
-        toast("Something went wrong");
-      });
+  useEffect(() => {
+    if (search.length == 0) {
+      axios
+        .get(`${API_ROUTE}/v1/student/`)
+        .then((res) => {
+          const filtered = returnFilteredList(res.data, filters);
+          setFilteredList(filtered.length > 0 ? filtered : []);
+        })
+
+        .catch((err) => {
+          if (err && err.code === "ERR_BAD_REQUEST") {
+            return;
+          }
+          toast.dismiss();
+          toast("Something went wrong");
+        });
     }
   }, [studentList]);
 
