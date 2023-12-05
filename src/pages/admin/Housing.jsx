@@ -178,6 +178,7 @@ const Housing = () => {
         {/*------------------------- Sidebar ------------------------*/}
         <div className="w-64">
           <div>
+            
             {/*-------------------------start Sidebar student  ----------------*/}
             {/* <div className="flex gap-10" onChange={handleChange}>
               <div className="flex gap-2">
@@ -229,7 +230,7 @@ const Housing = () => {
                             className="flex flex-col"
                           >
                             <span
-                              className="hover:cursor-pointer hover:bg-mainYellow text-red-600 font-bold"
+                              className="hover:cursor-pointer hover:bg-mainYellow text-green-600 font-bold"
                               onClick={handleBuildingClick}
                             >
                               {building.name}
@@ -264,28 +265,31 @@ const Housing = () => {
         {/* -------------------end Sidebar ---------------------*/}
       </div>
       <div className=" flex-1 pt-4">
+      <div className="bg-mainBlue	rounded  mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+            التسكين - جامعة حلوان
+          </div>
         {/* -------------------start student info ---------------------*/}
 
         {selectedStudentData && (
-          <div className="border-2 border-black mt-5 h-48 px-2 mx-2">
+          <div className="border-2 border-slate  mt-5 h-48 px-2 mx-2">
             <div className="flex justify-between items-center h-full">
               <div className="flex flex-col ">
                 <div>
-                  <span className="font bold text-2xl ">الاسم: </span>
-                  <span className="font text-xl text-sky-700">
+                  <span className="font bold text-2xl te ">الاسم: </span>
+                  <span className="font text-xl text-gray-400">
                     {selectedStudentData.name}
                   </span>
                 </div>
                 <div>
                   <span className="font bold text-2xl">الرقم القومي: </span>
-                  <span className="font text-xl text-sky-700">
+                  <span className="font text-xl text-gray-400">
                     {selectedStudentData.nationalId}
                   </span>
                 </div>
 
                 <div>
                   <span className="font bold text-2xl">نوع السكن : </span>
-                  <span className="font text-xl text-sky-700">
+                  <span className="font text-xl text-gray-400">
                     {selectedStudentData.accomodationType}
                   </span>
                 </div>
