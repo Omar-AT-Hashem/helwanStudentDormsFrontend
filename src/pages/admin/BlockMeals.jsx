@@ -2,6 +2,7 @@ import { useState } from "react";
 import MainSideBar from "../../components/minicomponent/MainSideBar";
 import Records from "../../assets/fakeData/Records.json";
 
+
 const BlockMeals = () => {
   const [form, setForm] = useState({});
   const [objects, setObjects] = useState([]);
@@ -46,37 +47,40 @@ const BlockMeals = () => {
         <div className="Data">
           {Records.map((record) => {
             return (
-              <div className="box" key={record.id}>
+              <div className="box h-full flex-1" key={record.id}>
+                < div className="bg-mainBlue w-full h-10 text-fuchsia-50 text-center text-2xl mt-8 rounded-lg text-mr-1">
+                    حجب الوجبات - جامعة حلوان
+                </div>
                 <div className="flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8">
                   <label className="mb-4 ">
-                    <span className="text-red-700">اسم المستخدم :</span>{" "}
+                    <span className="font-bold text-2xl">اسم المستخدم :</span>{" "}
                     <strong>{record.الاسم}</strong>
                   </label>
 
                   <div className="mb-4">
-                    <label className=" ml-10"> من تاريخ : </label>
+                    <label className=" font-bold text-2xl"> من تاريخ : </label>
                     <input
                       type="date"
                       name="fromDate"
                       onChange={handleChange}
                       required
-                      className="border border-gray-400"
+                      className="border text-xl text-gray-400 mr-4"
                     ></input>
                   </div>
 
                   <div className="mb-2">
-                    <label className="ml-10"> الى تاريخ :</label>
+                    <label className="font-bold text-2xl"> الى تاريخ :</label>
                     <input
                       type="date"
                       name="toDate"
                       required
                       onChange={handleChange}
-                      className="border border-gray-400"
+                      className="border text-xl text-gray-400 mr-4"
                     ></input>
                   </div>
 
                   <div>
-                    <label className="mb-2"> الوجبات:</label>
+                    <label className="font-bold text-2xl"> الوجبات:</label>
                     <input
                       id="radio1"
                       type="radio"
@@ -90,7 +94,7 @@ const BlockMeals = () => {
                       id="radio2"
                       type="radio"
                       name="meal"
-                      className="form-radio h-5 w-5 text-gray-600 mr-10"
+                      className="form-radio h-5 w-5 text-gray-600 mr-10 text-xl text-gray-400"
                       value="dinner"
                       onChange={handleChange}
                     ></input>
@@ -98,26 +102,26 @@ const BlockMeals = () => {
                   </div>
 
                   <div className="mb-2">
-                    <label className="ml-10">السبب :</label>
+                    <label className="font-bold text-2xl">السبب :</label>
                     <input
                       type="text"
                       required
                       value={form.reason}
                       name="reason"
                       onChange={handleChange}
-                      className="border border-gray-400 "
+                      className="border border-gray-400 text-xl text-gray-400 mr-4"
                     ></input>
                   </div>
-                  <div>
+                  <div className="flex items-center w-full ">
                     <button 
-                    className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2 w-20 mt-10 "
-                    onClick={handleAddDelete}
+                  className="w-40 h-10 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-green-500 rounded ml-10 mt-4 center"
+                  onClick={handleAddDelete}
                     >
                       ازاله
                     </button>
                     <button
-                      className="bg-blue-500 hover:opacity-70 hover:cursor-pointer transition-all duration-200  text-white font-bold py-2 px-4 rounded mx-2 w-20 mt-10"
-                      onClick={handleSubmit}
+                  className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
+                  onClick={handleSubmit}
                     >
                       اضافه
                     </button>
@@ -143,10 +147,10 @@ const BlockMeals = () => {
                             <td>{object.reason}</td>
               
                            <button
-                              className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
-                              onClick={handleAddDelete}
+                  className="w-20 h-8 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded m-4"
+                  onClick={handleAddDelete}
                               name={index}
-                            ></button>
+                            >حذف</button>
                           </tr>
                         ))}
                         

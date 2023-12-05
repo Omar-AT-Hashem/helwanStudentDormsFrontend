@@ -44,7 +44,7 @@ const BasicData = () => {
       {/* Main content area */}
       <div className=" h-full flex-1">
         {/* Header */}
-        <div className="bg-mainBlue w-full h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+        <div className="bg-mainBlue w-full h-10 text-fuchsia-50 text-center text-2xl mt-8 rounded-lg text-mr-1">
           بيانات اساسية - جامعة حلوان
         </div>
         <div className="text-white px-5">

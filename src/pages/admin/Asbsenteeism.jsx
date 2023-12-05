@@ -12,9 +12,9 @@ const Asbsenteeism = () => {
       </div>
 
       <div className=" flex-1">
-        <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl ">
-          الغياب والتصاريح - جامعة حلوان
-        </div>
+      <div className="bg-mainBlue	rounded mt-8 mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+            الغياب و التصاريح - جامعة حلوان
+          </div>
 
         <div className="Data">
           {Records.map((record) => {

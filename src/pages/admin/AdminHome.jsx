@@ -1,8 +1,8 @@
 const AdminHome = () => {
   return (
     <div>
-      <div className="w-100 pt-10 mt-1043">
-        <p className="w-1/2 max-w-[500px] mx-auto text-gray-500 dark:text-gray-600 text-center border-2 ">
+      <div className="w-100 pt-24 mt-1043">
+        <p className="text-xl max-w-[650px] mx-auto text-gray-500 dark:text-gray-600 text-center border-2 ">
           بخصوص الدعم الفنى للنظام يتم التواصل من خلال ارسال رسالة على النظام
           تتضمن المشكلة المراد الاستفسار عنها وسوف يتم الرد فى اقرب وقت فى حالة
           عدم الرد على الرسالة او وجود حالة طارئة يمكنك الاتصال مع احد ممثلى
