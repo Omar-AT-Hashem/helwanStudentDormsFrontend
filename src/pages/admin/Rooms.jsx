@@ -155,20 +155,31 @@ const citiesData = [
     setRoomFormVisible(true);
   };
 
-  const handleSaveRoom = () => {
-    // Logic to save new room data
-    setRoomFormVisible(false);
-  };
-
-  const handleRoomClick = (room) => {
-    setSelectedRoom(room);
-  };
-
 const handleUpdateBuilding = () => {
   setEditingBuilding(true);
   // Copy the selected building data to preserve original values while editing
   setSelectedBuilding((prevBuilding) => ({ ...prevBuilding }));
 };
+  const handleRoomClick = (room) => {
+    setSelectedRoom(room);
+    setEditingRoom(false); // Reset editing mode for room details
+  };
+
+  const handleUpdateRoom = () => {
+    setEditingRoom(true); // Enable editing mode for room details
+  };
+
+  const handleSaveRoom = () => {
+    // Logic to save updated room data
+    // Update the room data in the state or backend
+    setEditingRoom(false); // Disable editing mode for room details after saving
+  };
+
+  const handleExitRoomEdit = () => {
+    setEditingRoom(false); // Disable editing mode for room details
+    // Reset the selected room's data to its original state
+    // Logic to revert room data to its original values
+  };
 
   const handleSaveBuilding = () => {
     // Logic to update building
@@ -310,7 +321,6 @@ const handleUpdateBuilding = () => {
           </div>
         )}
 
-      // Display selected building details for editing
 {selectedBuilding.name && editingBuilding && (
   <div>
     <h3>Edit Building Details</h3>
