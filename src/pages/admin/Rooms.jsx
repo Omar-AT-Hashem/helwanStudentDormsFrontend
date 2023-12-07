@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 // City component
 function CityDetails({ selectedCity, handleUpdateBuilding, handleCityDelete }) {
   return (
@@ -39,6 +38,7 @@ function LevelDetails({ selectedLevel, roomsInLevel, handleRoomClick }) {
   );
 }
 
+
 function Rooms() {
   const [selectedCity, setSelectedCity] = useState({});
   const [selectedBuilding, setSelectedBuilding] = useState({});
@@ -54,6 +54,8 @@ function Rooms() {
   });
   const [editingBuilding, setEditingBuilding] = useState(false);
   const [editingRoom, setEditingRoom] = useState(false);
+  const [editingRoomData, setEditingRoomData] = useState({});
+  const [roomDetailsVisible, setRoomDetailsVisible] = useState(false);
 
 const citiesData = [
   {
@@ -160,26 +162,6 @@ const handleUpdateBuilding = () => {
   // Copy the selected building data to preserve original values while editing
   setSelectedBuilding((prevBuilding) => ({ ...prevBuilding }));
 };
-  const handleRoomClick = (room) => {
-    setSelectedRoom(room);
-    setEditingRoom(false); // Reset editing mode for room details
-  };
-
-  const handleUpdateRoom = () => {
-    setEditingRoom(true); // Enable editing mode for room details
-  };
-
-  const handleSaveRoom = () => {
-    // Logic to save updated room data
-    // Update the room data in the state or backend
-    setEditingRoom(false); // Disable editing mode for room details after saving
-  };
-
-  const handleExitRoomEdit = () => {
-    setEditingRoom(false); // Disable editing mode for room details
-    // Reset the selected room's data to its original state
-    // Logic to revert room data to its original values
-  };
 
   const handleSaveBuilding = () => {
     // Logic to update building
@@ -201,6 +183,86 @@ const handleUpdateBuilding = () => {
       type: 'normal',
       typeOfHousing: 'students',
     });
+  };
+const handleRoomClick = (room) => {
+    setSelectedRoom(room);
+    setEditingRoomData({});
+    setRoomDetailsVisible(true);
+  };
+
+  const handleUpdateRoom = () => {
+    setEditingRoomData({ ...selectedRoom });
+  };
+
+  const handleSaveRoom = () => {
+    // Logic to save updated room data
+    // Update the room data in the state or backend
+    setEditingRoomData({});
+    setRoomDetailsVisible(false);
+  };
+
+  const handleExitRoomEdit = () => {
+    setEditingRoomData({});
+    setRoomDetailsVisible(false);
+  };
+
+  // Render function for displaying room details
+  const renderRoomDetails = () => {
+    if (roomDetailsVisible && selectedLevel.name && roomsInLevel.length > 0) {
+      return (
+        <div>
+          <h2>Rooms in {selectedLevel.name}</h2>
+          <ul>
+            {roomsInLevel.map((room, index) => (
+              <li key={index} onClick={() => handleRoomClick(room)}>
+                {room.name}
+              </li>
+            ))}
+          </ul>
+          {selectedRoom.name && (
+            <div>
+              <h3>Room Details</h3>
+              <p>Name: {selectedRoom.name}</p>
+              <p>Number of Beds: {selectedRoom.numberOfBeds}</p>
+              {/* Displaying update and delete buttons when room is selected */}
+              <button onClick={handleUpdateRoom}>Update Room</button>
+              <button onClick={() => setSelectedRoom({})}>Delete Room</button>
+              {/* Render editing fields when update button is clicked */}
+              {editingRoomData.name === selectedRoom.name && (
+                <div>
+                  <label>
+                    Room Name:
+                    <input
+                      type="text"
+                      value={editingRoomData.name}
+                      onChange={(e) =>
+                        setEditingRoomData({ ...editingRoomData, name: e.target.value })
+                      }
+                    />
+                  </label>
+                  <label>
+                    Number of Beds:
+                    <select
+                      value={editingRoomData.numberOfBeds}
+                      onChange={(e) =>
+                        setEditingRoomData({ ...editingRoomData, numberOfBeds: e.target.value })
+                      }
+                    >
+                      <option value={1}>1</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                    </select>
+                  </label>
+                  <button onClick={handleSaveRoom}>Save</button>
+                  <button onClick={handleExitRoomEdit}>Exit</button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+    return null;
   };
 
   // Render function for the main content area
@@ -292,7 +354,7 @@ const handleUpdateBuilding = () => {
       {/* Main content */}
       <div className="main-content">
         {renderMainContent()}
-
+       {renderRoomDetails()}
         {/* Form for adding a room */}
         {roomFormVisible && (
           <div>
