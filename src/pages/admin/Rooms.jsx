@@ -1,4 +1,44 @@
 import React, { useState } from 'react';
+
+// City component
+function CityDetails({ selectedCity, handleUpdateBuilding, handleCityDelete }) {
+  return (
+    <div>
+      <h2>{selectedCity.name} - {selectedCity.type}</h2>
+      {/* Additional city details */}
+      <button onClick={handleUpdateBuilding}>Update Building</button>
+      <button onClick={handleCityDelete}>Delete Building</button>
+    </div>
+  );
+}
+
+// Building component
+function BuildingDetails({ selectedBuilding, handleAddRoom }) {
+  return (
+    <div>
+      <h2>{selectedBuilding.name} - Levels: {selectedBuilding.numberOfLevels}</h2>
+      {/* Additional building details */}
+      <button onClick={handleAddRoom}>Add Room</button>
+    </div>
+  );
+}
+
+// Level component
+function LevelDetails({ selectedLevel, roomsInLevel, handleRoomClick }) {
+  return (
+    <div>
+      <h2>Rooms in {selectedLevel.name}</h2>
+      <ul>
+        {roomsInLevel.map((room, index) => (
+          <li key={index} onClick={() => handleRoomClick(room)}>
+            {room.name}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function Rooms() {
   const [selectedCity, setSelectedCity] = useState({});
   const [selectedBuilding, setSelectedBuilding] = useState({});
@@ -12,8 +52,10 @@ function Rooms() {
     type: 'normal',
     typeOfHousing: 'students',
   });
+  const [editingBuilding, setEditingBuilding] = useState(false);
+  const [editingRoom, setEditingRoom] = useState(false);
 
- const citiesData = [
+  const citiesData = [
     {
       name: 'City A',
       type: 'sakan',
@@ -81,22 +123,84 @@ function Rooms() {
     setSelectedRoom(room);
   };
 
-  const handleUpdateRoom = () => {
-    console.log('Room updated:', selectedRoom);
-    // Logic to update room
+const handleUpdateBuilding = () => {
+  setEditingBuilding(true);
+  // Copy the selected building data to preserve original values while editing
+  setSelectedBuilding((prevBuilding) => ({ ...prevBuilding }));
+};
+
+  const handleSaveBuilding = () => {
+    // Logic to update building
+    setEditingBuilding(false);
   };
 
-  const handleDeleteRoom = () => {
-    console.log('Room deleted:', selectedRoom);
-    // Logic to delete room
+  const handleExitEditBuilding = () => {
+    setEditingBuilding(false);
+    // Reset building data to the state before editing
+    // Logic to revert building data to original state
+  };
+
+  const handleExitAddRoom = () => {
+    setRoomFormVisible(false);
+    // Reset new room data to default values
+    setNewRoomData({
+      name: '',
+      numberOfBeds: 1,
+      type: 'normal',
+      typeOfHousing: 'students',
+    });
+  };
+
+  // Render function for the main content area
+  const renderMainContent = () => {
+    if (selectedLevel.name) {
+      return (
+        <LevelDetails
+          selectedLevel={selectedLevel}
+          roomsInLevel={roomsInLevel}
+          handleRoomClick={handleRoomClick}
+        />
+      );
+    } else if (selectedBuilding.name && !editingBuilding) {
+      return (
+        <BuildingDetails
+          selectedBuilding={selectedBuilding}
+          handleAddRoom={handleAddRoom}
+        />
+      );
+    } else if (selectedCity.name) {
+      return (
+        <CityDetails
+          selectedCity={selectedCity}
+          handleUpdateBuilding={handleUpdateBuilding}
+          handleCityDelete={() => setSelectedBuilding({})}
+        />
+      );
+    }
+    return null;
   };
 
   return (
     <div className="rooms-container">
       {/* Sidebar */}
       <div className="sidebar">
-        {/* City list */}
-        <h2>Cities</h2>
+        {/* City or Building or Level list */}
+        <h2>
+          {selectedCity.name && `${selectedCity.name} - ${selectedCity.type}`}
+          {selectedBuilding.name && !editingBuilding && (
+            <>
+              <span>{` - Levels: ${selectedBuilding.numberOfLevels}`}</span>
+              <button onClick={handleUpdateBuilding}>Update Building</button>
+              <button onClick={() => setSelectedBuilding({})}>Delete Building</button>
+            </>
+          )}
+          {selectedLevel.name && !roomFormVisible && (
+            <>
+              <span>{` - Rooms in ${selectedLevel.name}`}</span>
+              <button onClick={handleAddRoom}>Add Room</button>
+            </>
+          )}
+        </h2>
         <ul>
           {/* Mapping through cities */}
           {citiesData.map((city, index) => (
@@ -111,14 +215,18 @@ function Rooms() {
                   {city.buildings.map((building, index) => (
                     <li key={index}>
                       <button onClick={() => handleBuildingClick(building)}>
-                        {building.name} - Levels: {building.numberOfLevels}
+                        {building.name}
                       </button>
-                      {/* Show room adding form if building is selected */}
+                      {/* Show levels if building is selected */}
                       {selectedBuilding.name === building.name && (
-                        <div>
-                          <button onClick={handleAddRoom}>Add Room</button>
-                          {/* Logic for updating and deleting building */}
-                        </div>
+                        <ul>
+                          {/* Mapping through levels */}
+                          {building.levels.map((level, index) => (
+                            <li key={index}>
+                              <button onClick={() => handleLevelClick(level)}>{level.name}</button>
+                            </li>
+                          ))}
+                        </ul>
                       )}
                     </li>
                   ))}
@@ -131,73 +239,62 @@ function Rooms() {
 
       {/* Main content */}
       <div className="main-content">
-        {/* Display rooms in the selected level */}
-        {selectedLevel.name && (
-          <div>
-            <h3>Rooms in {selectedLevel.name}</h3>
-            <ul>
-              {roomsInLevel.map((room, index) => (
-                <li key={index} onClick={() => handleRoomClick(room)}>
-                  {room.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {renderMainContent()}
 
         {/* Form for adding a room */}
         {roomFormVisible && (
           <div>
             <h3>Add Room</h3>
-            <input
-              type="text"
-              placeholder="Room Name"
-              value={newRoomData.name}
-              onChange={(e) => setNewRoomData({ ...newRoomData, name: e.target.value })}
-            />
-            <select
-              value={newRoomData.numberOfBeds}
-              onChange={(e) => setNewRoomData({ ...newRoomData, numberOfBeds: e.target.value })}
-            >
-              <option value={1}>1 bed</option>
-              <option value={2}>2 beds</option>
-              <option value={3}>3 beds</option>
-              <option value={4}>4 beds</option>
-            </select>
-            {/* Selector for room type */}
-            <select
-              value={newRoomData.type}
-              onChange={(e) => setNewRoomData({ ...newRoomData, type: e.target.value })}
-            >
-              <option value="normal">Normal</option>
-              <option value="special">Special</option>
-            </select>
-            {/* Selector for type of housing */}
-            <select
-              value={newRoomData.typeOfHousing}
-              onChange={(e) => setNewRoomData({ ...newRoomData, typeOfHousing: e.target.value })}
-            >
-              <option value="students">Students</option>
-              <option value="notstudents">Not Students</option>
-            </select>
-            {/* Save button */}
+            <label>
+              Room Name:
+              <input
+                type="text"
+                value={newRoomData.name}
+                onChange={(e) => setNewRoomData({ ...newRoomData, name: e.target.value })}
+              />
+            </label>
+            <label>
+              Number of Beds:
+              <select
+                value={newRoomData.numberOfBeds}
+                onChange={(e) => setNewRoomData({ ...newRoomData, numberOfBeds: e.target.value })}
+              >
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+              </select>
+            </label>
             <button onClick={handleSaveRoom}>Save</button>
+            <button onClick={handleExitAddRoom}>Exit</button>
           </div>
         )}
 
-        {/* Display selected room details */}
-        {selectedRoom.name && (
-          <div>
-            <h3>Selected Room</h3>
-            <p>Name: {selectedRoom.name}</p>
-            <p>Type: {selectedRoom.type}</p>
-            <p>Type of Housing: {selectedRoom.typeOfHousing}</p>
-            <p>Number of Beds: {selectedRoom.numberOfBeds}</p>
-            {/* Buttons for updating and deleting room */}
-            <button onClick={handleUpdateRoom}>Update Room</button>
-            <button onClick={handleDeleteRoom}>Delete Room</button>
-          </div>
-        )}
+      // Display selected building details for editing
+{selectedBuilding.name && editingBuilding && (
+  <div>
+    <h3>Edit Building Details</h3>
+    <label>
+      Building Name:
+      <input
+        type="text"
+        value={selectedBuilding.name}
+        onChange={(e) => setSelectedBuilding({ ...selectedBuilding, name: e.target.value })}
+      />
+    </label>
+    <label>
+      Number of Levels:
+      <input
+        type="number"
+        value={selectedBuilding.numberOfLevels}
+        onChange={(e) => setSelectedBuilding({ ...selectedBuilding, numberOfLevels: e.target.value })}
+      />
+    </label>
+    {/* Add more input fields for editing other building details */}
+    <button onClick={handleSaveBuilding}>Save</button>
+    <button onClick={handleExitEditBuilding}>Exit</button>
+  </div>
+)}
+
       </div>
     </div>
   );
