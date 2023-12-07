@@ -55,42 +55,83 @@ function Rooms() {
   const [editingBuilding, setEditingBuilding] = useState(false);
   const [editingRoom, setEditingRoom] = useState(false);
 
-  const citiesData = [
-    {
-      name: 'City A',
-      type: 'sakan',
-      buildings: [
-        {
-          name: 'Building 1',
-          numberOfLevels: 2,
-          levels: [
-            {
-              name: 'Level 1',
-              rooms: [
-                {
-                  name: 'Room 101',
-                  numberOfBeds: 2,
-                  type: 'normal',
-                  typeOfHousing: 'students',
-                },
-              ],
-            },
-            {
-              name: 'Level 2',
-              rooms: [
-                {
-                  name: 'Room 201',
-                  numberOfBeds: 3,
-                  type: 'special',
-                  typeOfHousing: 'notstudents',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ];
+const citiesData = [
+  {
+    name: 'City A',
+    type: 'sakan',
+    buildings: [
+      {
+        name: 'Building 1',
+        numberOfLevels: 2,
+        levels: [
+          {
+            name: 'Level 1',
+            rooms: [
+              {
+                name: 'Room 101',
+                numberOfBeds: 2,
+                type: 'normal',
+                typeOfHousing: 'students',
+              },
+              {
+                name: 'Room 102',
+                numberOfBeds: 3,
+                type: 'special',
+                typeOfHousing: 'notstudents',
+              },
+            ],
+          },
+          {
+            name: 'Level 2',
+            rooms: [
+              {
+                name: 'Room 201',
+                numberOfBeds: 3,
+                type: 'special',
+                typeOfHousing: 'notstudents',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'City B',
+    type: 'metropolitan',
+    buildings: [
+      {
+        name: 'Building 2',
+        numberOfLevels: 3,
+        levels: [
+          {
+            name: 'Level 1',
+            rooms: [
+              {
+                name: 'Room 103',
+                numberOfBeds: 4,
+                type: 'normal',
+                typeOfHousing: 'students',
+              },
+            ],
+          },
+          {
+            name: 'Level 2',
+            rooms: [
+              {
+                name: 'Room 202',
+                numberOfBeds: 2,
+                type: 'special',
+                typeOfHousing: 'notstudents',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
 
   const handleCityClick = (city) => {
     setSelectedCity(city);
