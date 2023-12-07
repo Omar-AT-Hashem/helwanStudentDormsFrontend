@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import toast, { Toaster } from "react-hot-toast";
 function Rooms() {
   const [selectedCity, setSelectedCity] = useState({});
   const [selectedBuilding, setSelectedBuilding] = useState({});
