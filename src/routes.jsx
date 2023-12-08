@@ -21,6 +21,7 @@ import { ApplicationApprovals } from "./pages/admin/applicationApprovals.jsx";
 import HousedStudentsEdit from "./pages/admin/HousedStudentsEdit.jsx";
 import Rooms from "./pages/admin/Rooms.jsx";
 import Penalties from "./pages/admin/Penalties.jsx";
+import Fees from "./pages/admin/fees.jsx";
 export const routes = createBrowserRouter([
   {
     path: "",
@@ -70,7 +71,6 @@ export const routes = createBrowserRouter([
             path: "asbsenteeism",
             element: <Asbsenteeism />,
           },
-
           {
             path: "manageInstructions",
             element: <ManageInsturctions />,
@@ -87,6 +87,11 @@ export const routes = createBrowserRouter([
             path: "penalties",
             element: <Penalties />,
           },
+          {
+            path: "fees",
+            element: <Fees/>,
+          },
+        
         ],
       },
       {

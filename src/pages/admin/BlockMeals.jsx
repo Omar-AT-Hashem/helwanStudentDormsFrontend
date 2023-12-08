@@ -1,9 +1,13 @@
 import { useState } from "react";
 import MainSideBar from "../../components/minicomponent/MainSideBar";
 import Records from "../../assets/fakeData/Records.json";
+import { useOutletContext } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 
 const BlockMeals = () => {
+  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
+  const [studentList, setStudentList] = useState([]);
   const [form, setForm] = useState({});
   const [objects, setObjects] = useState([]);
   //const [deletedObjects, setDeletedObjects] = useState([]);/////////////////////////////////
@@ -43,6 +47,31 @@ const BlockMeals = () => {
 
   return (
     <div className="pt-20 flex flex-row w-full h-screen ">
+       <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            border: "1px solid #A9872D",
+            backgroundColor: "#A9872D",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
+      <div className="w-64">
+        {/* Pass setSelectedStudent function to SearchForStudents to update selected student */}
+        <MainSideBar
+          studentList={studentList}
+          setStudentList={setStudentList}
+          setSelectedStudentData={setSelectedStudentData}
+        />
+      </div>
+
+
+
       <div className=" flex-1">
         <div className="Data">
           {Records.map((record) => {
@@ -54,7 +83,18 @@ const BlockMeals = () => {
                 <div className="flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8">
                   <label className="mb-4 ">
                     <span className="font-bold text-2xl">اسم المستخدم :</span>{" "}
-                    <strong>{record.الاسم}</strong>
+                    {selectedStudentData && (
+                    <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={selectedStudentData.name}
+                    // Add onChange handler to update the state
+                    readOnly
+                    className="border border-gray-400"
+                  />
+                )}
+                    
                   </label>
 
                   <div className="mb-4">
