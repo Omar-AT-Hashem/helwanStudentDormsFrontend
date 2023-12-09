@@ -22,6 +22,7 @@ import HousedStudentsEdit from "./pages/admin/HousedStudentsEdit.jsx";
 import Rooms from "./pages/admin/Rooms.jsx";
 import Penalties from "./pages/admin/Penalties.jsx";
 import Fees from "./pages/admin/fees.jsx";
+import EditStudentData from "./pages/admin/EditStudentData.jsx";
 export const routes = createBrowserRouter([
   {
     path: "",
@@ -90,6 +91,10 @@ export const routes = createBrowserRouter([
           {
             path: "fees",
             element: <Fees/>,
+          },
+          {
+            path: "editstudentdata",
+            element: <EditStudentData />,
           },
         
         ],
