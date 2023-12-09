@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import Loading from "./Loading.jsx";
 
 const MainSideBar = ({
   studentList,
@@ -12,7 +13,7 @@ const MainSideBar = ({
   // State variables for filters
 
   // State variable for search query
-
+  const [loading, setLoading] = useState(0)
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
   const [filters, setFilters] = useState({
@@ -26,11 +27,13 @@ const MainSideBar = ({
 
   useEffect(() => {
     if (search.length == 0) {
+      setLoading(prev => prev + 1)
       axios
         .get(`${API_ROUTE}/v1/student/`)
         .then((res) => {
           const filtered = returnFilteredList(res.data, filters);
           setFilteredList(filtered.length > 0 ? filtered : []);
+          setLoading(prev => prev - 1)
         })
 
         .catch((err) => {
@@ -90,14 +93,17 @@ const MainSideBar = ({
 
   const searchClick = () => {
     if (search.length > 0) {
+      setLoading(prev => prev + 1)
       axios
         .get(`${API_ROUTE}/v1/student/get-by-nationalId/${search}`)
         .then((res) => {
           setStudentList(res.data);
           setFilteredList(res.data.length > 0 ? res.data : []);
+          setLoading(prev => prev - 1)
         })
         .catch((err) => {
           if (err && err.code === "ERR_BAD_REQUEST") {
+            setLoading(prev => prev - 1)
             return;
           }
           toast.dismiss();
@@ -105,10 +111,12 @@ const MainSideBar = ({
         });
       return;
     }
+    setLoading(prev => prev + 1)
     axios
       .get(`${API_ROUTE}/v1/student/`)
       .then((res) => {
         setStudentList(res.data);
+        setLoading(prev => prev - 1)
 
         //------------ start filter for applicants --------------
         const filtered = returnFilteredList(res.data, filters);
@@ -119,6 +127,7 @@ const MainSideBar = ({
 
       .catch((err) => {
         if (err && err.code === "ERR_BAD_REQUEST") {
+          setLoading(prev => prev - 1)
           return;
         }
         toast.dismiss();
@@ -162,6 +171,7 @@ const MainSideBar = ({
 
   return (
     <div className="flex flex-col w-64 z-30 mt-4 border h-full">
+      {loading > 0 && <Loading />}
       <Toaster
         toastOptions={{
           className: "",

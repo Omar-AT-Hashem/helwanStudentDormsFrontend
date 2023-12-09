@@ -4,6 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { API_ROUTE } from "../../config/env";
+import Loading from "../../components/minicomponent/Loading";
 
 const BlockMeals = () => {
   const [selectedStudentData, setSelectedStudentData] = useOutletContext();
@@ -82,6 +83,7 @@ const BlockMeals = () => {
 
   return (
     <div className="pt-20 flex flex-row w-full h-screen ">
+      
       <Toaster
         toastOptions={{
           className: "",
