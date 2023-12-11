@@ -13,48 +13,9 @@ function ChangeApplicationStatus() {
 
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [editableImage, setEditableImage] = useState(false);
   const [error, setError] = useState(null);
-  const [isEditable, setIsEditable] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  // State variables for user data
-  // const [userData, setUserData] = useState({
-  //   image: '', // Image URL
-  //   nationalId: '',
-  //   name: '',
-  //   birthday: '',
-  //   placeOfBirth: '',
-  //   gender: '',
-  //   telephone: '',
-  //   mobile: '',
-  //   email: '',
-  //   religion: '',
-  //   faculty: '',
-  //   fatherName: '',
-  //   fatherNationalId: '',
-  //   fatherOccupation: '',
-  //   fatherNumber: '',
-  //   guardianName: '',
-  //   guardianNationalId: '',
-  //   guardianRelationship: '',
-  //   residence: '',
-  //   addressDetails: '',
-  //   isDisabled: 0,
-  //   familyAbroad: 0,
-  //   highschoolAbroad: 0,
-  //   highschoolSpecialization: '',
-  //   highschoolGrade: '',
-  //   accomodationType: '',
-  //   accomodationWithNutrition: '',
-  //   password: '',
-  //   applicationStatus: '',
-  // });
 
   const [userData, setUserData] = useState();
-
-  // State variable to track the selected image file
-  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     axios
@@ -64,93 +25,16 @@ function ChangeApplicationStatus() {
         )}`
       )
       .then((response) => {
-        console.log(response);
         setFormData({ ...response.data, id: sessionStorage.getItem("id") });
         setUserData(response.data);
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         setError(err.response ? err.response.data.error : "An error occurred");
         setLoading(false);
       });
   }, []);
 
-  // Function to handle the image selection
-  const handleImageChange = (e) => {
-    const file = e.target.files[0]; // Get the first selected file
-    // Set the selected image file
-    setSelectedImage(file);
-    // Display a preview of the selected image
-  };
-
-  const handleChange = (e) => {
-    let { name, value, type, checked } = e.target;
-    checked = checked ? 1 : 0;
-
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
-
-  const handleEditImage = async (e) => {
-    if (e.target.name == "edit") {
-      setEditableImage(true);
-    }
-    if (e.target.name == "cancel") {
-      setEditableImage(false);
-    }
-    if (e.target.name == "upload") {
-      const form = new FormData();
-      form.set("image", selectedImage);
-      form.set("id", sessionStorage.getItem("id"));
-      await axios.put(`${API_ROUTE}/v1/student/update-image`, form);
-      const res = await axios.get(
-        `${API_ROUTE}/v1/student/get-by-nationalId/${sessionStorage.getItem(
-          "nationalId"
-        )}`
-      );
-      setFormData(res.data);
-      setEditableImage(false);
-    }
-    if (e.target.name == "delete") {
-      await axios.put(`${API_ROUTE}/v1/student/delete-image`, {
-        id: sessionStorage.getItem("id"),
-      });
-      const res = await axios.get(
-        `${API_ROUTE}/v1/student/get-by-nationalId/${sessionStorage.getItem(
-          "nationalId"
-        )}`
-      );
-      setFormData(res.data);
-      setEditableImage(false);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    setLoading(true);
-    sessionStorage.setItem("nationalId", formData.nationalId);
-
-    axios
-      .put(`${API_ROUTE}/v1/student/`, formData)
-      .then((res) => {
-        setLoading(false);
-        toast.dismiss();
-        toast("تم التعديل بنجاح");
-      })
-      .catch((err) => {
-        setLoading(false);
-        if (err.response.request.status == 409) {
-          toast.dismiss();
-          return toast("المستخدم موجود في النظام");
-        }
-        toast.dismiss();
-        toast("حدث خطأ");
-      });
-  };
   const handleAccept = async () => {
     setLoading(true);
     const updatedData = { ...formData, applicationStatus: 'pending' };
@@ -182,7 +66,6 @@ function ChangeApplicationStatus() {
       toast("Error updating application status");
     }
   };
-
   return (
     formData && (
       <div className="pt-16 ">
@@ -646,23 +529,7 @@ function ChangeApplicationStatus() {
             </div>
           </div>
           <div>
-            <div className="mt-10 w-auto items-center">
-              {
-                <button
-                  type="submit"
-                  className={`bg-blue-500 w-56 hover:opacity-70 h-14${
-                    loading && "opacity-70 hover:cursor-default"
-                  } hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 flex justify-center`}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <Loader2 className="animate-spin duration-200" />
-                  ) : (
-                    <span>حفظ التعديل </span>
-                  )}
-                </button>
-              }
-            </div>
+
         {/* Buttons for Accept and Reject */}
         <div className="flex justify-between mt-6">
           <button
