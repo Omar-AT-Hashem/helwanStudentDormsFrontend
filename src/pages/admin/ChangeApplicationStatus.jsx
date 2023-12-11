@@ -14,7 +14,6 @@ function ChangeApplicationStatus() {
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [userData, setUserData] = useState();
 
   useEffect(() => {
@@ -94,52 +93,15 @@ function ChangeApplicationStatus() {
               {formData.nationalId}
             </span>
           </div>
-          <div className="flex flex-col items-end">
-            <img
-              src={formData.image ? formData.image : "/default-photo.jpg"}
-              className="w-40"
-              alt="default image"
-            />
-            {!editableImage && (
-              <button
-                className="bg-blue-600 text-white font-bold w-20 h-10 hover:opacity-70"
-                name="edit"
-                onClick={handleEditImage}
-              >
-                تعديل
-              </button>
-            )}
-            {editableImage && (
-              <div>
-                <input type="file" onChange={handleImageChange} />
-                <button
-                  className="bg-blue-600 text-white font-bold w-20 h-10 hover:opacity-70"
-                  name="upload"
-                  onClick={handleEditImage}
-                >
-                  رفع
-                </button>
-                <button
-                  className="bg-blue-600 text-white font-bold w-20 h-10 hover:opacity-70"
-                  name="delete"
-                  onClick={handleEditImage}
-                >
-                  أزاله
-                </button>
-
-                <button
-                  className="bg-blue-600 text-white font-bold w-20 h-10 hover:opacity-70"
-                  name="cancel"
-                  onClick={handleEditImage}
-                >
-                  ألغاء
-                </button>
-              </div>
-            )}
+    <div className="flex flex-col items-end">
+  <img
+    src={formData.image ? formData.image : "/default-photo.jpg"}
+    className="w-40"
+    alt="default image"
+  />
           </div>
         </div>
         <form
-          onSubmit={handleSubmit}
           className="mt-20 flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8 	"
         >
           <div className="flex flex-col items-start">
