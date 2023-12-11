@@ -149,9 +149,7 @@ function ChangeApplicationStatus() {
                 type="text"
                 name="nationalId"
                 value={formData.nationalId}
-                onChange={handleChange}
-                required
-                disabled={!isEditable}
+                disabled={true}
                 className=" w-96 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 py-2 mr-24"
               />
@@ -163,9 +161,7 @@ function ChangeApplicationStatus() {
                 type="text"
                 name="name"
                 value={formData.name}
-                onChange={handleChange}
-                required
-                disabled={!isEditable}
+                 disabled={true}
                 className="w-96  bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 py-2 px-4 mr-36"
               />
@@ -177,9 +173,8 @@ function ChangeApplicationStatus() {
                   type="date"
                   name="birthday"
                   value={formData.birthday}
-                  onChange={handleChange}
                   id="birthday"
-                  disabled={!isEditable}
+                  disabled={true}
                   className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24"
                 />
@@ -190,9 +185,8 @@ function ChangeApplicationStatus() {
                   type="text"
                   id="PlaceOfBirth"
                   name="placeOfBirth"
-                  onChange={handleChange}
                   value={formData.placeOfBirth}
-                  disabled={!isEditable}
+                  disabled={true}
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-10"
                 />
@@ -206,8 +200,7 @@ function ChangeApplicationStatus() {
                   id="Gender"
                   name="gender"
                   value={formData.gender}
-                  onChange={handleChange}
-                  disabled={!isEditable}
+                  disabled={true}
                   className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-36"
                 >
@@ -224,8 +217,7 @@ function ChangeApplicationStatus() {
                 id="Religion"
                 name="religion"
                 value={formData.religion}
-                onChange={handleChange}
-                disabled={!isEditable}
+                disabled={true}
                 className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
               >
@@ -241,9 +233,7 @@ function ChangeApplicationStatus() {
                 type="text"
                 name="residence"
                 value={formData.residence}
-                onChange={handleChange}
-                required
-                disabled={!isEditable}
+                disabled={true}
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-20"
               />
@@ -254,9 +244,7 @@ function ChangeApplicationStatus() {
               <textarea
                 name="addressDetails"
                 value={formData.addressDetails}
-                onChange={handleChange}
-                required
-                disabled={!isEditable}
+                disabled={true}
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-11"
               />
@@ -268,9 +256,7 @@ function ChangeApplicationStatus() {
                 type="email"
                 name="email"
                 value={formData.email}
-                onChange={handleChange}
-                disabled={!isEditable}
-                required
+                disabled={true}
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-12 "
               />
@@ -299,9 +285,7 @@ function ChangeApplicationStatus() {
                   id="mobile"
                   name="mobile"
                   value={formData.mobile}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  required
+                  disabled={true}
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-20"
                 />
@@ -314,9 +298,7 @@ function ChangeApplicationStatus() {
                 type="text"
                 name="faculty"
                 value={formData.faculty}
-                onChange={handleChange}
-                disabled={!isEditable}
-                required
+                disabled={true}
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-36"
               />
@@ -328,9 +310,7 @@ function ChangeApplicationStatus() {
                 type="text"
                 name="fatherName"
                 value={formData.fatherName}
-                onChange={handleChange}
-                disabled={!isEditable}
-                required
+                disabled={true}
                 className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-28"
               />
@@ -342,9 +322,7 @@ function ChangeApplicationStatus() {
                 type="text"
                 name="fatherNationalId"
                 value={formData.fatherNationalId}
-                onChange={handleChange}
-                disabled={!isEditable}
-                required
+                disabled={true}
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-12"
               />
@@ -356,9 +334,7 @@ function ChangeApplicationStatus() {
                   type="text"
                   name="fatherOccupation"
                   value={formData.fatherOccupation}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  required
+                  disabled={true}
                   className="  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24"
                 />
@@ -370,9 +346,7 @@ function ChangeApplicationStatus() {
                   type="text"
                   name="fatherNumber"
                   value={formData.fatherNumber}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  required
+                  disabled={true}
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-6"
                 />
@@ -385,9 +359,7 @@ function ChangeApplicationStatus() {
                 type="text"
                 name="guardianName"
                 value={formData.guardianName}
-                onChange={handleChange}
-                disabled={!isEditable}
-                required
+                disabled={true}
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-20"
               />
@@ -400,9 +372,7 @@ function ChangeApplicationStatus() {
                   type="text"
                   name="guardianNationalId"
                   value={formData.guardianNationalId}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  required
+                  disabled={true}
                   className="  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-2"
                 />
@@ -414,9 +384,7 @@ function ChangeApplicationStatus() {
                   type="text"
                   name="guardianRelationship"
                   value={formData.guardianRelationship}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  required
+                  disabled={true}
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-6"
                 />
@@ -430,8 +398,7 @@ function ChangeApplicationStatus() {
                   type="checkbox"
                   name="isDisabled"
                   checked={formData.isDisabled}
-                  onChange={handleChange}
-                  disabled={!isEditable}
+                  disabled={true}
                   className="mr-4"
                 />
               </label>
@@ -442,8 +409,7 @@ function ChangeApplicationStatus() {
                   type="checkbox"
                   name="familyAbroad"
                   checked={formData.familyAbroad}
-                  onChange={handleChange}
-                  disabled={!isEditable}
+                  disabled={true}
                   className="mr-4"
                 />
               </label>
@@ -455,9 +421,7 @@ function ChangeApplicationStatus() {
                 <input
                   name="highschoolSpecialization"
                   value={formData.highschoolSpecialization}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  required
+                  disabled={true}
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-7"
                 />
@@ -480,8 +444,7 @@ function ChangeApplicationStatus() {
                   type="checkbox"
                   name="highschoolAbroad"
                   checked={formData.highschoolAbroad}
-                  disabled={!isEditable}
-                  onChange={handleChange}
+                  disabled={true}
                   className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-6"
                 />
@@ -490,11 +453,9 @@ function ChangeApplicationStatus() {
             <label className="mb-4 ">
               مجموع الثانويه العامه :
               <input
-                onChange={handleChange}
                 name="grade"
                 value={formData.grade}
-                disabled={!isEditable}
-                required
+                  disabled={true}
                 className="mr-4  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
               />
@@ -505,9 +466,7 @@ function ChangeApplicationStatus() {
                 <select
                   name="accomodationType"
                   value={formData.accomodationType}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  required
+                  disabled={true}
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24"
                 >
@@ -520,8 +479,7 @@ function ChangeApplicationStatus() {
                   type="checkbox"
                   name="accomodationWithNutrition"
                   checked={formData.accomodationWithNutrition}
-                  onChange={handleChange}
-                  disabled={!isEditable}
+                  disabled={true}
                   className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-4"
                 />
