@@ -55,6 +55,7 @@ function UserProfile() {
 
   // State variable to track the selected image file
   const [selectedImage, setSelectedImage] = useState(null);
+  console.log(formData);
 
   useEffect(() => {
     axios
@@ -64,8 +65,7 @@ function UserProfile() {
         )}`
       )
       .then((response) => {
-        console.log(response);
-        setFormData({ ...response.data, id: sessionStorage.getItem("id") });
+        setFormData({ ...response.data[0], id: sessionStorage.getItem("id") });
         setUserData(response.data);
         setLoading(false);
       })
