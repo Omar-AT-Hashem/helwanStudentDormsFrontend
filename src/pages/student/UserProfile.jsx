@@ -18,38 +18,7 @@ function UserProfile() {
   const [isEditable, setIsEditable] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // State variables for user data
-  // const [userData, setUserData] = useState({
-  //   image: '', // Image URL
-  //   nationalId: '',
-  //   name: '',
-  //   birthday: '',
-  //   placeOfBirth: '',
-  //   gender: '',
-  //   telephone: '',
-  //   mobile: '',
-  //   email: '',
-  //   religion: '',
-  //   faculty: '',
-  //   fatherName: '',
-  //   fatherNationalId: '',
-  //   fatherOccupation: '',
-  //   fatherNumber: '',
-  //   guardianName: '',
-  //   guardianNationalId: '',
-  //   guardianRelationship: '',
-  //   residence: '',
-  //   addressDetails: '',
-  //   isDisabled: 0,
-  //   familyAbroad: 0,
-  //   highschoolAbroad: 0,
-  //   highschoolSpecialization: '',
-  //   highschoolGrade: '',
-  //   accomodationType: '',
-  //   accomodationWithNutrition: '',
-  //   password: '',
-  //   applicationStatus: '',
-  // });
+ 
 
   const [userData, setUserData] = useState();
 

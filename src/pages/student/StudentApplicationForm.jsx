@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -38,6 +38,20 @@ function StudentApplicationForm() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [position, setPosition] = useState();
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        setPosition({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      });
+    } else {
+      console.log("Geolocation is not available in your browser.");
+    }
+  }, []);
 
   const handleChange = (e) => {
     let { name, value, type, checked } = e.target;
@@ -49,10 +63,6 @@ function StudentApplicationForm() {
     });
   };
 
-  console.log(formData.gender);
-
-
-  console.log(formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
@@ -60,11 +70,14 @@ function StudentApplicationForm() {
       return toast("كلمة المرور وتأكيد كلمة المرور غير متطابقين");
     }
 
-
     setLoading(true);
 
     axios
-      .post(`${API_ROUTE}/v1/student/register`, formData)
+      .post(`${API_ROUTE}/v1/student/register`, {
+        ...formData,
+        latitude: position.latitude,
+        longitude: position.longitude,
+      })
       .then((res) => {
         setFormData({
           nationalId: "",
@@ -166,48 +179,46 @@ function StudentApplicationForm() {
             <div className="mb-4">
               <label htmlFor="input1">
                 تاريخ الميلاد :
-              
-              <input
-                type="date"
-                name="birthday"
-                value={formData.birthday}
-                onChange={handleChange}
-                id="birthday"
-                className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                <input
+                  type="date"
+                  name="birthday"
+                  value={formData.birthday}
+                  onChange={handleChange}
+                  id="birthday"
+                  className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24"
-              /></label>
+                />
+              </label>
               <label htmlFor="input2" className="ml-2 mr-20">
                 محل الميلاد :
-              
-              <input
-                type="text"
-                id="PlaceOfBirth"
-                name="placeOfBirth"
-                onChange={handleChange}
-                value={formData.placeOfBirth}
-                className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                <input
+                  type="text"
+                  id="PlaceOfBirth"
+                  name="placeOfBirth"
+                  onChange={handleChange}
+                  value={formData.placeOfBirth}
+                  className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-10"
-              /></label>
+                />
+              </label>
             </div>
 
             <div className="mb-4">
               <label htmlFor="input1">
                 النوع :{" "}
-              
-              <select
-                id="Gender"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-36">
-                            <option>----</option>
-                            <option value="F">انثى</option>
-                            <option value="M">ذكر</option>
-
-            </select>
-            
-            </label>
+                <select
+                  id="Gender"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-36"
+                >
+                  <option>----</option>
+                  <option value="F">انثى</option>
+                  <option value="M">ذكر</option>
+                </select>
+              </label>
               <label htmlFor="input2" className="ml-20 mr-20">
                 {" "}
                 الديانه :
@@ -218,12 +229,12 @@ function StudentApplicationForm() {
                 value={formData.religion}
                 onChange={handleChange}
                 className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 ">
-              <option>----</option>
-                            <option>مسلم</option>
-                            <option>مسيحى</option>
-            </select>
-             
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
+              >
+                <option>----</option>
+                <option>مسلم</option>
+                <option>مسيحى</option>
+              </select>
             </div>
 
             <label className="mb-4 ">
@@ -267,31 +278,31 @@ function StudentApplicationForm() {
             <div className="mb-4">
               <label htmlFor="input1">
                 التليفون :{" "}
-              
-              <input
-                type="text"
-                id="telephone"
-                name="telephone"
-                value={formData.telephone}
-                onChange={handleChange}
-                required
-                className="  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                <input
+                  type="text"
+                  id="telephone"
+                  name="telephone"
+                  value={formData.telephone}
+                  onChange={handleChange}
+                  required
+                  className="  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-28"
-              /></label>
+                />
+              </label>
               <label htmlFor="input2" className="ml-2 mr-28">
                 {" "}
                 الموبايل :
-              
-              <input
-                type="text"
-                id="mobile"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-                required
-                className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+                <input
+                  type="text"
+                  id="mobile"
+                  name="mobile"
+                  value={formData.mobile}
+                  onChange={handleChange}
+                  required
+                  className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-20"
-              /></label>
+                />
+              </label>
             </div>
 
             <label className="mb-4 ">
@@ -374,7 +385,7 @@ function StudentApplicationForm() {
             </label>
 
             <div className="mb-4">
-              <label >
+              <label>
                 الرقم القومى لولى الامر :
                 <input
                   type="text"
@@ -426,7 +437,7 @@ function StudentApplicationForm() {
             </div>
 
             <div className="mb-4">
-              <select 
+              <select
                 name="highschoolSpecialization"
                 value={formData.highschoolSpecialization}
                 onChange={handleChange}
@@ -447,18 +458,19 @@ function StudentApplicationForm() {
                 <option>دبلومات فنية</option>
                 <option>شهادات معادلة</option>
                 <option>مدارس STEM للعلوم والتكنولوجيا</option>
-                
               </select>
-              <label className="mb-4 mr-20">الثانويه بالخارج :
-              <input
-                type="checkbox"
-                name="highschoolAbroad"
-                checked={formData.highschoolAbroad}
-                onChange={handleChange}
-                className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+              <label className="mb-4 mr-20">
+                الثانويه بالخارج :
+                <input
+                  type="checkbox"
+                  name="highschoolAbroad"
+                  checked={formData.highschoolAbroad}
+                  onChange={handleChange}
+                  className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-6"
-              /></label>
-</div>
+                />
+              </label>
+            </div>
             <label className="mb-4 ">
               مجموع الثانويه العامه :
               <input
@@ -479,23 +491,26 @@ function StudentApplicationForm() {
                   onChange={handleChange}
                   required
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24">
-              <option>----</option>
-              <option>سكن عادى</option>
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24"
+                >
+                  <option>----</option>
+                  <option>سكن عادى</option>
                 </select>
               </label>
-              <label className="mb-4 mr-20">سكن بدون تغذيه :
-              <input
-                type="checkbox"
-                name="accomodationWithNutrition"
-                checked={formData.accomodationWithNutrition}
-                onChange={handleChange}
-                className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+              <label className="mb-4 mr-20">
+                سكن بدون تغذيه :
+                <input
+                  type="checkbox"
+                  name="accomodationWithNutrition"
+                  checked={formData.accomodationWithNutrition}
+                  onChange={handleChange}
+                  className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-4"
-              /></label>
+                />
+              </label>
             </div>
             <div className="mb-4">
-              <label >
+              <label>
                 كلمه السر:
                 <input
                   type="password"
@@ -507,15 +522,17 @@ function StudentApplicationForm() {
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24"
                 />
               </label>
-              <label className="mr-24">تاكيد كلمه المرور :
-              <input
-                className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+              <label className="mr-24">
+                تاكيد كلمه المرور :
+                <input
+                  className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-4"
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              /></label>
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                />
+              </label>
             </div>
 
             {/* <button
@@ -533,39 +550,55 @@ function StudentApplicationForm() {
             </button> */}
           </div>
           <div className="items-center">
-          <div className="text-neutral-500 flex gap-2 mx-5 my-3   border-yellow-600 bg-yellow-50 w-[80vw] min- h-suto   resize-none p-1 h-full  border rounded-2xl ml-96">
-            <h3 className=" mt-0 mr-2">ملاحظات هامة </h3>
-            <ul className="list-disc mt-8 text-2xl">
-              <li>التقدم للمدن الجامعية من خلال استمارة التقديم الالكترونى مجانى بالكامل.</li>
-              <li>يجب الاحتفاظ بكلمة المرور لأهميتها فى تعديل بياناتك كما سيتم استخدامها لاحقا عند إقامتك بالمدينة .</li>
-              <li>لوحظ أن العديد من الطلاب يختارون السكن المميز ويجب الإشارة بأن السكن المميز له تكلفة عالية بالنسبة للسكن العادى .</li>
-              <li>يجب اختيار الجامعه والنوع (ذكر/ انثى) لتظهر انواع السكن المميز .</li>
-              <li>ذوى الاحتياجات الخاصة لا يدخل فى التنسيق .</li>
-              
-            </ul></div>
-          </div>
-           <div>
-                <input type="checkbox"/>
-                <label className="mr-4 text-lg		">أقر بأن البيانات (محل الإقامة - التقدير - الفرقة/الكلية) صحيحة طبقاً للأوراق الرسمية على أن أقدم هذه الأوراق عند حضوري للمدينة في حالة القبول وإذا ثبت أي خطأ في البيانات يتم تحويلي للشئون القانونية وفصلي نهائياً من المدينة .</label>
-              <div className="mt-10 w-auto items-center">
-               { <button
-              type="submit"
-              className={`bg-blue-500 w-56 hover:opacity-70 h-14${
-                loading && "opacity-70 hover:cursor-default"
-              } hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 flex justify-center`}
-              disabled={loading}
-            >
-              {loading ? (
-                <Loader2 className="animate-spin duration-200" />
-              ) : (
-                <span> تقديم طلب الالحتحاق </span>
-              )}
-            </button>
-}
+            <div className="text-neutral-500 flex gap-2 mx-5 my-3   border-yellow-600 bg-yellow-50 w-[80vw] min- h-suto   resize-none p-1 h-full  border rounded-2xl ml-96">
+              <h3 className=" mt-0 mr-2">ملاحظات هامة </h3>
+              <ul className="list-disc mt-8 text-2xl">
+                <li>
+                  التقدم للمدن الجامعية من خلال استمارة التقديم الالكترونى مجانى
+                  بالكامل.
+                </li>
+                <li>
+                  يجب الاحتفاظ بكلمة المرور لأهميتها فى تعديل بياناتك كما سيتم
+                  استخدامها لاحقا عند إقامتك بالمدينة .
+                </li>
+                <li>
+                  لوحظ أن العديد من الطلاب يختارون السكن المميز ويجب الإشارة بأن
+                  السكن المميز له تكلفة عالية بالنسبة للسكن العادى .
+                </li>
+                <li>
+                  يجب اختيار الجامعه والنوع (ذكر/ انثى) لتظهر انواع السكن المميز
+                  .
+                </li>
+                <li>ذوى الاحتياجات الخاصة لا يدخل فى التنسيق .</li>
+              </ul>
             </div>
-           </div>
-             
-          
+          </div>
+          <div>
+            <input type="checkbox" />
+            <label className="mr-4 text-lg		">
+              أقر بأن البيانات (محل الإقامة - التقدير - الفرقة/الكلية) صحيحة
+              طبقاً للأوراق الرسمية على أن أقدم هذه الأوراق عند حضوري للمدينة في
+              حالة القبول وإذا ثبت أي خطأ في البيانات يتم تحويلي للشئون
+              القانونية وفصلي نهائياً من المدينة .
+            </label>
+            <div className="mt-10 w-auto items-center">
+              {
+                <button
+                  type="submit"
+                  className={`bg-blue-500 w-56 hover:opacity-70 h-14${
+                    loading && "opacity-70 hover:cursor-default"
+                  } hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 flex justify-center`}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Loader2 className="animate-spin duration-200" />
+                  ) : (
+                    <span> تقديم طلب الالحتحاق </span>
+                  )}
+                </button>
+              }
+            </div>
+          </div>
         </form>
       </div>
     </div>
