@@ -24,7 +24,7 @@ import Penalties from "./pages/admin/Penalties.jsx";
 import Fees from "./pages/admin/fees.jsx";
 import ChangeApplicationStatus from "./pages/admin/ChangeApplicationStatus.jsx";
 import EditStudentData from "./pages/admin/EditStudentData.jsx";
-import LeafletTest from "./pages/student/leafletTest.jsx";
+
 export const routes = createBrowserRouter([
   {
     path: "",
@@ -133,10 +133,7 @@ export const routes = createBrowserRouter([
             path: "rooms",
             element: <Rooms />,
           },
-          {
-            path: "leafletTest",
-            element: <LeafletTest />,
-          },
+         
         ],
       },
     ],
