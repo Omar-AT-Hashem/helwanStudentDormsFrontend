@@ -31,6 +31,7 @@ function StudentApplicationForm() {
     highschoolAbroad: 0,
     highschoolSpecialization: "",
     grade: "",
+    isNew: 0,
     accomodationType: "",
     accomodationWithNutrition: 0,
     password: "",
@@ -39,6 +40,7 @@ function StudentApplicationForm() {
 
   const [loading, setLoading] = useState(false);
   const [position, setPosition] = useState();
+  console.log(formData);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -105,6 +107,7 @@ function StudentApplicationForm() {
           highschoolAbroad: 0,
           highschoolSpecialization: "",
           grade: "",
+          isNew: 0,
           accomodationType: "",
           accomodationWithNutrition: 0,
           password: "",
@@ -129,7 +132,6 @@ function StudentApplicationForm() {
 
   return (
     <div>
-      <h1>Student Application Form</h1>
       <Toaster
         toastOptions={{
           className: "",
@@ -470,9 +472,22 @@ function StudentApplicationForm() {
         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-6"
                 />
               </label>
+              <label className="mb-4 mr-20">
+                مستجد :
+                <input
+                  type="checkbox"
+                  name="isNew"
+                  checked={formData.isNew}
+                  onChange={handleChange}
+                  className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+        focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-6"
+                />
+              </label>
             </div>
             <label className="mb-4 ">
-              مجموع الثانويه العامه :
+              {formData.isNew == 1
+                ? " مجموع الثانويه العامه :"
+                : "المجموع التراكمي (GPA) :"}
               <input
                 onChange={handleChange}
                 name="grade"
