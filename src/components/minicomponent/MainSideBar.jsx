@@ -13,11 +13,11 @@ const MainSideBar = ({
   // State variables for filters
 
   // State variable for search query
-  const [loading, setLoading] = useState(0)
+  const [loading, setLoading] = useState(0);
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
   const [filters, setFilters] = useState({
-    isAccepted: null,
+    isApproved: null,
     gender: null,
     notHoused: false,
     housed: false,
@@ -27,13 +27,13 @@ const MainSideBar = ({
 
   useEffect(() => {
     if (search.length == 0) {
-      setLoading(prev => prev + 1)
+      setLoading((prev) => prev + 1);
       axios
         .get(`${API_ROUTE}/v1/student/`)
         .then((res) => {
           const filtered = returnFilteredList(res.data, filters);
           setFilteredList(filtered.length > 0 ? filtered : []);
-          setLoading(prev => prev - 1)
+          setLoading((prev) => prev - 1);
         })
 
         .catch((err) => {
@@ -47,13 +47,21 @@ const MainSideBar = ({
   }, [studentList]);
 
   const returnFilteredList = (list, filters) => {
-    const { isAccepted, gender, notHoused, housed } = filters;
+    const { isApproved, gender, notHoused, housed } = filters;
 
     let filtered = [];
     let overlayArray = [];
-    filtered = list.filter(
-      (ele) => ele.isAccepted == isAccepted && ele.gender == gender
-    );
+    filtered = list.filter((ele) => {
+      if (ele.gender == gender) {
+        if (isApproved == 0 && ele.isApproved == isApproved) {
+          return ele;
+        } else if (isApproved == 1 && ele.isApproved == isApproved) {
+          if (ele.isAccepted == 1) {
+            return ele;
+          }
+        }
+      }
+    });
     overlayArray = filtered;
 
     if (!notHoused && !housed) {
@@ -64,7 +72,7 @@ const MainSideBar = ({
       filtered.push(
         ...overlayArray.filter(
           (ele) =>
-            ele.isAccepted == isAccepted &&
+            ele.isApproved == isApproved &&
             ele.gender == gender &&
             ele.isHoused == 0 &&
             !filtered.includes(ele)
@@ -78,7 +86,7 @@ const MainSideBar = ({
       filtered.push(
         ...overlayArray.filter(
           (ele) =>
-            ele.isAccepted == isAccepted &&
+            ele.isApproved == isApproved &&
             ele.gender == gender &&
             ele.isHoused == 1 &&
             !filtered.includes(ele)
@@ -93,17 +101,17 @@ const MainSideBar = ({
 
   const searchClick = () => {
     if (search.length > 0) {
-      setLoading(prev => prev + 1)
+      setLoading((prev) => prev + 1);
       axios
         .get(`${API_ROUTE}/v1/student/get-by-nationalId/${search}`)
         .then((res) => {
           setStudentList(res.data);
           setFilteredList(res.data.length > 0 ? res.data : []);
-          setLoading(prev => prev - 1)
+          setLoading((prev) => prev - 1);
         })
         .catch((err) => {
           if (err && err.code === "ERR_BAD_REQUEST") {
-            setLoading(prev => prev - 1)
+            setLoading((prev) => prev - 1);
             return;
           }
           toast.dismiss();
@@ -111,12 +119,12 @@ const MainSideBar = ({
         });
       return;
     }
-    setLoading(prev => prev + 1)
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/student/`)
       .then((res) => {
         setStudentList(res.data);
-        setLoading(prev => prev - 1)
+        setLoading((prev) => prev - 1);
 
         //------------ start filter for applicants --------------
         const filtered = returnFilteredList(res.data, filters);
@@ -127,7 +135,7 @@ const MainSideBar = ({
 
       .catch((err) => {
         if (err && err.code === "ERR_BAD_REQUEST") {
-          setLoading(prev => prev - 1)
+          setLoading((prev) => prev - 1);
           return;
         }
         toast.dismiss();
@@ -248,8 +256,8 @@ const MainSideBar = ({
           <input
             className=" mx-2"
             type="radio"
-            id="isAccepted"
-            name="isAccepted"
+            id="isApproved"
+            name="isApproved"
             value={0}
             onChange={chooseFilters}
           ></input>
@@ -258,8 +266,8 @@ const MainSideBar = ({
           <input
             className=" mx-2 mr-10"
             type="radio"
-            id="isAccepted"
-            name="isAccepted"
+            id="isApproved"
+            name="isApproved"
             value={1}
             onChange={chooseFilters}
           ></input>

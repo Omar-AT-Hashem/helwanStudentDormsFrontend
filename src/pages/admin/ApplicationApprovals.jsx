@@ -25,7 +25,7 @@ export const ApplicationApprovals = () => {
  
   const accept = () => {
     axios
-      .post(`${API_ROUTE}/v1/student/asess/approve`, {
+      .post(`${API_ROUTE}/v1/student/approve-or-reject/approve`, {
         id: selectedStudentData.id,
         grade: selectedStudentData.grade,
       })
@@ -46,7 +46,7 @@ export const ApplicationApprovals = () => {
   };
   const reject = () => {
     axios
-      .post(`${API_ROUTE}/v1/student/asess/reject`, {
+      .post(`${API_ROUTE}/v1/student/approve-or-reject/reject`, {
         id: selectedStudentData.id,
         grade: selectedStudentData.grade,
       })

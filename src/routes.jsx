@@ -24,6 +24,7 @@ import Penalties from "./pages/admin/Penalties.jsx";
 import Fees from "./pages/admin/fees.jsx";
 import ChangeApplicationStatus from "./pages/admin/ChangeApplicationStatus.jsx";
 import EditStudentData from "./pages/admin/EditStudentData.jsx";
+import { AssessStudents } from "./pages/admin/AssessStudents.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -97,6 +98,10 @@ export const routes = createBrowserRouter([
           {
             path: "editstudentdata",
             element: <EditStudentData />,
+          },
+          {
+            path: "assessStudents",
+            element: <AssessStudents />,
           },
         
         ],

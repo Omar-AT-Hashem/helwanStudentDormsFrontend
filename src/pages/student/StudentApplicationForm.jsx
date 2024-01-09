@@ -34,6 +34,7 @@ function StudentApplicationForm() {
     isNew: 0,
     accomodationType: "",
     accomodationWithNutrition: 0,
+    academicYear: 0,
     password: "",
     confirmPassword: "",
   });
@@ -110,6 +111,7 @@ function StudentApplicationForm() {
           isNew: 0,
           accomodationType: "",
           accomodationWithNutrition: 0,
+          academicYear: 0,
           password: "",
           confirmPassword: "",
         });
@@ -497,6 +499,31 @@ function StudentApplicationForm() {
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
               />
             </label>
+
+           { !formData.isNew && 
+            <label htmlFor="academicYear">
+              لسنه الدراسية:
+              <select
+                name="academicYear"
+                value={formData.academicYear}
+                onChange={handleChange}
+                required
+                className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+          focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-7"
+              >
+                <option>---</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                
+                
+              </select>
+            </label>
+            }
             <div className="mb-4">
               <label>
                 نوع السكن :
