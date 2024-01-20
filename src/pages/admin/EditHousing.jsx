@@ -1,28 +1,22 @@
 import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
-import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import MainSideBar from "../../components/minicomponent/MainSideBar.jsx";
 
-const Housing = () => {
+const EditHousing = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
-  const [studentList, setStudentList] = useState([]);
-
-  // const [selectedStudent, setSelectedStudent] = useState();
-
   const [towns, setTowns] = useState([]);
+  const [loading, setLoading] = useState(0);
+  const [insertionData, setInsertionData] = useState({
+    bedNumber: null,
+  });
 
   const [selectedFloorData, setSelectedFloorData] = useState([]);
-
-  const [selectedBed, setSelectedBed] = useState();
-
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
 
   useEffect(() => {
@@ -51,6 +45,12 @@ const Housing = () => {
     });
   };
 
+  const handleInputChange = (e) => {
+    setInsertionData((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
   const handleBuildingClick = (e) => {
     console.log(e.target.nextElementSibling.className);
     if (!e.target.nextElementSibling.className.includes("hidden")) {
@@ -75,36 +75,8 @@ const Housing = () => {
       });
   };
 
-  const handleHouseClick = () => {
-    axios
-      .post(`${API_ROUTE}/v1/bed/occupy`, {
-        studentId: selectedStudentData.id,
-        bedId: selectedBed,
-      })
-      .then(() => {
-        setStudentList((prev) =>
-          prev.filter((student) => student.id != selectedStudentData.id)
-        );
-        setSelectedBed();
-        setSelectedFloorData([]);
-        // setSelectedStudent();
-        setSelectedStudentData([]);
-
-        return;
-      })
-      .catch((err) => {
-        if (err && err.code === "ERR_BAD_REQUEST") {
-          return;
-        }
-        toast.dismiss();
-        return toast("Something went wrong");
-      });
-  };
-
-  const handleRadioChange = (e) => {
-    setSelectedBed(e.target.value);
-    console.log(e.target.value);
-  };
+  const handleRemoveBed = (bedId) => {};
+  const handleAddBed = (roomId) => {};
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen ">
@@ -112,39 +84,8 @@ const Housing = () => {
         {/*------------------------- Sidebar ------------------------*/}
         <div className="w-64">
           <div>
-            
-            {/*-------------------------start Sidebar student  ----------------*/}
-            {/* <div className="flex gap-10" onChange={handleChange}>
-              <div className="flex gap-2">
-                <input type="radio" id="gender" name="gender" value="m" />
-                <label htmlFor="gender">طلاب</label>
-              </div>
-              <div className="flex gap-2">
-                <input type="radio" id="gender" name="gender" value="f" />
-                <label htmlFor="gender">طالبات</label>
-              </div>
-            </div>
-
-            <div className="w-full h-64 bg-red-300 overflow-y-scroll">
-              {studentList.map((student) => (
-                <div
-                  key={`${student.id}-unapprr`}
-                  className="hover:cursor-pointer hover:bg-mainYellow"
-                  // onClick={() => handleStudentSelect(student.id)}
-                >
-                  {student.name}
-                </div>
-              ))}
-            </div> */}
-            <MainSideBar
-              studentList={studentList}
-              setStudentList={setStudentList}
-              setSelectedStudentData={setSelectedStudentData}
-            />
-            {/*-------------------------end Sidebar student  ----------------*/}
-
             {/*-------------------------start Sidebar towns ----------------*/}
-            <div className="mt-10 select-none">
+            <div className="mt-36 select-none">
               <div className="flex flex-col">
                 {/*------- towns menu start-----*/}
                 {towns.map((town, index) => (
@@ -199,50 +140,10 @@ const Housing = () => {
         {/* -------------------end Sidebar ---------------------*/}
       </div>
       <div className=" flex-1 pt-4">
-      <div className="bg-mainBlue	rounded  mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
-            التسكين - جامعة حلوان
-          </div>
+        <div className="bg-mainBlue mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+          التسكين - جامعة حلوان
+        </div>
         {/* -------------------start student info ---------------------*/}
-
-        {selectedStudentData && (
-          <div className="border-2 border-slate  mt-5 h-48 px-2 mx-2">
-            <div className="flex justify-between items-center h-full">
-              <div className="flex flex-col ">
-                <div>
-                  <span className="font bold text-2xl te ">الاسم: </span>
-                  <span className="font text-xl text-gray-400">
-                    {selectedStudentData.name}
-                  </span>
-                </div>
-                <div>
-                  <span className="font bold text-2xl">الرقم القومي: </span>
-                  <span className="font text-xl text-gray-400">
-                    {selectedStudentData.nationalId}
-                  </span>
-                </div>
-
-                <div>
-                  <span className="font bold text-2xl">نوع السكن : </span>
-                  <span className="font text-xl text-gray-400">
-                    {selectedStudentData.accomodationType}
-                  </span>
-                </div>
-              </div>
-              <div>
-                {" "}
-                <img
-                  src={
-                    selectedStudentData.image
-                      ? selectedStudentData.image
-                      : "/default-photo.jpg"
-                  }
-                  className="w-36 border-2 border-black"
-                  alt="default image"
-                />
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* -------------------end student info ---------------------*/}
 
@@ -251,30 +152,36 @@ const Housing = () => {
           <div className="flex flex-wrap gap-10 justify-center">
             {selectedFloorData.map((room) => (
               <div key={`room-beds-${room.id}`} className="flex flex-col">
-                <div className="flex justify-center items-center text-white text-xl font-bold bg-mainBlue w-20 h-10 ">
+                <div className="flex justify-center items-center text-white text-xl font-bold bg-mainBlue w-20 h-10 mr-9">
                   {room.number}
                 </div>
                 <div className="flex flex-col mt-2">
                   {/* -------------------start Beds menu ---------------------*/}
                   {room.beds.map((bed) => (
-                    <div key={`bed-${bed.id}`}>
+                    <div key={`bed-${bed.id}`} className="flex">
                       {bed.isOccupied == 1 ? (
-                        <div className="flex justify-center items-center text-white font-bold bg-blue-400 opacity-40 w-20 h-10 border">
+                        <div className="flex justify-center items-center text-white font-bold bg-blue-400 opacity-40 w-20 h-10 border mr-[36px]">
                           {bed.number}
                         </div>
                       ) : (
-                        <div>
+                        <div className="flex items-center">
+                          <button
+                            onClick={() => handleRemoveBed(bed.id)}
+                            className="ml-1 rounded-full w-8 h-8 bg-red-700 flex items-center justify-center text text-white font-bold hover:opacity-80 cursor-pointer transition-all duration-200"
+                          >
+                            X
+                          </button>
                           <input
                             type="radio"
+                            disabled={true}
                             name="bed"
                             id={`bed-${bed.id}`}
                             value={bed.id}
                             className="peer hidden"
-                            onChange={handleRadioChange}
                           />
                           <label
                             htmlFor={`bed-${bed.id}`}
-                            className="block cursor-pointer select-none p-2 border text-center hover:opacity-80 bg-blue-400 peer-checked:bg-red-800 font-bold text-white transition-all duration-200"
+                            className="block select-none p-2 border text-center  bg-blue-400 font-bold w-20 text-white"
                           >
                             {bed.number}
                           </label>
@@ -283,26 +190,24 @@ const Housing = () => {
                     </div>
                   ))}
                   {/* -------------------end Beds menu ---------------------*/}
+                  <div className="flex mt-1">
+                    <button onClick={() => handleAddBed(room.id)} className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 text-white rounded-full ml-1">+</button>
+                    <input
+                      name="bedNumber"
+                      type="text"
+                      onChange={handleInputChange}
+                      className="text-white font-bold bg-blue-500 w-20"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
         {/* -------------------end Rooms-Beds ---------------------*/}
-
-        <div className="flex justify-center mt-20">
-          {selectedBed && selectedStudentData.id && (
-            <button
-              className="bg-green-600 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded"
-              onClick={handleHouseClick}
-            >
-              تسكين
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );
 };
 
-export default Housing;
+export default EditHousing;
