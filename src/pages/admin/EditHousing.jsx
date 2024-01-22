@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import Loading from "../../components/minicomponent/Loading.jsx";
 
 const EditHousing = () => {
   if (sessionStorage.getItem("token")) {
@@ -18,6 +19,7 @@ const EditHousing = () => {
 
   const [selectedFloorData, setSelectedFloorData] = useState([]);
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
+  console.log(towns);
 
   useEffect(() => {
     axios
@@ -75,11 +77,102 @@ const EditHousing = () => {
       });
   };
 
-  const handleRemoveBed = (bedId) => {};
-  const handleAddBed = (roomId) => {};
+  const handleRemoveBed = (bedId, roomId) => {
+    axios
+      .delete(`${API_ROUTE}/v1/bed/${bedId}`)
+      .then(() => {
+        //dynamically add beds to the front end
+        setSelectedFloorData((prev) => {
+          prev = prev.map((ele) => {
+            if (ele.id == roomId) {
+              ele.beds = ele.beds.filter((ele2) => ele2.id != bedId);
+            }
+            return ele;
+          });
+          console.log(prev);
+          return prev;
+        });
+        setLoading((prev) => prev - 1);
+        toast.dismiss();
+        return toast("أزالة بنجاح");
+      })
+      .catch((err) => {
+        setLoading((prev) => prev - 1);
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
+  };
+
+  const handleAddBed = (roomId) => {
+    if (insertionData.bedNumber) {
+      if (isNaN(parseInt(insertionData.bedNumber))) {
+        console.log("1");
+        toast.dismiss();
+        toast("ادخل رقم");
+        return;
+      } else {
+        setLoading((prev) => prev + 1);
+        axios
+          .post(`${API_ROUTE}/v1/bed`, {
+            roomId: roomId,
+            number: insertionData.bedNumber,
+          })
+          .then((res) => {
+            //dynamically add beds to the front end
+            setSelectedFloorData((prev) => {
+              prev = prev.map((ele) => {
+                if (ele.id == roomId) {
+                  ele.beds.push({
+                    id: res.data.id,
+                    number: insertionData.bedNumber,
+                    isOccupied: 0,
+                    occupant: null,
+                  });
+                }
+                return ele;
+              });
+              console.log(prev);
+              return prev;
+            });
+            setInsertionData((prev) => {
+              return { ...prev, bedNumber: null };
+            });
+            setLoading((prev) => prev - 1);
+            toast.dismiss();
+            return toast("اضافه بنجاح");
+          })
+          .catch((err) => {
+            setLoading((prev) => prev - 1);
+            if (err && err.code === "ERR_BAD_REQUEST") {
+              return;
+            }
+            toast.dismiss();
+            return toast("Something went wrong");
+          });
+      }
+    }
+  };
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen ">
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            border: "1px solid #A9872D",
+            backgroundColor: "#A9872D",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
+      {loading > 0 && <Loading />}
       <div className="w-64">
         {/*------------------------- Sidebar ------------------------*/}
         <div className="w-64">
@@ -166,7 +259,7 @@ const EditHousing = () => {
                       ) : (
                         <div className="flex items-center">
                           <button
-                            onClick={() => handleRemoveBed(bed.id)}
+                            onClick={() => handleRemoveBed(bed.id, room.id)}
                             className="ml-1 rounded-full w-8 h-8 bg-red-700 flex items-center justify-center text text-white font-bold hover:opacity-80 cursor-pointer transition-all duration-200"
                           >
                             X
@@ -191,10 +284,16 @@ const EditHousing = () => {
                   ))}
                   {/* -------------------end Beds menu ---------------------*/}
                   <div className="flex mt-1">
-                    <button onClick={() => handleAddBed(room.id)} className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 text-white rounded-full ml-1">+</button>
+                    <button
+                      onClick={() => handleAddBed(room.id)}
+                      className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 text-white rounded-full ml-1 cursor-pointer hover:opacity-80 transition-all duration-200"
+                    >
+                      +
+                    </button>
                     <input
                       name="bedNumber"
                       type="text"
+                      autoComplete="off"
                       onChange={handleInputChange}
                       className="text-white font-bold bg-blue-500 w-20"
                     />
