@@ -15,10 +15,12 @@ const EditHousing = () => {
   const [loading, setLoading] = useState(0);
   const [insertionData, setInsertionData] = useState({
     bedNumber: null,
+    roomNumber: null,
   });
-
+  const [selectedFloorId, setSelectedFloorId] = useState();
   const [selectedFloorData, setSelectedFloorData] = useState([]);
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
+  console.log(selectedFloorData);
   console.log(towns);
 
   useEffect(() => {
@@ -66,6 +68,7 @@ const EditHousing = () => {
     axios
       .get(`${API_ROUTE}/v1/housing/floor-rooms-beds/${floorId}`)
       .then((res) => {
+        setSelectedFloorId(floorId);
         return setSelectedFloorData(res.data);
       })
       .catch((err) => {
@@ -109,7 +112,6 @@ const EditHousing = () => {
   const handleAddBed = (roomId) => {
     if (insertionData.bedNumber) {
       if (isNaN(parseInt(insertionData.bedNumber))) {
-        console.log("1");
         toast.dismiss();
         toast("ادخل رقم");
         return;
@@ -154,6 +156,77 @@ const EditHousing = () => {
           });
       }
     }
+  };
+
+  const handleAddRoom = () => {
+    if (insertionData.roomNumber) {
+      if (isNaN(parseInt(insertionData.roomNumber))) {
+        toast.dismiss();
+        toast("ادخل رقم");
+        return;
+      } else {
+        setLoading((prev) => prev + 1);
+        axios
+          .post(`${API_ROUTE}/v1/room`, {
+            floorId: selectedFloorId,
+            number: insertionData.roomNumber,
+          })
+          .then((res) => {
+            //dynamically add beds to the front end
+            setSelectedFloorData((prev) => {
+              return [
+                ...prev,
+                {
+                  id: res.data.id,
+                  floorId: selectedFloorId,
+                  number: insertionData.roomNumber,
+                  beds: [],
+                },
+              ];
+            });
+            setInsertionData((prev) => {
+              return { ...prev, bedNumber: null };
+            });
+            setLoading((prev) => prev - 1);
+            toast.dismiss();
+            return toast("اضافه بنجاح");
+          })
+          .catch((err) => {
+            setLoading((prev) => prev - 1);
+            if (err && err.code === "ERR_BAD_REQUEST") {
+              return;
+            }
+            toast.dismiss();
+            return toast("Something went wrong");
+          });
+      }
+    }
+  };
+
+  const handleRemoveRoom = (roomId) => {
+    axios
+      .delete(`${API_ROUTE}/v1/room/${roomId}`)
+      .then(() => {
+        //dynamically add beds to the front end
+        setSelectedFloorData((prev) => {
+          let i = prev.findIndex((ele) => ele.id == roomId);
+          console.log(i);
+          prev.splice(i, 1);
+          console.log(prev);
+          return prev;
+        });
+        setLoading((prev) => prev - 1);
+        toast.dismiss();
+        return toast("أزالة بنجاح");
+      })
+      .catch((err) => {
+        setLoading((prev) => prev - 1);
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
   };
 
   return (
@@ -241,12 +314,22 @@ const EditHousing = () => {
         {/* -------------------end student info ---------------------*/}
 
         {/* -------------------start Rooms-Beds ---------------------*/}
-        <div className="mt-10">
-          <div className="flex flex-wrap gap-10 justify-center">
+        <div className="mt-10 flex justify-center">
+          <div className="flex flex-wrap gap-10 justify-center max-w-[700px]">
             {selectedFloorData.map((room) => (
               <div key={`room-beds-${room.id}`} className="flex flex-col">
-                <div className="flex justify-center items-center text-white text-xl font-bold bg-mainBlue w-20 h-10 mr-9">
-                  {room.number}
+                <div className="flex">
+                  {!room.beds.find((e) => e.isOccupied == 1) && (
+                    <button
+                      onClick={() => handleRemoveRoom(room.id)}
+                      className="flex items-center justify-center w-8 h-8 bg-red-700 -ml-8 text-white rounded-full cursor-pointer font-bold  hover:opacity-80 transition-all duration-200"
+                    >
+                      X
+                    </button>
+                  )}
+                  <div className="flex justify-center items-center text-white text-xl font-bold bg-mainBlue w-20 h-10 mr-9">
+                    {room.number}
+                  </div>
                 </div>
                 <div className="flex flex-col mt-2">
                   {/* -------------------start Beds menu ---------------------*/}
@@ -301,6 +384,23 @@ const EditHousing = () => {
                 </div>
               </div>
             ))}
+            {selectedFloorId && (
+              <div className="flex">
+                <button
+                  onClick={handleAddRoom}
+                  className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 ml-1 text-white rounded-full cursor-pointer hover:opacity-80 transition-all duration-200"
+                >
+                  +
+                </button>
+                <input
+                  name="roomNumber"
+                  type="text"
+                  autoComplete="off"
+                  onChange={handleInputChange}
+                  className="text-white font-bold bg-mainBlue h-10 w-20"
+                />
+              </div>
+            )}
           </div>
         </div>
         {/* -------------------end Rooms-Beds ---------------------*/}
