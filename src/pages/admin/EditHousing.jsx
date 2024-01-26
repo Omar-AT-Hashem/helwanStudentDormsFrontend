@@ -20,7 +20,6 @@ const EditHousing = () => {
   const [selectedFloorId, setSelectedFloorId] = useState();
   const [selectedFloorData, setSelectedFloorData] = useState([]);
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
-  console.log(selectedFloorData);
   console.log(towns);
 
   useEffect(() => {
@@ -109,7 +108,7 @@ const EditHousing = () => {
       });
   };
 
-  const handleAddBed = (roomId) => {
+  const handleAddBed = (e, roomId) => {
     if (insertionData.bedNumber) {
       if (isNaN(parseInt(insertionData.bedNumber))) {
         toast.dismiss();
@@ -143,11 +142,13 @@ const EditHousing = () => {
               return { ...prev, bedNumber: null };
             });
             setLoading((prev) => prev - 1);
+            e.target.nextElementSibling.value = "";
             toast.dismiss();
             return toast("اضافه بنجاح");
           })
           .catch((err) => {
             setLoading((prev) => prev - 1);
+            e.target.nextElementSibling.value = "";
             if (err && err.code === "ERR_BAD_REQUEST") {
               return;
             }
@@ -158,7 +159,7 @@ const EditHousing = () => {
     }
   };
 
-  const handleAddRoom = () => {
+  const handleAddRoom = (e) => {
     if (insertionData.roomNumber) {
       if (isNaN(parseInt(insertionData.roomNumber))) {
         toast.dismiss();
@@ -188,11 +189,13 @@ const EditHousing = () => {
               return { ...prev, bedNumber: null };
             });
             setLoading((prev) => prev - 1);
+            e.target.nextElementSibling.value = "";
             toast.dismiss();
             return toast("اضافه بنجاح");
           })
           .catch((err) => {
             setLoading((prev) => prev - 1);
+            e.target.nextElementSibling.value = "";
             if (err && err.code === "ERR_BAD_REQUEST") {
               return;
             }
@@ -368,7 +371,7 @@ const EditHousing = () => {
                   {/* -------------------end Beds menu ---------------------*/}
                   <div className="flex mt-1">
                     <button
-                      onClick={() => handleAddBed(room.id)}
+                      onClick={(e) => handleAddBed(e, room.id)}
                       className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 text-white rounded-full ml-1 cursor-pointer hover:opacity-80 transition-all duration-200"
                     >
                       +
