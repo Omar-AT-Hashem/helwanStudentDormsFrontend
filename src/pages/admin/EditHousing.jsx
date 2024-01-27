@@ -283,14 +283,21 @@ const EditHousing = () => {
                             {/*-------start floors menu -----*/}
                             <div className="hidden flex-col">
                               {building.floors.map((floor) => (
-                                <span
-                                  key={`floor-${floor.id}`}
-                                  className="hover:cursor-pointer hover:bg-mainYellow pr-5 text-blue-600 font-bold"
-                                  onClick={() => handleFloorClick(floor.id)}
-                                >
-                                  {floor.number}
-                                </span>
+                                <div key={`floor-${floor.id}`} className="flex">
+                                  {floor.floorOccupied == false && (
+                                    <button className="flex items-center justify-center h-5 w-5 rounded-full bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold">X</button>
+                                  )}
+                                  <span
+                                    className={`hover:cursor-pointer hover:bg-mainYellow pl-2 ${floor.floorOccupied == false ? "pr-9":"pr-14"}  text-blue-600 font-bold`}
+                                    onClick={() => handleFloorClick(floor.id)}
+                                  >
+                                    {floor.number}
+                                  </span>
+                                </div>
                               ))}
+                              <div>
+                              <button className="flex items-center justify-center h-5 w-5 rounded-full bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl">+</button>
+                              </div>
                             </div>
                             {/*-------end floors menu -----*/}
                           </div>
