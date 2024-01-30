@@ -16,16 +16,17 @@ const EditHousing = () => {
   const [insertionData, setInsertionData] = useState({
     bedNumber: null,
     roomNumber: null,
+    floorNumber: null,
   });
   const [selectedFloorId, setSelectedFloorId] = useState();
   const [selectedFloorData, setSelectedFloorData] = useState([]);
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
-  console.log(towns);
-
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/housing/towns-buildings-floors`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setTowns(res.data);
         const isOpen = Array(res.data.length).fill(false);
         setSideBarTownsOpen(isOpen);
@@ -33,6 +34,7 @@ const EditHousing = () => {
       })
       .catch((err) => {
         if (err && err.code === "ERR_BAD_REQUEST") {
+          setLoading((prev) => prev - 1);
           return;
         }
         toast.dismiss();
@@ -55,7 +57,6 @@ const EditHousing = () => {
   };
 
   const handleBuildingClick = (e) => {
-    console.log(e.target.nextElementSibling.className);
     if (!e.target.nextElementSibling.className.includes("hidden")) {
       e.target.nextElementSibling.className = "hidden";
     } else {
@@ -64,14 +65,17 @@ const EditHousing = () => {
   };
 
   const handleFloorClick = (floorId) => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/housing/floor-rooms-beds/${floorId}`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setSelectedFloorId(floorId);
         return setSelectedFloorData(res.data);
       })
       .catch((err) => {
         if (err && err.code === "ERR_BAD_REQUEST") {
+          setLoading((prev) => prev - 1);
           return;
         }
         toast.dismiss();
@@ -80,6 +84,7 @@ const EditHousing = () => {
   };
 
   const handleRemoveBed = (bedId, roomId) => {
+    setLoading((prev) => prev + 1);
     axios
       .delete(`${API_ROUTE}/v1/bed/${bedId}`)
       .then(() => {
@@ -91,7 +96,7 @@ const EditHousing = () => {
             }
             return ele;
           });
-          console.log(prev);
+
           return prev;
         });
         setLoading((prev) => prev - 1);
@@ -129,13 +134,14 @@ const EditHousing = () => {
                   ele.beds.push({
                     id: res.data.id,
                     number: insertionData.bedNumber,
+                    roomId: roomId,
                     isOccupied: 0,
                     occupant: null,
                   });
                 }
                 return ele;
               });
-              console.log(prev);
+
               return prev;
             });
             setInsertionData((prev) => {
@@ -207,14 +213,103 @@ const EditHousing = () => {
   };
 
   const handleRemoveRoom = (roomId) => {
+    setLoading((prev) => prev + 1);
     axios
       .delete(`${API_ROUTE}/v1/room/${roomId}`)
       .then(() => {
         //dynamically add beds to the front end
         setSelectedFloorData((prev) => {
           let i = prev.findIndex((ele) => ele.id == roomId);
-          console.log(i);
           prev.splice(i, 1);
+          return prev;
+        });
+        setLoading((prev) => prev - 1);
+        toast.dismiss();
+        return toast("أزالة بنجاح");
+      })
+      .catch((err) => {
+        setLoading((prev) => prev - 1);
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
+  };
+
+  const handleAddFloor = (e, buildingId, townId) => {
+    if (insertionData.floorNumber) {
+      if (isNaN(parseInt(insertionData.floorNumber))) {
+        toast.dismiss();
+        toast("ادخل رقم");
+        return;
+      } else {
+        setLoading((prev) => prev + 1);
+        axios
+          .post(`${API_ROUTE}/v1/floor`, {
+            buildingId: buildingId,
+            number: insertionData.floorNumber,
+          })
+          .then((res) => {
+            //dynamically add beds to the front end
+            setTowns((prev) => {
+              prev = prev.map((ele) => {
+                if (ele.id == townId) {
+                  ele.buildings.forEach((building) => {
+                    if (building.id == buildingId) {
+                      building.floors.push({
+                        id: res.data.id,
+                        buildingId: buildingId,
+                        number: insertionData.floorNumber,
+                        floorOccupied: false,
+                      });
+                    }
+                  });
+                }
+                return ele;
+              });
+
+              return prev;
+            });
+            setInsertionData((prev) => {
+              return { ...prev, bedNumber: null };
+            });
+            setLoading((prev) => prev - 1);
+            e.target.nextElementSibling.value = "";
+            toast.dismiss();
+            return toast("اضافه بنجاح");
+          })
+          .catch((err) => {
+            setLoading((prev) => prev - 1);
+            e.target.nextElementSibling.value = "";
+            if (err && err.code === "ERR_BAD_REQUEST") {
+              return;
+            }
+            toast.dismiss();
+            return toast("Something went wrong");
+          });
+      }
+    }
+  };
+
+  const handleRemoveFloor = (floorId, buildingId, townId) => {
+    setLoading((prev) => prev + 1);
+    axios
+      .delete(`${API_ROUTE}/v1/floor/${floorId}`)
+      .then(() => {
+        //dynamically add beds to the front end
+        setTowns((prev) => {
+          prev = prev.map((ele) => {
+            if (ele.id == townId) {
+              ele.buildings.forEach((building) => {
+                if (building.id == buildingId) {
+                  let i = building.floors.findIndex((ele2) => ele2.id == floorId);
+                  building.floors.splice(i, 1);
+                }
+              });
+            }
+            return ele
+          });
           console.log(prev);
           return prev;
         });
@@ -258,7 +353,7 @@ const EditHousing = () => {
               <div className="flex flex-col">
                 {/*------- towns menu start-----*/}
                 {towns.map((town, index) => (
-                  <>
+                  <div key={`edit-${town}-housing-${index}`}>
                     <span
                       className="hover:cursor-pointer hover:bg-mainYellow pr-5 select-none font-bold text-xl"
                       onClick={() => handleSideBarTownClick(index)}
@@ -285,18 +380,47 @@ const EditHousing = () => {
                               {building.floors.map((floor) => (
                                 <div key={`floor-${floor.id}`} className="flex">
                                   {floor.floorOccupied == false && (
-                                    <button className="flex items-center justify-center h-5 w-5 rounded-full bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold">X</button>
+                                    <button
+                                      onClick={() =>
+                                        handleRemoveFloor(
+                                          floor.id,
+                                          building.id,
+                                          town.id
+                                        )
+                                      }
+                                      className="flex items-center justify-center h-5 w-5 rounded-full bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold"
+                                    >
+                                      X
+                                    </button>
                                   )}
                                   <span
-                                    className={`hover:cursor-pointer hover:bg-mainYellow pl-2 ${floor.floorOccupied == false ? "pr-9":"pr-14"}  text-blue-600 font-bold`}
+                                    className={`hover:cursor-pointer hover:bg-mainYellow pl-2 ${
+                                      floor.floorOccupied == false
+                                        ? "pr-9"
+                                        : "pr-14"
+                                    }  text-blue-600 font-bold`}
                                     onClick={() => handleFloorClick(floor.id)}
                                   >
                                     {floor.number}
                                   </span>
                                 </div>
                               ))}
-                              <div>
-                              <button className="flex items-center justify-center h-5 w-5 rounded-full bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl">+</button>
+                              <div className="flex items-center">
+                                <button
+                                  onClick={(e) =>
+                                    handleAddFloor(e, building.id, town.id)
+                                  }
+                                  className="flex items-center justify-center h-5 w-5 rounded-full bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
+                                >
+                                  +
+                                </button>
+                                <input
+                                  name="floorNumber"
+                                  type="text"
+                                  autoComplete="off"
+                                  onChange={handleInputChange}
+                                  className="text-blue-600 font-bold bg-yellow-600 h-5 w-10 mr-3"
+                                />
                               </div>
                             </div>
                             {/*-------end floors menu -----*/}
@@ -305,7 +429,7 @@ const EditHousing = () => {
                       </div>
                     )}
                     {/*-------end buildings menu -----*/}
-                  </>
+                  </div>
                 ))}
                 {/*-------end towns menu -----*/}
               </div>
