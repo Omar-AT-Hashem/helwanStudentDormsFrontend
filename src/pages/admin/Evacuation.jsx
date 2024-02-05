@@ -5,7 +5,7 @@ import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import MainSideBar from "../../components/minicomponent/MainSideBar.jsx";
 
-const Housing = () => {
+const Evacuation = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
       "Authorization"
@@ -22,8 +22,11 @@ const Housing = () => {
   const [selectedFloorData, setSelectedFloorData] = useState([]);
 
   const [selectedBed, setSelectedBed] = useState();
+  const [selectedRoom, setSelectedRoom] = useState();
 
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
+
+  console.log(selectedFloorData);
 
   useEffect(() => {
     axios
@@ -75,9 +78,29 @@ const Housing = () => {
       });
   };
 
-  const handleHouseClick = () => {
+  const handleBedChange = (e, bedId, bedOccupant, roomId) => {
+    setSelectedBed(bedId);
+    setSelectedRoom(roomId);
     axios
-      .post(`${API_ROUTE}/v1/bed/occupy`, {
+      .get(`${API_ROUTE}/v1/student/get-by-id/${bedOccupant}`)
+      .then((res) => {
+        console.log(res.data);
+        return setSelectedStudentData(res.data[0]);
+      })
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
+
+    console.log(e.target.value);
+  };
+
+  const handleEvacuationClick = () => {
+    axios
+      .put(`${API_ROUTE}/v1/bed/unoccupy`, {
         studentId: selectedStudentData.id,
         bedId: selectedBed,
       })
@@ -86,9 +109,22 @@ const Housing = () => {
           prev.filter((student) => student.id != selectedStudentData.id)
         );
         setSelectedBed();
-        setSelectedFloorData([]);        
+        setSelectedRoom();
+        setSelectedFloorData((prev) => {
+          prev = prev.map((ele) => {
+            if (ele.id == selectedRoom) {
+              let index = ele.beds.findIndex((ele2) => ele2.id == selectedBed);
+              ele.beds[index] = {
+                ...ele.beds[index],
+                isOccupied: 0,
+                occupant: null,
+              };
+            }
+            return ele;
+          });
+          return prev;
+        });
         setSelectedStudentData([]);
-
         return;
       })
       .catch((err) => {
@@ -98,11 +134,6 @@ const Housing = () => {
         toast.dismiss();
         return toast("Something went wrong");
       });
-  };
-
-  const handleRadioChange = (e) => {
-    setSelectedBed(e.target.value);
-    console.log(e.target.value);
   };
 
   return (
@@ -125,8 +156,6 @@ const Housing = () => {
         {/*------------------------- Sidebar ------------------------*/}
         <div className="w-64">
           <div>
-            {/*-------------------------start Sidebar student  ----------------*/}
-            
             <MainSideBar
               studentList={studentList}
               setStudentList={setStudentList}
@@ -190,7 +219,7 @@ const Housing = () => {
         {/* -------------------end Sidebar ---------------------*/}
       </div>
       <div className=" flex-1 pt-4">
-        <div className="bg-mainBlue mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+        <div className="bg-mainBlue	mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
           التسكين - جامعة حلوان
         </div>
         {/* -------------------start student info ---------------------*/}
@@ -250,10 +279,6 @@ const Housing = () => {
                   {room.beds.map((bed) => (
                     <div key={`bed-${bed.id}`}>
                       {bed.isOccupied == 1 ? (
-                        <div className="flex justify-center items-center text-white font-bold bg-blue-400 opacity-40 w-20 h-10 border">
-                          {bed.number}
-                        </div>
-                      ) : (
                         <div>
                           <input
                             type="radio"
@@ -261,14 +286,20 @@ const Housing = () => {
                             id={`bed-${bed.id}`}
                             value={bed.id}
                             className="peer hidden"
-                            onChange={handleRadioChange}
+                            onChange={(e) =>
+                              handleBedChange(e, bed.id, bed.occupant, room.id)
+                            }
                           />
                           <label
                             htmlFor={`bed-${bed.id}`}
-                            className="block cursor-pointer select-none p-2 border text-center hover:opacity-80 bg-blue-400 peer-checked:bg-red-800 font-bold text-white transition-all duration-200"
+                            className="block cursor-pointer select-none bg-blue-400 opacity-40 p-2 border text-center peer-checked:bg-red-800 peer-checked:opacity-100 font-bold text-white transition-all duration-200"
                           >
                             {bed.number}
                           </label>
+                        </div>
+                      ) : (
+                        <div className="flex justify-center items-center text-white font-bold    bg-blue-400 w-20 h-10 border">
+                          {bed.number}
                         </div>
                       )}
                     </div>
@@ -284,10 +315,10 @@ const Housing = () => {
         <div className="flex justify-center mt-20">
           {selectedBed && selectedStudentData && (
             <button
-              className="bg-green-600 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded"
-              onClick={handleHouseClick}
+              className="bg-red-800 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded"
+              onClick={handleEvacuationClick}
             >
-              تسكين
+              اخلاء
             </button>
           )}
         </div>
@@ -296,4 +327,4 @@ const Housing = () => {
   );
 };
 
-export default Housing;
+export default Evacuation;

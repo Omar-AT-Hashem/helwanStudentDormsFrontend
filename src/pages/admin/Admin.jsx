@@ -3,8 +3,8 @@ import { AdminNavbar } from "../../components/shared/AdminNavbar";
 import { useState } from "react";
 
 const Admin = () => {
-  const [selectedStudentData, setSelectedStudentData] = useState();
-  
+  const [selectedStudentData, setSelectedStudentData] = useState([]);
+
   return (
     <>
       <AdminNavbar />

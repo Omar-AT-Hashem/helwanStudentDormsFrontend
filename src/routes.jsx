@@ -26,6 +26,7 @@ import ChangeApplicationStatus from "./pages/admin/ChangeApplicationStatus.jsx";
 import EditStudentData from "./pages/admin/EditStudentData.jsx";
 import { AssessStudents } from "./pages/admin/AssessStudents.jsx";
 import EditHousing from "./pages/admin/EditHousing.jsx";
+import Evacuation from "./pages/admin/Evacuation.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ export const routes = createBrowserRouter([
           {
             path: "editHousing",
             element: <EditHousing />,
+          },
+          {
+            path: "evacuation",
+            element: <Evacuation />,
           },
           {
             path: "housing",
@@ -97,7 +102,7 @@ export const routes = createBrowserRouter([
           },
           {
             path: "fees",
-            element: <Fees/>,
+            element: <Fees />,
           },
           {
             path: "editstudentdata",
@@ -107,7 +112,6 @@ export const routes = createBrowserRouter([
             path: "assessStudents",
             element: <AssessStudents />,
           },
-        
         ],
       },
       {
@@ -142,7 +146,6 @@ export const routes = createBrowserRouter([
             path: "rooms",
             element: <Rooms />,
           },
-         
         ],
       },
     ],
