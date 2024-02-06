@@ -14,6 +14,7 @@ const Evacuation = () => {
 
   const [selectedStudentData, setSelectedStudentData] = useOutletContext();
   const [studentList, setStudentList] = useState([]);
+  const [tracedHousing, setTracedHousing] = useState();
 
   // const [selectedStudent, setSelectedStudent] = useState();
 
@@ -23,10 +24,7 @@ const Evacuation = () => {
 
   const [selectedBed, setSelectedBed] = useState();
   const [selectedRoom, setSelectedRoom] = useState();
-
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
-
-  console.log(selectedFloorData);
 
   useEffect(() => {
     axios
@@ -45,6 +43,28 @@ const Evacuation = () => {
         return toast("Something went wrong");
       });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${API_ROUTE}/v1/housing/trace-student/${selectedStudentData.id}`)
+      .then((res) => {
+        if (res.data.message == "found") {
+          setTracedHousing(res.data);
+          setSelectedBed(res.data.bed.id);
+        }
+        if (res.data.message == "not found") {
+          setTracedHousing();
+          setSelectedBed();
+        }
+      })
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("Something went wrong");
+      });
+  }, [selectedStudentData]);
 
   const handleSideBarTownClick = (index) => {
     setSideBarTownsOpen((prev) => {
@@ -266,6 +286,48 @@ const Evacuation = () => {
 
         {/* -------------------end student info ---------------------*/}
 
+        {/* -------------------start tracedHousing info ---------------------*/}
+
+        {tracedHousing && tracedHousing.message == "found" && (
+          <div className="w-full flex justify-center">
+            <div className="flex flex-col font-bold text-xl">
+              <div>
+                <span>المدينه : </span>
+                <span className="text-blue-700">{tracedHousing.town.name}</span>
+              </div>
+
+              <div>
+                <span>المبنى : </span>
+                <span className="text-blue-700">
+                  {tracedHousing.building.name}
+                </span>
+              </div>
+
+              <div>
+                <span>الطابق : </span>
+                <span className="text-blue-700">
+                  {tracedHousing.floor.number}
+                </span>
+              </div>
+
+              <div>
+                <span>الغرفه : </span>
+                <span className="text-blue-700">
+                  {tracedHousing.room.number}
+                </span>
+              </div>
+
+              <div>
+                <span>السرير :</span>
+                <span className="text-blue-700">
+                  {tracedHousing.bed.number}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* -------------------end tracedHousing info ---------------------*/}
+
         {/* -------------------start Rooms-Beds ---------------------*/}
         <div className="mt-10">
           <div className="flex flex-wrap gap-10 justify-center">
@@ -313,7 +375,10 @@ const Evacuation = () => {
         {/* -------------------end Rooms-Beds ---------------------*/}
 
         <div className="flex justify-center mt-20">
-          {selectedBed && selectedStudentData && (
+          {((selectedBed && selectedStudentData) ||
+            (selectedBed &&
+              selectedStudentData &&
+              tracedHousing.message == "found")) && (
             <button
               className="bg-red-800 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded"
               onClick={handleEvacuationClick}
