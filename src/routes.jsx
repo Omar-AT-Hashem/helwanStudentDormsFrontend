@@ -27,6 +27,7 @@ import EditStudentData from "./pages/admin/EditStudentData.jsx";
 import { AssessStudents } from "./pages/admin/AssessStudents.jsx";
 import EditHousing from "./pages/admin/EditHousing.jsx";
 import Evacuation from "./pages/admin/Evacuation.jsx";
+import ManageFees from "./pages/admin/ManageFees.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ export const routes = createBrowserRouter([
           {
             path: "manageInstructions",
             element: <ManageInsturctions />,
+          },
+          {
+            path: "manageFees",
+            element: <ManageFees />,
           },
           {
             path: "manageApplicationDates",

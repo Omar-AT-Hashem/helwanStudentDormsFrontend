@@ -32,12 +32,6 @@ export default function ManageCategories() {
     }
   };
 
-  console.log(objects);
-  console.log(deletedObjects);
-  console.log(updatedObjects);
-  console.log(addedObjects);
-
-
 
   const handleInputChange = (e) => {
     const elementIndex = parseInt(e.target.name.split("-")[0]);
