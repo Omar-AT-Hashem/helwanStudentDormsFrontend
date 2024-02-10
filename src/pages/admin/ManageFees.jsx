@@ -3,7 +3,6 @@ import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../../components/minicomponent/Loading.jsx";
-import { CloudHail } from "lucide-react";
 
 const ManageFees = () => {
   if (sessionStorage.getItem("token")) {
@@ -40,7 +39,7 @@ const ManageFees = () => {
           return;
         }
         toast.dismiss();
-        return toast("Something went wrong");
+        return toast("حدث خطأ");
       });
   }, []);
 
@@ -93,7 +92,7 @@ const ManageFees = () => {
             return;
           }
           toast.dismiss();
-          return toast("Something went wrong");
+          return toast("حدث خطأ");
         });
     } else {
       toast.dismiss();
@@ -109,7 +108,17 @@ const ManageFees = () => {
         .post(`${API_ROUTE}/v1/fee/`, { name: feeData.feeToAdd })
         .then((res) => {
           setLoading((prev) => prev - 1);
-          setFees(res.data);
+          setFees((prev) => {
+            prev = [
+              ...prev,
+              {
+                id: res.data.id,
+                name: feeData.feeToAdd,
+                necessaryForNutrition: "no",
+              },
+            ];
+            return prev;
+          });
           setFeeData({
             feeName: "",
             necessaryForNutrition: "",
@@ -124,12 +133,42 @@ const ManageFees = () => {
             return;
           }
           toast.dismiss();
-          return toast("Something went wrong");
+          return toast("حدث خطأ");
         });
     } else {
       toast.dismiss();
       toast("ادخل اسم الرسوم");
     }
+  };
+
+  const handleDeleteClick = () => {
+    setLoading((prev) => prev + 1);
+    axios
+      .delete(`${API_ROUTE}/v1/fee/${selectedFee}`)
+      .then((res) => {
+        setLoading((prev) => prev - 1);
+        setFees((prev) => {
+          let i = prev.findIndex((ele) => ele.id == selectedFee);
+          prev.splice(i, 1);
+          return prev;
+        });
+        setSelectedFee();
+        setFeeData({
+          feeName: "",
+          necessaryForNutrition: "",
+          feeToAdd: "",
+        });
+        toast.dismiss();
+        return toast("ازاله بنجاح");
+      })
+      .catch((err) => {
+        setLoading((prev) => prev - 1);
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("حدث خطأ");
+      });
   };
 
   const handleSideFeeClick = (fee) => {
@@ -261,6 +300,14 @@ const ManageFees = () => {
                   onClick={handleEditClick}
                 >
                   تعديل
+                </button>
+              )}
+              {!editable && (
+                <button
+                  className="font-bold text-white text-xl bg-red-700 hover:opacity-70 hover:pointer transition-all duration-200 w-20 h-10 rounded-md mr-10"
+                  onClick={handleDeleteClick}
+                >
+                  ازاله
                 </button>
               )}
               {editable && (
