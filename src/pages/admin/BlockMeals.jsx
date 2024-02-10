@@ -83,7 +83,6 @@ const BlockMeals = () => {
 
   return (
     <div className="pt-20 flex flex-row w-full h-screen ">
-      
       <Toaster
         toastOptions={{
           className: "",
@@ -185,7 +184,6 @@ const BlockMeals = () => {
                 ></input>
               </div>
               <div className="flex items-center w-full ">
-             
                 <button
                   className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500"
                   onClick={handleSubmit}
