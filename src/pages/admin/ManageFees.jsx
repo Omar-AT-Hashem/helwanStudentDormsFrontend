@@ -145,7 +145,7 @@ const ManageFees = () => {
     setLoading((prev) => prev + 1);
     axios
       .delete(`${API_ROUTE}/v1/fee/${selectedFee}`)
-      .then((res) => {
+      .then(() => {
         setLoading((prev) => prev - 1);
         setFees((prev) => {
           let i = prev.findIndex((ele) => ele.id == selectedFee);

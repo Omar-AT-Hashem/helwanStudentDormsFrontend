@@ -16,10 +16,12 @@ const EditHousing = () => {
   const [insertionData, setInsertionData] = useState({
     bedNumber: null,
     roomNumber: null,
+    roomType: null,
     floorNumber: null,
     buildingName: null,
     townName: null,
   });
+  console.log(insertionData);
   const [selectedFloorId, setSelectedFloorId] = useState();
   const [selectedFloorData, setSelectedFloorData] = useState([]);
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
@@ -169,7 +171,7 @@ const EditHousing = () => {
   };
 
   const handleAddRoom = (e) => {
-    if (insertionData.roomNumber) {
+    if (insertionData.roomNumber && insertionData.roomType) {
       if (isNaN(parseInt(insertionData.roomNumber))) {
         toast.dismiss();
         toast("ادخل رقم");
@@ -180,6 +182,7 @@ const EditHousing = () => {
           .post(`${API_ROUTE}/v1/room`, {
             floorId: selectedFloorId,
             number: insertionData.roomNumber,
+            type: insertionData.roomType,
           })
           .then((res) => {
             //dynamically add beds to the front end
@@ -190,12 +193,13 @@ const EditHousing = () => {
                   id: res.data.id,
                   floorId: selectedFloorId,
                   number: insertionData.roomNumber,
+                  type: insertionData.roomType,
                   beds: [],
                 },
               ];
             });
             setInsertionData((prev) => {
-              return { ...prev, roomNumber: null };
+              return { ...prev, roomNumber: null, roomType: null };
             });
             setLoading((prev) => prev - 1);
             e.target.nextElementSibling.value = "";
@@ -513,13 +517,13 @@ const EditHousing = () => {
                         <button
                           onClick={() => handleRemoveTown(town.id)}
                           className="flex items-center
-                                 absolute justify-center h-5 w-5 rounded-full bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold mt-1 mr-1"
+                                 absolute justify-center h-5 w-5 rounded-md bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold mt-1 mr-1"
                         >
                           X
                         </button>
                       )}
                       <span
-                        className="hover:cursor-pointer hover:bg-mainYellow pr-5 select-none font-bold text-xl mr-3"
+                        className="hover:cursor-pointer hover:bg-slate-300 px-2 select-none font-bold text-xl mr-10 mb-1 transition-all duration-200"
                         onClick={() => handleSideBarTownClick(index)}
                       >
                         {town.name}
@@ -527,7 +531,7 @@ const EditHousing = () => {
                     </div>
                     {/*-------start buildings menu -----*/}
                     {sideBarTownsOpen[index] && (
-                      <div className="flex flex-col gap-1 pr-7 pt-1 ">
+                      <div className="flex flex-col gap-1 pr-7 pt-1 mr-4 mb-5">
                         {town.buildings.map((building) => (
                           <div
                             key={`Build-town-${building.id}`}
@@ -539,13 +543,13 @@ const EditHousing = () => {
                                   handleRemoveBuilding(building.id, town.id)
                                 }
                                 className="flex items-center
-                                 absolute justify-center h-5 w-5 rounded-full bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold"
+                                 absolute justify-center h-5 w-5 rounded-md bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold"
                               >
                                 X
                               </button>
                             )}
                             <span
-                              className="hover:cursor-pointer hover:bg-mainYellow text-green-600 font-bold mr-8 w-24"
+                              className="hover:cursor-pointer hover:bg-slate-300 text-gray-800 font-bold mr-8 w-24 transition-all duration-200"
                               onClick={handleBuildingClick}
                             >
                               {building.name}
@@ -567,17 +571,17 @@ const EditHousing = () => {
                                           town.id
                                         )
                                       }
-                                      className="flex items-center justify-center h-5 w-5 rounded-full bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold"
+                                      className="flex items-center justify-center h-5 w-5 rounded-md bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold"
                                     >
                                       X
                                     </button>
                                   )}
                                   <span
-                                    className={`hover:cursor-pointer hover:bg-mainYellow pl-2 ${
+                                    className={`hover:cursor-pointer hover:bg-slate-300 pl-2 ${
                                       floor.floorOccupied == false
-                                        ? "pr-9"
-                                        : "pr-14"
-                                    }  text-blue-600 font-bold`}
+                                        ? "pr-6"
+                                        : "pr-6 mr-5"
+                                    } text-blue-600 font-bold transition-all duration-200`}
                                     onClick={() => handleFloorClick(floor.id)}
                                   >
                                     {floor.number}
@@ -589,7 +593,7 @@ const EditHousing = () => {
                                   onClick={(e) =>
                                     handleAddFloor(e, building.id, town.id)
                                   }
-                                  className="flex items-center justify-center h-5 w-5 rounded-full bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
+                                  className="flex items-center justify-center h-5 w-5 rounded-md bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
                                 >
                                   +
                                 </button>
@@ -598,7 +602,7 @@ const EditHousing = () => {
                                   type="text"
                                   autoComplete="off"
                                   onChange={handleInputChange}
-                                  className="text-blue-600 font-bold bg-yellow-600 h-5 w-10 mr-3"
+                                  className="text-blue-600 font-bold bg-slate-300 h-5 w-10 mr-3"
                                 />
                               </div>
                             </div>
@@ -608,7 +612,7 @@ const EditHousing = () => {
                         <div className="flex items-center">
                           <button
                             onClick={(e) => handleAddBuilding(e, town.id)}
-                            className="flex items-center justify-center h-5 w-5 rounded-full bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
+                            className="flex items-center justify-center h-5 w-5 rounded-md bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
                           >
                             +
                           </button>
@@ -617,7 +621,7 @@ const EditHousing = () => {
                             type="text"
                             autoComplete="off"
                             onChange={handleInputChange}
-                            className="text-green-600 font-bold bg-yellow-600 h-5 w-24 mr-3"
+                            className="text-gray-800 font-bold bg-slate-300 h-5 w-24 mr-3"
                           />
                         </div>
                       </div>
@@ -629,7 +633,7 @@ const EditHousing = () => {
                 <div className="flex items-center mr-1 mt-1">
                   <button
                     onClick={handleAddTown}
-                    className="flex items-center justify-center h-5 w-5 rounded-full bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
+                    className="flex items-center justify-center h-5 w-5 rounded-md bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
                   >
                     +
                   </button>
@@ -638,7 +642,7 @@ const EditHousing = () => {
                     type="text"
                     autoComplete="off"
                     onChange={handleInputChange}
-                    className="text-black font-bold bg-yellow-600 h-5 w-24 mr-3"
+                    className="text-black font-bold bg-slate-300 h-5 w-24 mr-3"
                   />
                 </div>
               </div>
@@ -665,7 +669,7 @@ const EditHousing = () => {
                   {!room.beds.find((e) => e.isOccupied == 1) && (
                     <button
                       onClick={() => handleRemoveRoom(room.id)}
-                      className="flex items-center justify-center w-8 h-8 bg-red-700 -ml-8 text-white rounded-full cursor-pointer font-bold  hover:opacity-80 transition-all duration-200"
+                      className="flex items-center justify-center w-8 h-8 bg-red-700 -ml-8 text-white rounded-md cursor-pointer font-bold  hover:opacity-80 transition-all duration-200"
                     >
                       X
                     </button>
@@ -686,7 +690,7 @@ const EditHousing = () => {
                         <div className="flex items-center">
                           <button
                             onClick={() => handleRemoveBed(bed.id, room.id)}
-                            className="ml-1 rounded-full w-8 h-8 bg-red-700 flex items-center justify-center text text-white font-bold hover:opacity-80 cursor-pointer transition-all duration-200"
+                            className="ml-1 rounded-md w-8 h-8 bg-red-700 flex items-center justify-center text text-white font-bold hover:opacity-80 cursor-pointer transition-all duration-200"
                           >
                             X
                           </button>
@@ -712,7 +716,7 @@ const EditHousing = () => {
                   <div className="flex mt-1">
                     <button
                       onClick={(e) => handleAddBed(e, room.id)}
-                      className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 text-white rounded-full ml-1 cursor-pointer hover:opacity-80 transition-all duration-200"
+                      className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 text-white rounded-md ml-1 cursor-pointer hover:opacity-80 transition-all duration-200"
                     >
                       +
                     </button>
@@ -728,20 +732,46 @@ const EditHousing = () => {
               </div>
             ))}
             {selectedFloorId && (
-              <div className="flex">
-                <button
-                  onClick={handleAddRoom}
-                  className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 ml-1 text-white rounded-full cursor-pointer hover:opacity-80 transition-all duration-200"
-                >
-                  +
-                </button>
-                <input
-                  name="roomNumber"
-                  type="text"
-                  autoComplete="off"
-                  onChange={handleInputChange}
-                  className="text-white font-bold bg-mainBlue h-10 w-20"
-                />
+              <div className="flex flex-col">
+                <div className="flex">
+                  <button
+                    onClick={handleAddRoom}
+                    className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 ml-1 text-white rounded-md cursor-pointer hover:opacity-80 transition-all duration-200"
+                  >
+                    +
+                  </button>
+                  <input
+                    name="roomNumber"
+                    type="text"
+                    autoComplete="off"
+                    onChange={handleInputChange}
+                    className="text-white font-bold bg-mainBlue h-10 w-20"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <div>
+                    <input
+                      type="radio"
+                      name="roomType"
+                      value="سكن عادي"
+                      onChange={handleInputChange}
+                      required
+                      className="mr-4 text-xl"
+                    />
+                    <label className="mr-2 text-xl">سكن عادي</label>
+                  </div>
+                  <div>
+                    <input
+                      type="radio"
+                      name="roomType"
+                      value="سكن مميز"
+                      onChange={handleInputChange}
+                      required
+                      className="mr-4"
+                    />
+                    <label className="mr-2">سكن مميز</label>
+                  </div>
+                </div>
               </div>
             )}
           </div>
