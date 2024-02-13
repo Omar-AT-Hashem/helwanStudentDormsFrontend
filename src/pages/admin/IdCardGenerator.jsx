@@ -77,14 +77,6 @@ const IDCardGenerator = () => {
               </div>
               <div className="id-card-details" style={{ padding: "1cm" }}>
                 <h2>{studentData.name}</h2>
-                <p>Collage: {studentData.collage}</p>
-                <p>Grade: {studentData.grade}</p>
-                <p>Year: {studentData.year}</p>
-                <div>
-                  <p>Building: {studentData.building}</p>
-                  <p>Room Number: {studentData.roomNumber}</p>
-                </div>
-                <p>Barcode: {studentData.barcode}</p>
               </div>
             </div>
           ) : (
