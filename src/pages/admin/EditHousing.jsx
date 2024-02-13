@@ -20,12 +20,13 @@ const EditHousing = () => {
     floorNumber: null,
     buildingName: null,
     townName: null,
+    buildingType: null,
   });
-  console.log(insertionData);
+
   const [selectedFloorId, setSelectedFloorId] = useState();
   const [selectedFloorData, setSelectedFloorData] = useState([]);
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
-  console.log(towns);
+
   useEffect(() => {
     setLoading((prev) => prev + 1);
     axios
@@ -337,12 +338,13 @@ const EditHousing = () => {
   };
 
   const handleAddBuilding = (e, townId) => {
-    if (insertionData.buildingName) {
+    if (insertionData.buildingName && insertionData.buildingType) {
       setLoading((prev) => prev + 1);
       axios
         .post(`${API_ROUTE}/v1/building`, {
           townId: townId,
           name: insertionData.buildingName,
+          type: insertionData.buildingType,
         })
         .then((res) => {
           //dynamically add beds to the front end
@@ -353,6 +355,7 @@ const EditHousing = () => {
                   id: res.data.id,
                   name: insertionData.buildingName,
                   buildingOccupied: false,
+                  type: insertionData.buildingType,
                   floors: [],
                 });
               }
@@ -362,7 +365,7 @@ const EditHousing = () => {
             return prev;
           });
           setInsertionData((prev) => {
-            return { ...prev, buildingName: null };
+            return { ...prev, buildingName: null, buildingType: null };
           });
           setLoading((prev) => prev - 1);
           e.target.nextElementSibling.value = "";
@@ -549,10 +552,11 @@ const EditHousing = () => {
                               </button>
                             )}
                             <span
-                              className="hover:cursor-pointer hover:bg-slate-300 text-gray-800 font-bold mr-8 w-24 transition-all duration-200"
+                              className="hover:cursor-pointer hover:bg-slate-300 text-gray-800 font-bold mr-8 transition-all duration-200"
                               onClick={handleBuildingClick}
                             >
-                              {building.name}
+                              {building.name} |{" "}
+                              {building.type == "M" ? "طلاب" : "طالبات"}
                             </span>
 
                             {/*-------start floors menu -----*/}
@@ -609,20 +613,46 @@ const EditHousing = () => {
                             {/*-------end floors menu -----*/}
                           </div>
                         ))}
-                        <div className="flex items-center">
-                          <button
-                            onClick={(e) => handleAddBuilding(e, town.id)}
-                            className="flex items-center justify-center h-5 w-5 rounded-md bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
-                          >
-                            +
-                          </button>
-                          <input
-                            name="buildingName"
-                            type="text"
-                            autoComplete="off"
-                            onChange={handleInputChange}
-                            className="text-gray-800 font-bold bg-slate-300 h-5 w-24 mr-3"
-                          />
+                        <div className="flex flex-col">
+                          <div className="flex ">
+                            <button
+                              onClick={(e) => handleAddBuilding(e, town.id)}
+                              className="flex items-center justify-center h-5 w-5 rounded-md bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
+                            >
+                              +
+                            </button>
+                            <input
+                              name="buildingName"
+                              type="text"
+                              autoComplete="off"
+                              onChange={handleInputChange}
+                              className="text-gray-800 font-bold bg-slate-300 h-5 w-24 mr-3"
+                            />
+                          </div>
+                          <div className="flex flex-col">
+                            <div>
+                              <input
+                                type="radio"
+                                name="buildingType"
+                                value="M"
+                                onChange={handleInputChange}
+                                required
+                                className="mr-4"
+                              />
+                              <label className="mr-2 text-xl">طلاب</label>
+                            </div>
+                            <div>
+                              <input
+                                type="radio"
+                                name="buildingType"
+                                value="F"
+                                onChange={handleInputChange}
+                                required
+                                className="mr-4"
+                              />
+                              <label className="mr-2 text-xl">طالبات</label>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -665,6 +695,15 @@ const EditHousing = () => {
           <div className="flex flex-wrap gap-10 justify-center max-w-[700px]">
             {selectedFloorData.map((room) => (
               <div key={`room-beds-${room.id}`} className="flex flex-col">
+                <div
+                  className={`flex justify-center font-bold text-xl mr-9 w-20 ${
+                    room.type == "سكن عادي"
+                      ? "bg-slate-400 "
+                      : "bg-yellow-600 text-white"
+                  }`}
+                >
+                  {room.type}
+                </div>
                 <div className="flex">
                   {!room.beds.find((e) => e.isOccupied == 1) && (
                     <button
@@ -732,7 +771,7 @@ const EditHousing = () => {
               </div>
             ))}
             {selectedFloorId && (
-              <div className="flex flex-col">
+              <div className="flex flex-col mt-8">
                 <div className="flex">
                   <button
                     onClick={handleAddRoom}
@@ -769,7 +808,7 @@ const EditHousing = () => {
                       required
                       className="mr-4"
                     />
-                    <label className="mr-2">سكن مميز</label>
+                    <label className="mr-2 text-xl">سكن مميز</label>
                   </div>
                 </div>
               </div>
