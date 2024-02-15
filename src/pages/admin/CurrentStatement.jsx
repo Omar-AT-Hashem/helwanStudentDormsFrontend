@@ -111,16 +111,9 @@ const fieldValue = "text-xl text-gray-400";
                 </div>
 
                 <div className="flex items-center justify-center">
-                <div className="bg-mainBlue	rounded mt-8 mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1 w-1/5">الرسوم التى يجب دفعها عن شهر <span></span></div>
-                </div>
-    
-
-    
-    
-         </form>
-        
-
-        
+                <div className="bg-mainBlue	 mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1 w-1/5">الرسوم التى يجب دفعها عن شهر <span></span></div>
+                </div>   
+         </form>        
       </div>
     </div>
   );
