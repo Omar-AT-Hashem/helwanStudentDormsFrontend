@@ -16,11 +16,11 @@ const EditHousing = () => {
   const [insertionData, setInsertionData] = useState({
     bedNumber: null,
     roomNumber: null,
-    roomType: null,
+    roomType: "سكن عادي",
     floorNumber: null,
     buildingName: null,
     townName: null,
-    buildingType: null,
+    buildingType: "M",
   });
 
   const [selectedFloorId, setSelectedFloorId] = useState();
@@ -200,7 +200,7 @@ const EditHousing = () => {
               ];
             });
             setInsertionData((prev) => {
-              return { ...prev, roomNumber: null, roomType: null };
+              return { ...prev, roomNumber: null };
             });
             setLoading((prev) => prev - 1);
             e.target.nextElementSibling.value = "";
@@ -226,6 +226,7 @@ const EditHousing = () => {
       .delete(`${API_ROUTE}/v1/room/${roomId}`)
       .then(() => {
         //dynamically add beds to the front end
+
         setSelectedFloorData((prev) => {
           let i = prev.findIndex((ele) => ele.id == roomId);
           prev.splice(i, 1);
@@ -259,6 +260,25 @@ const EditHousing = () => {
             number: insertionData.floorNumber,
           })
           .then((res) => {
+            let currentT = towns.findIndex((ele) => ele.id == townId);
+            let currentB = towns[currentT].buildings.findIndex(
+              (ele2) => ele2.id == buildingId
+            );
+
+            //handle logs
+            axios
+              .post(`${API_ROUTE}/v1/log`, {
+                adminId: sessionStorage.getItem("id"),
+                adminName: sessionStorage.getItem("name"),
+                adminUsername: sessionStorage.getItem("username"),
+                action: `اضافه دور برقم "${insertionData.floorNumber}" لمبني "${towns[currentT].buildings[currentB].name}" في مدينه "${towns[currentT].name}"`,
+                objectId: res.data.id,
+                objectName: insertionData.floorNumber,
+              })
+              .catch(() => {
+                return;
+              });
+
             //dynamically add beds to the front end
             setTowns((prev) => {
               prev = prev.map((ele) => {
@@ -305,6 +325,27 @@ const EditHousing = () => {
     axios
       .delete(`${API_ROUTE}/v1/floor/${floorId}`)
       .then(() => {
+        let currentT = towns.findIndex((ele) => ele.id == townId);
+        let currentB = towns[currentT].buildings.findIndex(
+          (ele2) => ele2.id == buildingId
+        );
+        let currentF = towns[currentT].buildings[currentB].floors.findIndex(
+          (ele3) => ele3.id == floorId
+        );
+        //handle logs
+        axios
+          .post(`${API_ROUTE}/v1/log`, {
+            adminId: sessionStorage.getItem("id"),
+            adminName: sessionStorage.getItem("name"),
+            adminUsername: sessionStorage.getItem("username"),
+            action: `ازاله دور برقم "${towns[currentT].buildings[currentB].floors[currentF].number}" من مبني "${towns[currentT].buildings[currentB].name}" في مدينه "${towns[currentT].name}"`,
+            objectId: floorId,
+            objectName:
+              towns[currentT].buildings[currentB].floors[currentF].number,
+          })
+          .catch(() => {
+            return;
+          });
         //dynamically add beds to the front end
         setTowns((prev) => {
           prev = prev.map((ele) => {
@@ -347,6 +388,22 @@ const EditHousing = () => {
           type: insertionData.buildingType,
         })
         .then((res) => {
+          let currentT = towns.findIndex((ele) => ele.id == townId);
+
+          //handle logs
+          axios
+            .post(`${API_ROUTE}/v1/log`, {
+              adminId: sessionStorage.getItem("id"),
+              adminName: sessionStorage.getItem("name"),
+              adminUsername: sessionStorage.getItem("username"),
+              action: `اضافه مبني جديد بأسم "${insertionData.buildingName}" لمدينه "${towns[currentT].name}"`,
+              objectId: res.data.id,
+              objectName: insertionData.buildingName,
+            })
+            .catch(() => {
+              return;
+            });
+
           //dynamically add beds to the front end
           setTowns((prev) => {
             prev = prev.map((ele) => {
@@ -365,7 +422,7 @@ const EditHousing = () => {
             return prev;
           });
           setInsertionData((prev) => {
-            return { ...prev, buildingName: null, buildingType: null };
+            return { ...prev, buildingName: null };
           });
           setLoading((prev) => prev - 1);
           e.target.nextElementSibling.value = "";
@@ -393,6 +450,24 @@ const EditHousing = () => {
     axios
       .delete(`${API_ROUTE}/v1/building/${buildingId}`)
       .then(() => {
+        let currentT = towns.findIndex((ele) => ele.id == townId);
+        let currentB = towns[currentT].buildings.findIndex(
+          (ele2) => ele2.id == buildingId
+        );
+        //handle logs
+        axios
+          .post(`${API_ROUTE}/v1/log`, {
+            adminId: sessionStorage.getItem("id"),
+            adminName: sessionStorage.getItem("name"),
+            adminUsername: sessionStorage.getItem("username"),
+            action: ` ازاله مبني بأسم "${towns[currentT].buildings[currentB].name}" من مدينه "${towns[currentT].name}"`,
+            objectId: buildingId,
+            objectName: towns[currentT].buildings[currentB].name,
+          })
+          .catch(() => {
+            return;
+          });
+
         //dynamically add beds to the front end
         setTowns((prev) => {
           prev = prev.map((ele) => {
@@ -402,9 +477,9 @@ const EditHousing = () => {
             }
             return ele;
           });
-          console.log(prev);
           return prev;
         });
+
         setLoading((prev) => prev - 1);
         toast.dismiss();
         return toast("أزالة بنجاح");
@@ -480,7 +555,22 @@ const EditHousing = () => {
     axios
       .delete(`${API_ROUTE}/v1/town/${townId}`)
       .then(() => {
-        //dynamically add beds to the front end
+        //handle logs
+        axios
+          .post(`${API_ROUTE}/v1/log`, {
+            adminId: sessionStorage.getItem("id"),
+            adminName: sessionStorage.getItem("name"),
+            adminUsername: sessionStorage.getItem("username"),
+            action: ` ازاله مدينه بأسم "${
+              towns[towns.findIndex((ele) => ele.id == townId)].name
+            }"`,
+            objectId: townId,
+            objectName: towns[towns.findIndex((ele) => ele.id == townId)].name,
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
         setTowns((prev) => {
           let i = prev.findIndex((ele2) => ele2.id == townId);
           prev.splice(i, 1);
@@ -527,20 +617,27 @@ const EditHousing = () => {
                 {/*------- towns menu start-----*/}
                 {towns.map((town, index) => (
                   <div key={`edit-${town}-housing-${index}`}>
-                    <div className="flex">
+                    <div className="flex items-center">
                       {!town.buildings.find(
                         (ele) => ele.buildingOccupied == true
                       ) && (
                         <button
                           onClick={() => handleRemoveTown(town.id)}
                           className="flex items-center
-                                 absolute justify-center h-5 w-5 rounded-md bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold mt-1 mr-1"
+                                  justify-center h-5 w-5 rounded-md bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold mt-1 mr-1 "
                         >
                           X
                         </button>
                       )}
                       <span
-                        className="hover:cursor-pointer hover:bg-slate-300 px-2 select-none font-bold text-xl mr-10 mb-1 transition-all duration-200"
+                        className={`hover:cursor-pointer hover:bg-slate-300 px-2 select-none 
+                        font-bold text-xl ${
+                          town.buildings.find(
+                            (ele) => ele.buildingOccupied == true
+                          )
+                            ? "mr-10"
+                            : "mr-4"
+                        } mb-1 transition-all duration-200`}
                         onClick={() => handleSideBarTownClick(index)}
                       >
                         {town.name}
@@ -552,7 +649,7 @@ const EditHousing = () => {
                         {town.buildings.map((building) => (
                           <div
                             key={`Build-town-${building.id}`}
-                            className="flex flex-col relative"
+                            className="flex flex-col"
                           >
                             {building.buildingOccupied == false && (
                               <button
@@ -560,7 +657,7 @@ const EditHousing = () => {
                                   handleRemoveBuilding(building.id, town.id)
                                 }
                                 className="flex items-center
-                                 absolute justify-center h-5 w-5 rounded-md bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold"
+                                 justify-center h-5 w-5 rounded-md bg-red-700 hover:opacity-70 transition-all duration-200  text-white font-bold -mb-6"
                               >
                                 X
                               </button>

@@ -22,7 +22,7 @@ export const AdminNavbar = () => {
   };
 
   return (
-    <div className="ltr-local z-50">
+    <div className={`ltr-local`}>
       <nav className="bg-mainBlue h-20 fixed w-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className=" items-center  justify-between h-17">
@@ -52,7 +52,7 @@ export const AdminNavbar = () => {
                 </div>
               </div>
             </div>
-            <div className="-mr-2 flex md:hidden bg-red-700 absolute z-30">
+            <div className="-mr-2 flex md:hidden bg-red-700 absolute">
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 type="button"
