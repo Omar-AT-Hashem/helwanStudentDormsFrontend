@@ -427,16 +427,30 @@ const EditHousing = () => {
           name: insertionData.townName,
         })
         .then((res) => {
-          //dynamically add beds to the front end
+          //dynamically add towns to the front end
           setTowns((prev) => {
             prev.push({
               id: res.data.id,
               name: insertionData.townName,
               buildings: [],
             });
-
             return prev;
           });
+
+          //handle logs
+          axios
+            .post(`${API_ROUTE}/v1/log`, {
+              adminId: sessionStorage.getItem("id"),
+              adminName: sessionStorage.getItem("name"),
+              adminUsername: sessionStorage.getItem("username"),
+              action: `اضافه مدينه جديده بأسم "${insertionData.townName}"`,
+              objectId: res.data.id,
+              objectName: insertionData.townName,
+            })
+            .catch(() => {
+              return;
+            });
+
           setInsertionData((prev) => {
             return { ...prev, townName: null };
           });

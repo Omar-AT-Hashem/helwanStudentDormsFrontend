@@ -29,6 +29,7 @@ import EditHousing from "./pages/admin/EditHousing.jsx";
 import Evacuation from "./pages/admin/Evacuation.jsx";
 import ManageFees from "./pages/admin/ManageFees.jsx";
 import CreateEmployee from "./pages/admin/CreateEmployee.jsx";
+import Logs from "./pages/admin/Logs.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -80,6 +81,10 @@ export const routes = createBrowserRouter([
           {
             path: "createEmployee",
             element: <CreateEmployee />,
+          },
+          {
+            path: "logs",
+            element: <Logs />,
           },
           {
             path: "idcardgenerator",
