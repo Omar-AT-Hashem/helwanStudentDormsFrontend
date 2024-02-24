@@ -21,7 +21,7 @@ function ChangeApplicationStatus() {
       .get(
         `${API_ROUTE}/v1/student/get-by-nationalId/${sessionStorage.getItem(
           "nationalId"
-        )}`
+        )}`       
       )
       .then((response) => {
         setFormData({ ...response.data, id: sessionStorage.getItem("id") });

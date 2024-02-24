@@ -22,7 +22,6 @@ export const ApplicationApprovals = () => {
   const [selectedStudentData, setSelectedStudentData] = useOutletContext();
   const [studentList, setStudentList] = useState([]);
 
- 
   const accept = () => {
     axios
       .post(`${API_ROUTE}/v1/student/approve-or-reject/approve`, {
@@ -30,6 +29,15 @@ export const ApplicationApprovals = () => {
         grade: selectedStudentData.grade,
       })
       .then(() => {
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `قبول طلب الطالب ${selectedStudentData.name} و الرقم القومى ${selectedStudentData.nationalId}`,
+          objectId: selectedStudentData.nationalId,
+          objectName: selectedStudentData.name,
+        });
         setStudentList((prev) => {
           return prev.filter((e) => e.id !== selectedStudentData.id);
         });
@@ -51,6 +59,15 @@ export const ApplicationApprovals = () => {
         grade: selectedStudentData.grade,
       })
       .then(() => {
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `رفض طلب الطالب ${selectedStudentData.name} و الرقم القومى ${selectedStudentData.nationalId}`,
+          objectId: selectedStudentData.nationalId,
+          objectName: selectedStudentData.name,
+        });
         setStudentList((prev) => {
           return prev.filter((e) => e.id !== selectedStudentData.id);
         });

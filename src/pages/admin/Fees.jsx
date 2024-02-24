@@ -83,6 +83,15 @@ const Fees = () => {
           studentId: selectedStudentData.id,
         })
         .then((res) => {
+          //handle Logs
+          axios.post(`${API_ROUTE}/v1/log`, {
+            adminId: sessionStorage.getItem("id"),
+            adminName: sessionStorage.getItem("name"),
+            adminUsername: sessionStorage.getItem("username"),
+            action: `اضافه رسوم للطالب ${selectedStudentData.name} و الرقم القومي ${selectedStudentData.nationalId} بقيمه ${form.sum}`,
+            objectId: `${selectedStudentData.nationalId}`,
+            objectName: `${selectedStudentData.name}`,
+          });
           setForm({ fees: "", date: "", amount: "", type: "", isPayed: false });
         })
         .catch(() => {

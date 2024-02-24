@@ -32,7 +32,6 @@ export default function ManageCategories() {
     }
   };
 
-
   const handleInputChange = (e) => {
     const elementIndex = parseInt(e.target.name.split("-")[0]);
     const elementName = e.target.name.split("-")[1];
@@ -90,6 +89,14 @@ export default function ManageCategories() {
           axios
             .delete(`${API_ROUTE}/v1/category/${id}`)
             .then(() => {
+              axios.post(`${API_ROUTE}/v1/log`, {
+                adminId: sessionStorage.getItem("id"),
+                adminName: sessionStorage.getItem("name"),
+                adminUsername: sessionStorage.getItem("username"),
+                action: `ازاله فئه`,
+                objectId: `فارغ`,
+                objectName: `فارغ`,
+              });
               setLoading((prev) => prev - 1);
             })
             .catch(() => {
@@ -127,6 +134,14 @@ export default function ManageCategories() {
               governorate: update.governorate,
             })
             .then(() => {
+              axios.post(`${API_ROUTE}/v1/log`, {
+                adminId: sessionStorage.getItem("id"),
+                adminName: sessionStorage.getItem("name"),
+                adminUsername: sessionStorage.getItem("username"),
+                action: `تعديل فئه`,
+                objectId: `فارغ`,
+                objectName: `فارغ`,
+              });
               setLoading((prev) => prev - 1);
             })
             .catch(() => {
@@ -152,7 +167,7 @@ export default function ManageCategories() {
       return [...prev];
     });
   };
-  
+
   const handleAddChange = (e) => {
     const elementIndex = parseInt(e.target.name.split("-")[0]);
     const elementName = e.target.name.split("-")[1];
@@ -202,6 +217,14 @@ export default function ManageCategories() {
             governorate: addedObject.governorate,
           })
           .then((res) => {
+            axios.post(`${API_ROUTE}/v1/log`, {
+              adminId: sessionStorage.getItem("id"),
+              adminName: sessionStorage.getItem("name"),
+              adminUsername: sessionStorage.getItem("username"),
+              action: `اضافه فئه جديده بالاسم ${addedObject.name} و المحافظه ${addedObject.governorate} `,
+              objectId: `${res.data.id}`,
+              objectName: `${addedObject.name}`,
+            });
             setLoading((prev) => prev - 1);
 
             setObjects((prev) => {

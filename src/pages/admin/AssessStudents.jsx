@@ -34,6 +34,15 @@ export const AssessStudents = () => {
     axios
       .put(`${API_ROUTE}/v1/student/assess-students`)
       .then(() => {
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `بدأ تنسيق الطلاب`,
+          objectId: "فارغ",
+          objectName: "فارغ",
+        });
         setLoading((prev) => prev - 1);
         toast.dismiss();
         toast("تم تنسيق الطلاب بنجاح");

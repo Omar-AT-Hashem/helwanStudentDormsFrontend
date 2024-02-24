@@ -64,6 +64,14 @@ const ManageFees = () => {
           necessaryForNutrition: feeData.necessaryForNutrition,
         })
         .then(() => {
+          axios.post(`${API_ROUTE}/v1/log`, {
+            adminId: sessionStorage.getItem("id"),
+            adminName: sessionStorage.getItem("name"),
+            adminUsername: sessionStorage.getItem("username"),
+            action: `تعديل اسم الرسوم ${feeData.feeName}`,
+            objectId: selectedFee,
+            objectName: feeData.feeName,
+          });
           setLoading((prev) => prev - 1);
           setFeeData({
             feeName: feeData.feeName,
@@ -107,6 +115,14 @@ const ManageFees = () => {
       axios
         .post(`${API_ROUTE}/v1/fee/`, { name: feeData.feeToAdd })
         .then((res) => {
+          axios.post(`${API_ROUTE}/v1/log`, {
+            adminId: sessionStorage.getItem("id"),
+            adminName: sessionStorage.getItem("name"),
+            adminUsername: sessionStorage.getItem("username"),
+            action: `اضافه رسوم جديده بالاسم ${feeData.feeToAdd}`,
+            objectId: selectedFee,
+            objectName: feeData.feeToAdd,
+          });
           setLoading((prev) => prev - 1);
           setFees((prev) => {
             prev = [
@@ -146,6 +162,14 @@ const ManageFees = () => {
     axios
       .delete(`${API_ROUTE}/v1/fee/${selectedFee}`)
       .then(() => {
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `ازاله رسوم بالاسمذ`,
+          objectId: selectedFee,
+          objectName: "فارغ",
+        });
         setLoading((prev) => prev - 1);
         setFees((prev) => {
           let i = prev.findIndex((ele) => ele.id == selectedFee);

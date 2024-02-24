@@ -42,7 +42,16 @@ const CreateEmployee = () => {
             username: formData.username,
             password: formData.password,
           })
-          .then(() => {
+          .then((res) => {
+            //handle Logs
+            axios.post(`${API_ROUTE}/v1/log`, {
+              adminId: sessionStorage.getItem("id"),
+              adminName: sessionStorage.getItem("name"),
+              adminUsername: sessionStorage.getItem("username"),
+              action: `اضافه موظف جديد بالاسم ${formData.name}`,
+              objectId: `${res.data.id}`,
+              objectName: `${formData.name}`,
+            });
             setLoading((prev) => prev - 1);
             setFormData({
               name: "",

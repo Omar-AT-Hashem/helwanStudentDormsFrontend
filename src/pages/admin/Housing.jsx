@@ -82,6 +82,15 @@ const Housing = () => {
         bedId: selectedBed,
       })
       .then(() => {
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `تسكين الطالب ${selectedStudentData.name} و الرقم القومي ${selectedStudentData.nationalId}`,
+          objectId: `${selectedStudentData.nationalId}`,
+          objectName: `${selectedStudentData.name}`,
+        });
         setStudentList((prev) =>
           prev.filter((student) => student.id != selectedStudentData.id)
         );

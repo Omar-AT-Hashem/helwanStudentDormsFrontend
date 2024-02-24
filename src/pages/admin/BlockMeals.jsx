@@ -44,6 +44,15 @@ const BlockMeals = () => {
     axios
       .delete(`${API_ROUTE}/v1/blockmeals/${id}`)
       .then(() => {
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `ازاله وجبه محجوبه من الطالب ${selectedStudentData.name} و الرقم القومي ${selectedStudentData.nationalId}`,
+          objectId: `${selectedStudentData.nationalId}`,
+          objectName: `${selectedStudentData.name}`,
+        });
         setObjects((prev) => {
           prev.splice(index, 1);
           return [...prev];
@@ -64,6 +73,15 @@ const BlockMeals = () => {
           studentId: selectedStudentData.id,
         })
         .then((res) => {
+          //handle Logs
+          axios.post(`${API_ROUTE}/v1/log`, {
+            adminId: sessionStorage.getItem("id"),
+            adminName: sessionStorage.getItem("name"),
+            adminUsername: sessionStorage.getItem("username"),
+            action: `اضافه وجبه محجوبه للطالب ${selectedStudentData.name} و الرقم القومي ${selectedStudentData.nationalId}`,
+            objectId: `${selectedStudentData.nationalId}`,
+            objectName: `${selectedStudentData.name}`,
+          });
           const creationId = res.data.id;
           setObjects((prev) => {
             return [...prev, { ...form, id: creationId }];

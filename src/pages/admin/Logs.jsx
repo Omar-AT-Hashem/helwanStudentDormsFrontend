@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
-import MainSideBar from "../../components/minicomponent/MainSideBar";
 import axios from "axios";
-import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
 const Logs = () => {

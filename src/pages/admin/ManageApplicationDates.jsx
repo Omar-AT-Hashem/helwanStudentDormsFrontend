@@ -85,7 +85,7 @@ export default function ManageApplicationDates() {
       setObjects(preservedObjects);
     }
     setAddedObjects([]);
-    setDeletedObjects([])
+    setDeletedObjects([]);
     setDeletable(false);
     setEditable(false);
   };
@@ -98,6 +98,16 @@ export default function ManageApplicationDates() {
           axios
             .delete(`${API_ROUTE}/v1/application-date/${id}`)
             .then(() => {
+              //handle Logs
+              axios.post(`${API_ROUTE}/v1/log`, {
+                adminId: sessionStorage.getItem("id"),
+                adminName: sessionStorage.getItem("name"),
+                adminUsername: sessionStorage.getItem("username"),
+                action: `حذف تاريخ التقديم `,
+                objectId: `فارغ`,
+                objectName: `فارغ`,
+              });
+
               setLoading((prev) => prev - 1);
             })
             .catch(() => {
@@ -137,6 +147,15 @@ export default function ManageApplicationDates() {
               endDate: update.endDate,
             })
             .then(() => {
+              //handle Logs
+              axios.post(`${API_ROUTE}/v1/log`, {
+                adminId: sessionStorage.getItem("id"),
+                adminName: sessionStorage.getItem("name"),
+                adminUsername: sessionStorage.getItem("username"),
+                action: `تعديل تاريخ التقديم`,
+                objectId: `فارغ`,
+                objectName: `فارغ`,
+              });
               setLoading((prev) => prev - 1);
             })
             .catch(() => {
@@ -228,6 +247,14 @@ export default function ManageApplicationDates() {
             endDate: addedObject.endDate,
           })
           .then((res) => {
+            axios.post(`${API_ROUTE}/v1/log`, {
+              adminId: sessionStorage.getItem("id"),
+              adminName: sessionStorage.getItem("name"),
+              adminUsername: sessionStorage.getItem("username"),
+              action: `اضافه تاريخ التقديم`,
+              objectId: `فارغ`,
+              objectName: `فارغ`,
+            });
             setLoading((prev) => prev - 1);
 
             setObjects((prev) => {
@@ -287,7 +314,8 @@ export default function ManageApplicationDates() {
       />
 
       <div className="mx-auto w-fit mt-20">
-        {(objects && objects.length > 0) || (addedObjects && addedObjects.length > 0) ? (
+        {(objects && objects.length > 0) ||
+        (addedObjects && addedObjects.length > 0) ? (
           <div className="flex flex-col">
             <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
@@ -475,15 +503,15 @@ export default function ManageApplicationDates() {
           </div>
         ) : (
           <>
-          <div>لا تتوفر بيانات</div>
-          {!editable && !deletable && (
-            <button
-              onClick={handleAdd}
-              className="bg-blue-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
-            >
-              إضافة
-            </button>
-          )}
+            <div>لا تتوفر بيانات</div>
+            {!editable && !deletable && (
+              <button
+                onClick={handleAdd}
+                className="bg-blue-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
+              >
+                إضافة
+              </button>
+            )}
           </>
         )}
       </div>
