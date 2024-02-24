@@ -22,6 +22,7 @@ import HousedStudentsEdit from "./pages/admin/HousedStudentsEdit.jsx";
 import Rooms from "./pages/admin/Rooms.jsx";
 import Penalties from "./pages/admin/Penalties.jsx";
 import Fees from "./pages/admin/fees.jsx";
+import RecievingMeals from "./pages/admin/RecievingMeals.jsx";
 import ChangeApplicationStatus from "./pages/admin/ChangeApplicationStatus.jsx";
 import EditStudentData from "./pages/admin/EditStudentData.jsx";
 import { AssessStudents } from "./pages/admin/AssessStudents.jsx";
@@ -117,6 +118,10 @@ export const routes = createBrowserRouter([
           {
             path: "fees",
             element: <Fees />,
+          },
+          {
+            path: "RecievingMeals",
+            element: <RecievingMeals />,
           },
           {
             path: "editstudentdata",
