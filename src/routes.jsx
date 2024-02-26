@@ -3,6 +3,8 @@ import App from "./App";
 import Login from "./pages/login/login";
 import BasicData from "./pages/admin/BasicData";
 import Housing from "./pages/admin/Housing";
+import HousingReport from "./pages/admin/HousingReport";
+import DormReport from "./pages/admin/DormReport";
 import BlockMeals from "./pages/admin/BlockMeals";
 import Asbsenteeism from "./pages/admin/Asbsenteeism";
 import WhenToApply from "./pages/student/WhenToApply";
@@ -54,6 +56,15 @@ export const routes = createBrowserRouter([
             path: "basicdata",
             element: <BasicData />,
           },
+          {
+            path: "housingreport",
+            element: <HousingReport />,
+          },
+          {
+            path: "dormreport",
+            element: <DormReport />,
+          },
+          
           {
             path: "editHousing",
             element: <EditHousing />,
