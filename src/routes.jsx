@@ -5,6 +5,7 @@ import ExcludedCitiesReport from "./pages/admin/ExcludedCitiesReport";
 import BasicData from "./pages/admin/BasicData";
 import Housing from "./pages/admin/Housing";
 import HousingReport from "./pages/admin/HousingReport";
+import UniversityStructureReport from "./pages/admin/UniversityStructureReport";
 import DormReport from "./pages/admin/DormReport";
 import BlockMeals from "./pages/admin/BlockMeals";
 import Asbsenteeism from "./pages/admin/Asbsenteeism";
@@ -52,10 +53,14 @@ export const routes = createBrowserRouter([
             path: "home",
             element: <AdminHome />,
           },
-
+          
           {
             path: "basicdata",
             element: <BasicData />,
+          },
+          {
+            path: "universitystructurereport",
+            element: <UniversityStructureReport />,
           },
           {
             path: "housingreport",
