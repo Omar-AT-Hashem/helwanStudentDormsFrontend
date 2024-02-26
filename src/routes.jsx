@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Login from "./pages/login/login";
+import ExcludedCitiesReport from "./pages/admin/ExcludedCitiesReport";
 import BasicData from "./pages/admin/BasicData";
 import Housing from "./pages/admin/Housing";
 import HousingReport from "./pages/admin/HousingReport";
@@ -69,9 +70,13 @@ export const routes = createBrowserRouter([
             path: "editHousing",
             element: <EditHousing />,
           },
-          {
+           {
             path: "evacuation",
             element: <Evacuation />,
+          },
+          {
+            path: "excludedcitiesreport",
+            element: <ExcludedCitiesReport />,
           },
           {
             path: "housing",
