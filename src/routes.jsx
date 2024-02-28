@@ -4,6 +4,7 @@ import Login from "./pages/login/login";
 import ExcludedCitiesReport from "./pages/admin/ExcludedCitiesReport";
 import BasicData from "./pages/admin/BasicData";
 import Housing from "./pages/admin/Housing";
+import PermissionReport from "./pages/admin/PermissionReport";
 import HousingReport from "./pages/admin/HousingReport";
 import UniversityStructureReport from "./pages/admin/UniversityStructureReport";
 import DormReport from "./pages/admin/DormReport";
@@ -178,9 +179,13 @@ export const routes = createBrowserRouter([
             path: "changeapplicationstatus",
             element: <ChangeApplicationStatus />,
           },
-          {
+           {
             path: "whenToApply",
             element: <WhenToApply />,
+          },
+          {
+            path: "permissionreport",
+            element: <PermissionReport />,
           },
           {
             path: "rooms",
