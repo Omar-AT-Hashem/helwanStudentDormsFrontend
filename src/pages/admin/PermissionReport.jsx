@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
-
 export function PermissionReport(props) {
-
   const dataSets = {
     'بيانات أساسية': [
       { username: 'مستخدم1', field: 'مجال1', permission: 'صلاحية1' },
@@ -47,7 +45,7 @@ export function PermissionReport(props) {
     ],
   };
 
- const [selectedDataSet, setSelectedDataSet] = useState('');
+  const [selectedDataSet, setSelectedDataSet] = useState('');
   const [tableData, setTableData] = useState([]);
 
   const handleDataSetChange = (e) => {
