@@ -10,14 +10,12 @@ const fakeStatistics = [
   { date: '2024-01-02', college: 'College A', mealType: 'Breakfast', mealsReceived: 60 },
   { date: '2024-01-02', college: 'College A', mealType: 'Lunch', mealsReceived: 90 },
   { date: '2024-01-02', college: 'College A', mealType: 'Dinner', mealsReceived: 75 },
-
 ];
 
-// Selector Component
 const Selector = ({ label, options, onSelect }) => {
   return (
-    <div>
-      <label>{label}</label>
+    <div style={{ marginBottom: '15px' }}>
+      <label style={{ marginRight: '10px', fontWeight: 'bold' }}>{label}</label>
       <select onChange={(e) => onSelect(e.target.value)}>
         {options.map((option, index) => (
           <option key={index}>{option}</option>
@@ -55,9 +53,9 @@ export function MealsReport(props){
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
       <Selector
-        label="العام الأكاديمى"
+        label="العام الأكاديمي"
         options={['2022', '2023', '2024']}
         onSelect={setAcademicYear}
       />
@@ -66,45 +64,47 @@ export function MealsReport(props){
         options={['College A', 'College B', 'College C']}
         onSelect={setCollege}
       />
-      <div>
-        <label>الفترة</label>
-        <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
-      </div>
-      <div>
-        <label>إلى</label>
-        <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
+      <div style={{ display: 'flex', marginBottom: '15px' }}>
+        <div style={{ marginRight: '15px' }}>
+          <label style={{ fontWeight: 'bold' }}>البداية</label>
+          <DatePicker selected={startDate} onChange={date => setStartDate(date)} />
+        </div>
+        <div>
+          <label style={{ fontWeight: 'bold' }}>النهاية</label>
+          <DatePicker selected={endDate} onChange={date => setEndDate(date)} />
+        </div>
       </div>
       <Selector
-        label="الوجبة"
+        label="نوع الوجبة"
         options={['Breakfast', 'Lunch', 'Dinner']}
         onSelect={setMealType}
       />
 
-      <button style={{ backgroundColor: '#007bff', color: '#fff', padding: '10px 20px', borderRadius: '5px', margin: '5px', border: 'none', cursor: 'pointer' }} onClick={filterStatistics}>عرض الإحصائيات</button>
+      <button style={{ backgroundColor: '#007bff', color: '#fff', padding: '10px 20px', borderRadius: '5px', margin: '10px 0', border: 'none', cursor: 'pointer' }} onClick={filterStatistics}>عرض الإحصائيات</button>
 
       {/* Print Button */}
-      <button style={{ backgroundColor: '#28a745', color: '#fff', padding: '10px 20px', borderRadius: '5px', margin: '5px', border: 'none', cursor: 'pointer' }} onClick={handlePrint}>طباعة</button>
+      <button style={{ backgroundColor: '#28a745', color: '#fff', padding: '10px 20px', borderRadius: '5px', margin: '5px 0', border: 'none', cursor: 'pointer' }} onClick={handlePrint}>طباعة</button>
 
       {/* Display statistics */}
       {statistics && (
         <div>
-          <h2>إحصائيات استلام الوجبات</h2>
-          <table>
+          <h2 style={{ marginTop: '20px', fontWeight: 'bold' }}>إحصائيات استلام الوجبات</h2>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                <th>التاريخ</th>
-                <th>الكلية</th>
-                <th>نوع الوجبة</th>
-                <th>عدد الوجبات المستلمة</th>
+                <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>التاريخ</th>
+                <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>الكلية</th>
+                <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>نوع الوجبة</th>
+                <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>عدد الوجبات المستلمة</th>
               </tr>
             </thead>
             <tbody>
               {statistics.map((stat, index) => (
                 <tr key={index}>
-                  <td>{stat.date}</td>
-                  <td>{stat.college}</td>
-                  <td>{stat.mealType}</td>
-                  <td>{stat.mealsReceived}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{stat.date}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{stat.college}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{stat.mealType}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{stat.mealsReceived}</td>
                 </tr>
               ))}
             </tbody>
