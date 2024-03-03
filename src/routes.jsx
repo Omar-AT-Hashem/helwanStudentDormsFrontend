@@ -8,6 +8,7 @@ import PermissionReport from "./pages/admin/PermissionReport";
 import HousingReport from "./pages/admin/HousingReport";
 import UniversityStructureReport from "./pages/admin/UniversityStructureReport";
 import DormReport from "./pages/admin/DormReport";
+import MealsReport from "./pages/admin/MealsReport";
 import BlockMeals from "./pages/admin/BlockMeals";
 import Asbsenteeism from "./pages/admin/Asbsenteeism";
 import WhenToApply from "./pages/student/WhenToApply";
@@ -112,6 +113,10 @@ export const routes = createBrowserRouter([
           {
             path: "idcardgenerator",
             element: <IdCardGenerator />,
+          },
+           {
+            path: "mealsreport",
+            element: <MealsReport />,
           },
           {
             path: "asbsenteeism",
