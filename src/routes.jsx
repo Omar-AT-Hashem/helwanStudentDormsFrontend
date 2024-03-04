@@ -15,7 +15,7 @@ import WhenToApply from "./pages/student/WhenToApply";
 import UserProfile from "./pages/student/UserProfile";
 import StudentApplicationForm from "./pages/student/StudentApplicationForm";
 import InstructionsViewer from "./pages/student/InstructionsViewer";
-import IdCardGenerator from "./pages/admin/IdCardGenerator";
+import IdGenerator from "./pages/admin/IdGenerator";
 import ManageInsturctions from "./pages/admin/ManageInstructions";
 import StudentLogin from "./pages/login/StudentLogin";
 import Student from "./pages/student/student";
@@ -111,8 +111,8 @@ export const routes = createBrowserRouter([
             element: <Logs />,
           },
           {
-            path: "idcardgenerator",
-            element: <IdCardGenerator />,
+            path: "idgenerator",
+            element: <IdGenerator />,
           },
            {
             path: "mealsreport",
