@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { jsPDF } from 'jspdf';
-import AmiriRegular from './Amiri-Regular.ttf'; // Change it to the correct path
+import AmiriRegular from '../../assets/pdfFonts/Amiri-Regular.ttf';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import Loading from '../../components/minicomponent/Loading.jsx';
