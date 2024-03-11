@@ -39,7 +39,7 @@ export const ApplicationApprovals = () => {
         setPermissions(res.data);
       })
       .catch(() => {
-          return;
+        return;
       });
   }, []);
 
@@ -162,7 +162,7 @@ export const ApplicationApprovals = () => {
           <div className="bg-mainBlue mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
             قبول الطلب - جامعة حلوان
           </div>
-          {selectedStudentData.nationalId && permissions.reading ? (
+          {selectedStudentData.nationalId && permissions.reading == 1 ? (
             <div>
               <div className="grid grid-cols-2 gap  p-4 border rounded-lg border-mainBlue mt-2">
                 <div className={fieldContainer}>
@@ -338,7 +338,7 @@ export const ApplicationApprovals = () => {
               </div>
 
               <div className="flex gap-10 mt-10 text-white font-bold w-1/2 m-auto justify-center">
-                {permissions.updating && (
+                {permissions.updating == 1 && (
                   <button
                     className="w-40 h-10 bg-green-600  hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
                     onClick={accept}
@@ -346,7 +346,7 @@ export const ApplicationApprovals = () => {
                     قبول
                   </button>
                 )}
-                {permissions.updating && (
+                {permissions.updating == 1 && (
                   <button
                     className="w-40 h-10 bg-red-600  hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
                     onClick={reject}

@@ -3,7 +3,6 @@ import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../../components/minicomponent/Loading.jsx";
-import { CloudFog } from "lucide-react";
 
 const CreateEmployee = () => {
   if (sessionStorage.getItem("token")) {
@@ -25,7 +24,27 @@ const CreateEmployee = () => {
   });
   const [loading, setLoading] = useState(0);
 
-  console.log(formData);
+  const [permissions, setPermissions] = useState([
+    {
+      creating: 0,
+      reading: 0,
+      updating: 0,
+      deleting: 0,
+      creatingEmployee: 0,
+    },
+  ]);
+  useEffect(() => {
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        return;
+      });
+  }, []);
 
   const handleChange = (e) => {
     let value;
@@ -253,12 +272,14 @@ const CreateEmployee = () => {
             </div>
           </div>
           <div className="mr-32 mt-5">
-            <button
-              className="font-bold text-white text-xl bg-blue-700 hover:opacity-70 hover:pointer transition-all duration-200 w-20 h-10 rounded-md"
-              onClick={handleSaveClick}
-            >
-              حفظ
-            </button>
+            {permissions.creatingEmployee == 1 && (
+              <button
+                className="font-bold text-white text-xl bg-blue-700 hover:opacity-70 hover:pointer transition-all duration-200 w-20 h-10 rounded-md"
+                onClick={handleSaveClick}
+              >
+                حفظ
+              </button>
+            )}
           </div>
         </div>
       </div>

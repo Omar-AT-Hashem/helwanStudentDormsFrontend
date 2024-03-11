@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export function excludedCities(props) {
+export default function excludedCities(props) {
 
     const data = [
       { governorate:'القاهره', distance: '22 كم' },

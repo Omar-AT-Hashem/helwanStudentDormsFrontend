@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
-export function DormReport(props) {
+export default function DormReport(props) {
   const [dormData, setDormData] = useState([]);
 
   useEffect(() => {

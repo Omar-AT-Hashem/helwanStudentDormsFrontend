@@ -20,6 +20,28 @@ const ManageInsturctions = () => {
   const [deletable, setDeletable] = useState(false);
   const [loading, setLoading] = useState(0);
 
+  const [permissions, setPermissions] = useState([
+    {
+      creating: 0,
+      reading: 0,
+      updating: 0,
+      deleting: 0,
+      creatingEmployee: 0,
+    },
+  ]);
+  useEffect(() => {
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        return;
+      });
+  }, []);
+
   useEffect(() => {
     axios
       .get(`${API_ROUTE}/v1/instruction`)
@@ -213,8 +235,8 @@ const ManageInsturctions = () => {
         }}
       />
       <div className=" flex-1 mt-4 snap-x ">
-      <div className="bg-mainBlue w-3/4 h-10  mr-56 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
-          اداره التعليمات  - جامعة حلوان
+        <div className="bg-mainBlue w-3/4 h-10  mr-56 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+          اداره التعليمات - جامعة حلوان
         </div>
 
         {objects ? (
@@ -277,20 +299,24 @@ const ManageInsturctions = () => {
                   </>
                 ) : (
                   <>
-                    <button
-                      className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
-                      onClick={handleEdit}
-                      name="edit"
-                    >
-                      تعديل
-                    </button>
-                    <button
-                      className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
-                      onClick={handleDelete}
-                      name="delete"
-                    >
-                      حذف
-                    </button>
+                    {permissions.creating == 1 && (
+                      <button
+                        className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
+                        onClick={handleEdit}
+                        name="edit"
+                      >
+                        تعديل
+                      </button>
+                    )}
+                    {permissions.creating == 1 && (
+                      <button
+                        className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
+                        onClick={handleDelete}
+                        name="delete"
+                      >
+                        حذف
+                      </button>
+                    )}
                   </>
                 )}
               </div>
@@ -335,13 +361,15 @@ const ManageInsturctions = () => {
               اضافه الكل
             </button>
           )}
-          <button
-            className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded m-auto"
-            onClick={handleAdd}
-            name="add"
-          >
-            اضافه
-          </button>
+          {permissions.creating == 1 && (
+            <button
+              className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded m-auto"
+              onClick={handleAdd}
+              name="add"
+            >
+              اضافه
+            </button>
+          )}
         </div>
       </div>
       {loading > 0 && (

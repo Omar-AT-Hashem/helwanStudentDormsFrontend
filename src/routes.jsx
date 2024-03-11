@@ -15,7 +15,7 @@ import WhenToApply from "./pages/student/WhenToApply";
 import UserProfile from "./pages/student/UserProfile";
 import StudentApplicationForm from "./pages/student/StudentApplicationForm";
 import InstructionsViewer from "./pages/student/InstructionsViewer";
-import IdGenerator from "./pages/admin/IdGenerator";
+import { IdGenerator } from "./pages/admin/IdGenerator.jsx";
 import ManageInsturctions from "./pages/admin/ManageInstructions";
 import StudentLogin from "./pages/login/StudentLogin";
 import Student from "./pages/student/student";
@@ -55,7 +55,7 @@ export const routes = createBrowserRouter([
             path: "home",
             element: <AdminHome />,
           },
-          
+
           {
             path: "basicdata",
             element: <BasicData />,
@@ -72,12 +72,12 @@ export const routes = createBrowserRouter([
             path: "dormreport",
             element: <DormReport />,
           },
-          
+
           {
             path: "editHousing",
             element: <EditHousing />,
           },
-           {
+          {
             path: "evacuation",
             element: <Evacuation />,
           },
@@ -114,7 +114,7 @@ export const routes = createBrowserRouter([
             path: "idgenerator",
             element: <IdGenerator />,
           },
-           {
+          {
             path: "mealsreport",
             element: <MealsReport />,
           },
@@ -184,7 +184,7 @@ export const routes = createBrowserRouter([
             path: "changeapplicationstatus",
             element: <ChangeApplicationStatus />,
           },
-           {
+          {
             path: "whenToApply",
             element: <WhenToApply />,
           },

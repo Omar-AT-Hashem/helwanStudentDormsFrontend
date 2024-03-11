@@ -10,6 +10,7 @@ const IDCardGenerator = () => {
   const location = useLocation();
   const nationalId = new URLSearchParams(location.search).get("nationalId");
 
+  
   useEffect(() => {
     if (nationalId) {
       const fetchData = async () => {

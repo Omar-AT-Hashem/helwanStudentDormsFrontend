@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import { API_ROUTE } from "../../config/env.js";
-export function UniversityStructureReport(props) {
+export default function UniversityStructureReport(props) {
   const [selectedOption, setSelectedOption] = useState('');
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true); // State to manage loading state

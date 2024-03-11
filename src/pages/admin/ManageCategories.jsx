@@ -20,6 +20,28 @@ export default function ManageCategories() {
   const [deletable, setDeletable] = useState();
   const [editable, setEditable] = useState();
 
+  const [permissions, setPermissions] = useState([
+    {
+      creating: 0,
+      reading: 0,
+      updating: 0,
+      deleting: 0,
+      creatingEmployee: 0,
+    },
+  ]);
+  useEffect(() => {
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        return;
+      });
+  }, []);
+
   const handleCheckboxChange = (e) => {
     if (e.target.checked === true) {
       setDeletedObjects((prev) => [...prev, e.target.value]);
@@ -460,14 +482,17 @@ export default function ManageCategories() {
                   حذف المُحدَد
                 </button>
               )}
-              {!deletable && !editable && addedObjects.length == 0 && (
-                <button
-                  onClick={handleDelete}
-                  className="bg-red-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
-                >
-                  حذف
-                </button>
-              )}
+              {!deletable &&
+                !editable &&
+                addedObjects.length == 0 &&
+                permissions.updating == 1 && (
+                  <button
+                    onClick={handleDelete}
+                    className="bg-red-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
+                  >
+                    حذف
+                  </button>
+                )}
               {(deletable || editable || addedObjects.length > 0) && (
                 <button
                   onClick={handleCancel}
@@ -476,7 +501,7 @@ export default function ManageCategories() {
                   إلغاء
                 </button>
               )}{" "}
-              {!editable && !deletable && (
+              {!editable && !deletable && permissions.creating == 1 && (
                 <button
                   onClick={handleAdd}
                   className="bg-blue-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
@@ -492,14 +517,17 @@ export default function ManageCategories() {
                   ارسال
                 </button>
               )}
-              {!deletable && !editable && addedObjects.length == 0 && (
-                <button
-                  onClick={handleEdit}
-                  className="bg-blue-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
-                >
-                  تعديل
-                </button>
-              )}
+              {!deletable &&
+                !editable &&
+                addedObjects.length == 0 &&
+                permissions.updating == 1 && (
+                  <button
+                    onClick={handleEdit}
+                    className="bg-blue-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
+                  >
+                    تعديل
+                  </button>
+                )}
               {addedObjects.length > 0 && (
                 <button
                   onClick={handleAddAll}

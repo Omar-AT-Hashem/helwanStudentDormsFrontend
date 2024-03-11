@@ -11,6 +11,30 @@ const BlockMeals = () => {
   const [studentList, setStudentList] = useState([]);
   const [form, setForm] = useState({});
   const [objects, setObjects] = useState([]);
+
+  const [permissions, setPermissions] = useState([
+    {
+      creating: 0,
+      reading: 0,
+      updating: 0,
+      deleting: 0,
+      creatingEmployee: 0,
+    },
+  ]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        return;
+      });
+  }, []);
+
   console.log(form);
   useEffect(() => {
     if (selectedStudentData) {
@@ -202,12 +226,14 @@ const BlockMeals = () => {
                 ></input>
               </div>
               <div className="flex items-center w-full ">
-                <button
-                  className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500"
-                  onClick={handleSubmit}
-                >
-                  اضافه
-                </button>
+                {permissions.creating == 1 && (
+                  <button
+                    className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500"
+                    onClick={handleSubmit}
+                  >
+                    اضافه
+                  </button>
+                )}
               </div>
             </div>
             <div>
@@ -228,14 +254,15 @@ const BlockMeals = () => {
                         <td>{object.toDate}</td>
                         <td>{object.meal}</td>
                         <td>{object.reason}</td>
-
-                        <button
-                          className="w-20 h-8 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 m-4"
-                          onClick={handleAddDelete}
-                          name={`${index}-${object.id}`}
-                        >
-                          حذف
-                        </button>
+                        {permissions.deleting == 1 && (
+                          <button
+                            className="w-20 h-8 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 m-4"
+                            onClick={handleAddDelete}
+                            name={`${index}-${object.id}`}
+                          >
+                            حذف
+                          </button>
+                        )}
                       </tr>
                     ))}
                 </tbody>
