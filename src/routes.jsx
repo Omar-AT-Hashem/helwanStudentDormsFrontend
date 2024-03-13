@@ -37,6 +37,7 @@ import Evacuation from "./pages/admin/Evacuation.jsx";
 import ManageFees from "./pages/admin/ManageFees.jsx";
 import CreateEmployee from "./pages/admin/CreateEmployee.jsx";
 import Logs from "./pages/admin/Logs.jsx";
+import Statistics from "./pages/admin/Statistics.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -158,6 +159,10 @@ export const routes = createBrowserRouter([
             path: "assessStudents",
             element: <AssessStudents />,
           },
+          {
+            path: "statistics",
+            element: <Statistics />,
+          },
         ],
       },
       {
@@ -187,10 +192,6 @@ export const routes = createBrowserRouter([
           {
             path: "whenToApply",
             element: <WhenToApply />,
-          },
-          {
-            path: "permissionreport",
-            element: <PermissionReport />,
           },
           {
             path: "rooms",

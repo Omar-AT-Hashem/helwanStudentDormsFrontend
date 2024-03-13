@@ -53,7 +53,7 @@ export default function PermissionReport(props) {
   };
 
   return (
-    <div id="printableArea">
+    <div id="printableArea" className="">
       <style>
         {`
           body {
