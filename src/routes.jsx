@@ -147,7 +147,7 @@ export const routes = createBrowserRouter([
             element: <Fees />,
           },
           {
-            path: "RecievingMeals",
+            path: "recievingmeals",
             element: <RecievingMeals />,
           },
           {

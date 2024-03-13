@@ -4,82 +4,37 @@ import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { API_ROUTE } from "../../config/env.js";
-import csvtojson from 'csvtojson';
+import csvtojson from "csvtojson";
 
 const RecievingMeals = () => {
-  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
-  const [studentList, setStudentList] = useState([]);
-  const [file, setFile] = useState(null);//
-  const [jsonData, setJsonData] = useState(null);//
-  //const [objects, setObjects] = useState([]);
+  const [file, setFile] = useState(null);
+  console.log(file);
 
-  useEffect(() => {
-    if (selectedStudentData) {
-      axios
-        .get(
-          `${API_ROUTE}/v1/RecievingMeals/get-by-studentId/${selectedStudentData.id}`
-        )
-        .then((res) => {
-          setObjects(res.data);
-        })
-        .catch((err) => {
-          toast.dismiss();
-          toast("something went wrong");
-        });
-    }
-  }, [selectedStudentData]);
-
-        const formData = new FormData();
-        formData.append('recievedMealss', file);
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
-    
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = async (e) => {
-        const csvData = e.target.result;
-
-        // Convert CSV to JSON using csvtojson
-        const jsonArray = await csvtojson().fromString(csvData);
-
-        // Set the JSON data in state
-        setJsonData(jsonArray);
-
-        // Make a POST request with jsonData
-        makePostRequest(jsonArray);
-      };
-
-      reader.readAsText(file);
-    }
+    setFile(file);
   };
-
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (selectedStudentData) {
-      axios
-        .post(`${API_ROUTE}/v1/RecievingMeals/`, {
-          ...form,
-          studentId: selectedStudentData.id,
-        })
-        .then((res) => {
-          setObjects((prev) => {
-            return [...prev, form];
-          });
-        })
-        .catch((err) => {
-          toast.dismiss();
-          toast("something went wrong");
-        });
-
-        
-
-    } else {
-      toast.dismiss();
-      toast("please select a student");
-    }
+    const formData = new FormData();
+    formData.append("recievedMeals", file);
+    axios
+      .post(`${API_ROUTE}/v1/recieved-meal/recieve-meals`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        toast.dismiss();
+        toast.success("تم استلام الوجبات بنجاح");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.dismiss();
+        toast.error("حدث خطأ ما");
+      });
   };
   return (
     <div className="pt-20 flex flex-row w-full h-screen ">
@@ -97,32 +52,29 @@ const RecievingMeals = () => {
           },
         }}
       />
-      <div className="w-64">
-        <MainSideBar
-          studentList={studentList}
-          setStudentList={setStudentList}
-          setSelectedStudentData={setSelectedStudentData}
-        />
-      </div>
+
       <div className=" bg-white-900 flex-1 pr-2">
         <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl">
           استلام الوجبات - جامعة حلوان
         </div>
 
-        
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded"
-          onChange={handleFileChange}
-          onClick={handleSubmit}>       
-          رفع الملف
-        </button>
-
-        
+        <div className="w-full h-full flex items-center justify-center flex-col gap-10">
+          <input
+            className="bg-slate-500 text-white px-4 py-2 rounded hover:opacity-70 transition-all duration-200 hover:cursor-pointer"
+            onChange={handleFileChange}
+            type="file"
+          />
+          <button
+            onClick={handleSubmit}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:opacity-70 transition-all duration-200 hover:cursor-pointer"
+          >
+            {" "}
+            رفع الملف Excel
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
 export default RecievingMeals;
-
-
