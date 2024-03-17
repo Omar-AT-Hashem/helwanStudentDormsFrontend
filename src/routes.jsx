@@ -38,6 +38,7 @@ import ManageFees from "./pages/admin/ManageFees.jsx";
 import CreateEmployee from "./pages/admin/CreateEmployee.jsx";
 import Logs from "./pages/admin/Logs.jsx";
 import Statistics from "./pages/admin/Statistics.jsx";
+import IDCardGenerator from "./pages/admin/IdCardGenerator.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -162,6 +163,10 @@ export const routes = createBrowserRouter([
           {
             path: "statistics",
             element: <Statistics />,
+          },
+          {
+            path: "idCardGenerator",
+            element: <IDCardGenerator />,
           },
         ],
       },
