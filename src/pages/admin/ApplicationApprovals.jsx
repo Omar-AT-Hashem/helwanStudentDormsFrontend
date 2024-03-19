@@ -62,7 +62,7 @@ export const ApplicationApprovals = () => {
         setStudentList((prev) => {
           return prev.filter((e) => e.id !== selectedStudentData.id);
         });
-        setSelectedStudentData();
+        setSelectedStudentData([]);
         return;
       })
       .catch((err) => {
@@ -93,7 +93,7 @@ export const ApplicationApprovals = () => {
           return prev.filter((e) => e.id !== selectedStudentData.id);
         });
 
-        setSelectedStudentData();
+        setSelectedStudentData([]);
         return;
       })
       .catch((err) => {

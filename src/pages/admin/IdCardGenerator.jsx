@@ -79,11 +79,16 @@ const IDCardGenerator = () => {
       </div>
       <div className="mt-28 w-screen flex flex-wrap gap-16">
         {studentDataList.map((student) => (
-          <div key={`${student.id}-recieveCard`} className=" w-[600px] border-x-[12px] border-y-[15px] border-mainBlue ">
+          <div
+            key={`${student.id}-recieveCard`}
+            className=" w-[650px] border-x-[12px] border-y-[15px] border-mainBlue "
+          >
             <div className="w-full flex flex-col ">
               <div className="flex items-center gap-10 w-full mb-2 -mt-2  bg-mainBlue">
                 <img src={universityLogo} alt="" className="h-14 " />
-                <span className="text-white font-bold text-3xl">كارنيه استلام الوجبات - جامعة حلوان</span>
+                <span className="text-white font-bold text-3xl">
+                  كارنيه استلام الوجبات - جامعة حلوان
+                </span>
               </div>
               <div className="flex justify-between items-center m-3">
                 <img
@@ -91,7 +96,7 @@ const IDCardGenerator = () => {
                   alt=""
                   className="h-36 mr-[4px]"
                 />
-                
+
                 <div className="flex flex-col text-xl">
                   <div>الرقم القومي: {student.nationalId}</div>
                   <div>الاسم: {student.name}</div>
