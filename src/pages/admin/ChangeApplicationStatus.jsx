@@ -36,7 +36,7 @@ function ChangeApplicationStatus() {
 
   const handleAccept = async () => {
     setLoading(true);
-    const updatedData = { ...formData, applicationStatus: 'pending' };
+    const updatedData = { ...formData, applicationStatus: "pending" };
 
     try {
       await axios.put(`${API_ROUTE}/v1/student/`, updatedData);
@@ -52,7 +52,7 @@ function ChangeApplicationStatus() {
 
   const handleReject = async () => {
     setLoading(true);
-    const updatedData = { ...formData, applicationStatus: 'rejected' };
+    const updatedData = { ...formData, applicationStatus: "rejected" };
 
     try {
       await axios.put(`${API_ROUTE}/v1/student/`, updatedData);
@@ -93,17 +93,15 @@ function ChangeApplicationStatus() {
               {formData.nationalId}
             </span>
           </div>
-    <div className="flex flex-col items-end">
-  <img
-    src={formData.image ? formData.image : "/default-photo.jpg"}
-    className="w-40"
-    alt="default image"
-  />
+          <div className="flex flex-col items-end">
+            <img
+              src={formData.image ? formData.image : "/default-photo.jpg"}
+              className="w-40"
+              alt="default image"
+            />
           </div>
         </div>
-        <form
-          className="mt-20 flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8 	"
-        >
+        <form className="mt-20 flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8 	">
           <div className="flex flex-col items-start">
             <label className="mb-4 ">
               الرقم القومى :
@@ -123,7 +121,7 @@ function ChangeApplicationStatus() {
                 type="text"
                 name="name"
                 value={formData.name}
-                 disabled={true}
+                disabled={true}
                 className="w-96  bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 py-2 px-4 mr-36"
               />
@@ -417,7 +415,7 @@ function ChangeApplicationStatus() {
               <input
                 name="grade"
                 value={formData.grade}
-                  disabled={true}
+                disabled={true}
                 className="mr-4  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 "
               />
@@ -449,28 +447,27 @@ function ChangeApplicationStatus() {
             </div>
           </div>
           <div>
-
-        {/* Buttons for Accept and Reject */}
-        <div className="flex justify-between mt-6">
-          <button
-            onClick={handleAccept}
-            className={`bg-green-500 w-40 text-white font-bold py-2 px-4 rounded hover:opacity-70 ${
-              loading && "opacity-70 pointer-events-none"
-            }`}
-            disabled={loading}
-          >
-            Accept
-          </button>
-          <button
-            onClick={handleReject}
-            className={`bg-red-500 w-40 text-white font-bold py-2 px-4 rounded hover:opacity-70 ${
-              loading && "opacity-70 pointer-events-none"
-            }`}
-            disabled={loading}
-          >
-            Reject
-          </button>
-        </div>
+            {/* Buttons for Accept and Reject */}
+            <div className="flex justify-between mt-6">
+              <button
+                onClick={handleAccept}
+                className={`bg-green-500 w-40 text-white font-bold py-2 px-4 rounded hover:opacity-70 ${
+                  loading && "opacity-70 pointer-events-none"
+                }`}
+                disabled={loading}
+              >
+                Accept
+              </button>
+              <button
+                onClick={handleReject}
+                className={`bg-red-500 w-40 text-white font-bold py-2 px-4 rounded hover:opacity-70 ${
+                  loading && "opacity-70 pointer-events-none"
+                }`}
+                disabled={loading}
+              >
+                Reject
+              </button>
+            </div>
           </div>
         </form>
       </div>

@@ -41,14 +41,30 @@ function StudentApplicationForm() {
 
   const [loading, setLoading] = useState(false);
   const [position, setPosition] = useState();
+  const [faculties, setFaculties] = useState([]);
+
   console.log(formData);
+
+  useEffect(() => {
+    axios
+      .get(`${API_ROUTE}/v1/university-structure/get-faculties`)
+      .then((res) => {
+        setFaculties(res.data);
+        return;
+      })
+      .catch((err) => {
+        toast.dismiss();
+        toast("حدث خطأ");
+        return;
+      });
+  }, []);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(function (position) {
         setPosition({
-          latitude: position.coords.latitude,
           longitude: position.coords.longitude,
+          latitude: position.coords.latitude,
         });
       });
     } else {
@@ -81,7 +97,7 @@ function StudentApplicationForm() {
         latitude: position.latitude,
         longitude: position.longitude,
       })
-      .then((res) => {
+      .then(() => {
         setFormData({
           nationalId: "",
           name: "",
@@ -311,15 +327,19 @@ function StudentApplicationForm() {
 
             <label className="mb-4 ">
               الكليه :
-              <input
-                type="text"
+              <select
                 name="faculty"
                 value={formData.faculty}
                 onChange={handleChange}
                 required
-                className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-36"
-              />
+                className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+          focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-7"
+              >
+                <option>---</option>
+                {faculties.map((faculty) => (
+                  <option key={faculty.id}>{faculty.name}</option>
+                ))}
+              </select>
             </label>
 
             <label className="mb-4 ">
@@ -440,51 +460,55 @@ function StudentApplicationForm() {
               </label>
             </div>
 
-            <div className="mb-4">
-              <select
-                name="highschoolSpecialization"
-                value={formData.highschoolSpecialization}
-                onChange={handleChange}
-                required
-                className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-          focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-7"
-              >
+            <div className="mb-4 flex flex-col">
+              <label className="mb-4 ">
                 الشعبه بالثانويه العامه:
-                <option>---</option>
-                <option>علمى علوم</option>
-                <option>علمى رياضة</option>
-                <option>أدبى</option>
-                <option>أزهرى علمى</option>
-                <option>أزهرى أدبى</option>
-                <option>معاهد فنية ثلاث سنوات</option>
-                <option>معاهد فنية اربعه سنوات</option>
-                <option>معاهد فنية خمس سنوات</option>
-                <option>دبلومات فنية</option>
-                <option>شهادات معادلة</option>
-                <option>مدارس STEM للعلوم والتكنولوجيا</option>
-              </select>
-              <label className="mb-4 mr-20">
-                الثانويه بالخارج :
-                <input
-                  type="checkbox"
-                  name="highschoolAbroad"
-                  checked={formData.highschoolAbroad}
+                <select
+                  name="highschoolSpecialization"
+                  value={formData.highschoolSpecialization}
                   onChange={handleChange}
-                  className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-        focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-6"
-                />
+                  required
+                  className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+          focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-7"
+                >
+                  <option>---</option>
+                  <option>علمى علوم</option>
+                  <option>علمى رياضة</option>
+                  <option>أدبى</option>
+                  <option>أزهرى علمى</option>
+                  <option>أزهرى أدبى</option>
+                  <option>معاهد فنية ثلاث سنوات</option>
+                  <option>معاهد فنية اربعه سنوات</option>
+                  <option>معاهد فنية خمس سنوات</option>
+                  <option>دبلومات فنية</option>
+                  <option>شهادات معادلة</option>
+                  <option>مدارس STEM للعلوم والتكنولوجيا</option>
+                </select>
               </label>
-              <label className="mb-4 mr-20">
-                مستجد :
-                <input
-                  type="checkbox"
-                  name="isNew"
-                  checked={formData.isNew}
-                  onChange={handleChange}
-                  className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+              <div className="flex">
+                <label className="mb-4">
+                  الثانويه بالخارج :
+                  <input
+                    type="checkbox"
+                    name="highschoolAbroad"
+                    checked={formData.highschoolAbroad}
+                    onChange={handleChange}
+                    className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
         focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-6"
-                />
-              </label>
+                  />
+                </label>
+                <label className="mb-4 mr-20">
+                  مستجد :
+                  <input
+                    type="checkbox"
+                    name="isNew"
+                    checked={formData.isNew}
+                    onChange={handleChange}
+                    className="  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+        focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-6"
+                  />
+                </label>
+              </div>
             </div>
             <label className="mb-4 ">
               {formData.isNew == 1
@@ -500,30 +524,28 @@ function StudentApplicationForm() {
               />
             </label>
 
-           { !formData.isNew && 
-            <label htmlFor="academicYear">
-              لسنه الدراسية:
-              <select
-                name="academicYear"
-                value={formData.academicYear}
-                onChange={handleChange}
-                required
-                className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+            {!formData.isNew && (
+              <label htmlFor="academicYear">
+                لسنه الدراسية:
+                <select
+                  name="academicYear"
+                  value={formData.academicYear}
+                  onChange={handleChange}
+                  required
+                  className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
           focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-7"
-              >
-                <option>---</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                
-                
-              </select>
-            </label>
-            }
+                >
+                  <option>---</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                </select>
+              </label>
+            )}
             <div className="mb-4">
               <label>
                 نوع السكن :
@@ -535,8 +557,8 @@ function StudentApplicationForm() {
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24"
                 >
-                  <option>----</option>
-                  <option>سكن عادى</option>
+                  <option>سكن عادي</option>
+                  <option>سكن مميز</option>
                 </select>
               </label>
               <label className="mb-4 mr-20">

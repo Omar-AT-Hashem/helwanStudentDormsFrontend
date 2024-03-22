@@ -1,15 +1,21 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Login from "./pages/login/login";
+import ExcludedCitiesReport from "./pages/admin/ExcludedCitiesReport";
 import BasicData from "./pages/admin/BasicData";
 import Housing from "./pages/admin/Housing";
+import PermissionReport from "./pages/admin/PermissionReport";
+import HousingReport from "./pages/admin/HousingReport";
+import UniversityStructureReport from "./pages/admin/UniversityStructureReport";
+import DormReport from "./pages/admin/DormReport";
+import MealsReport from "./pages/admin/MealsReport";
 import BlockMeals from "./pages/admin/BlockMeals";
 import Asbsenteeism from "./pages/admin/Asbsenteeism";
 import WhenToApply from "./pages/student/WhenToApply";
 import UserProfile from "./pages/student/UserProfile";
 import StudentApplicationForm from "./pages/student/StudentApplicationForm";
 import InstructionsViewer from "./pages/student/InstructionsViewer";
-import IdCardGenerator from "./pages/admin/IdCardGenerator";
+import { IdGenerator } from "./pages/admin/IdGenerator.jsx";
 import ManageInsturctions from "./pages/admin/ManageInstructions";
 import StudentLogin from "./pages/login/StudentLogin";
 import Student from "./pages/student/student";
@@ -22,12 +28,17 @@ import HousedStudentsEdit from "./pages/admin/HousedStudentsEdit.jsx";
 import Rooms from "./pages/admin/Rooms.jsx";
 import Penalties from "./pages/admin/Penalties.jsx";
 import Fees from "./pages/admin/fees.jsx";
+import RecievingMeals from "./pages/admin/RecievingMeals.jsx";
 import ChangeApplicationStatus from "./pages/admin/ChangeApplicationStatus.jsx";
 import EditStudentData from "./pages/admin/EditStudentData.jsx";
 import { AssessStudents } from "./pages/admin/AssessStudents.jsx";
 import EditHousing from "./pages/admin/EditHousing.jsx";
 import Evacuation from "./pages/admin/Evacuation.jsx";
 import ManageFees from "./pages/admin/ManageFees.jsx";
+import CreateEmployee from "./pages/admin/CreateEmployee.jsx";
+import Logs from "./pages/admin/Logs.jsx";
+import Statistics from "./pages/admin/Statistics.jsx";
+import IDCardGenerator from "./pages/admin/IdCardGenerator.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -52,12 +63,29 @@ export const routes = createBrowserRouter([
             element: <BasicData />,
           },
           {
+            path: "universitystructurereport",
+            element: <UniversityStructureReport />,
+          },
+          {
+            path: "housingreport",
+            element: <HousingReport />,
+          },
+          {
+            path: "dormreport",
+            element: <DormReport />,
+          },
+
+          {
             path: "editHousing",
             element: <EditHousing />,
           },
           {
             path: "evacuation",
             element: <Evacuation />,
+          },
+          {
+            path: "excludedcitiesreport",
+            element: <ExcludedCitiesReport />,
           },
           {
             path: "housing",
@@ -76,10 +104,21 @@ export const routes = createBrowserRouter([
             path: "blockmeals",
             element: <BlockMeals />,
           },
-
           {
-            path: "idcardgenerator",
-            element: <IdCardGenerator />,
+            path: "createEmployee",
+            element: <CreateEmployee />,
+          },
+          {
+            path: "logs",
+            element: <Logs />,
+          },
+          {
+            path: "idgenerator",
+            element: <IdGenerator />,
+          },
+          {
+            path: "mealsreport",
+            element: <MealsReport />,
           },
           {
             path: "asbsenteeism",
@@ -110,12 +149,24 @@ export const routes = createBrowserRouter([
             element: <Fees />,
           },
           {
+            path: "recievingmeals",
+            element: <RecievingMeals />,
+          },
+          {
             path: "editstudentdata",
             element: <EditStudentData />,
           },
           {
             path: "assessStudents",
             element: <AssessStudents />,
+          },
+          {
+            path: "statistics",
+            element: <Statistics />,
+          },
+          {
+            path: "idCardGenerator",
+            element: <IDCardGenerator />,
           },
         ],
       },

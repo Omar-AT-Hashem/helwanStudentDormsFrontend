@@ -21,8 +21,28 @@ export const ApplicationApprovals = () => {
 
   const [selectedStudentData, setSelectedStudentData] = useOutletContext();
   const [studentList, setStudentList] = useState([]);
+  const [permissions, setPermissions] = useState([
+    {
+      creating: 0,
+      reading: 0,
+      updating: 0,
+      deleting: 0,
+      creatingEmployee: 0,
+    },
+  ]);
+  useEffect(() => {
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        return;
+      });
+  }, []);
 
- 
   const accept = () => {
     axios
       .post(`${API_ROUTE}/v1/student/approve-or-reject/approve`, {
@@ -30,10 +50,19 @@ export const ApplicationApprovals = () => {
         grade: selectedStudentData.grade,
       })
       .then(() => {
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `قبول طلب الطالب ${selectedStudentData.name} و الرقم القومى ${selectedStudentData.nationalId}`,
+          objectId: selectedStudentData.nationalId,
+          objectName: selectedStudentData.name,
+        });
         setStudentList((prev) => {
           return prev.filter((e) => e.id !== selectedStudentData.id);
         });
-        setSelectedStudentData();
+        setSelectedStudentData([]);
         return;
       })
       .catch((err) => {
@@ -51,11 +80,20 @@ export const ApplicationApprovals = () => {
         grade: selectedStudentData.grade,
       })
       .then(() => {
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `رفض طلب الطالب ${selectedStudentData.name} و الرقم القومى ${selectedStudentData.nationalId}`,
+          objectId: selectedStudentData.nationalId,
+          objectName: selectedStudentData.name,
+        });
         setStudentList((prev) => {
           return prev.filter((e) => e.id !== selectedStudentData.id);
         });
 
-        setSelectedStudentData();
+        setSelectedStudentData([]);
         return;
       })
       .catch((err) => {
@@ -121,10 +159,10 @@ export const ApplicationApprovals = () => {
       {/*----------------- Main content area----------------- */}
       <div className=" h-full flex-1 ">
         <div className="px-5   ">
-          <div className="bg-mainBlue	rounded  mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
+          <div className="bg-mainBlue mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
             قبول الطلب - جامعة حلوان
           </div>
-          {selectedStudentData ? (
+          {selectedStudentData.nationalId && permissions.reading == 1 ? (
             <div>
               <div className="grid grid-cols-2 gap  p-4 border rounded-lg border-mainBlue mt-2">
                 <div className={fieldContainer}>
@@ -299,19 +337,23 @@ export const ApplicationApprovals = () => {
                 </div>
               </div>
 
-              <div className="flex gap-10 mt-10 text-white font-bold w-1/2 m-auto">
-                <button
-                  className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
-                  onClick={accept}
-                >
-                  قبول
-                </button>
-                <button
-                  className="w-40 h-10 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
-                  onClick={reject}
-                >
-                  رفض
-                </button>
+              <div className="flex gap-10 mt-10 text-white font-bold w-1/2 m-auto justify-center">
+                {permissions.updating == 1 && (
+                  <button
+                    className="w-40 h-10 bg-green-600  hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
+                    onClick={accept}
+                  >
+                    قبول
+                  </button>
+                )}
+                {permissions.updating == 1 && (
+                  <button
+                    className="w-40 h-10 bg-red-600  hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
+                    onClick={reject}
+                  >
+                    رفض
+                  </button>
+                )}
               </div>
             </div>
           ) : (

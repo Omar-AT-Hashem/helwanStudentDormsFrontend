@@ -14,6 +14,28 @@ export const AssessStudents = () => {
   const [loading, setLoading] = useState(0);
   const [metaData, setMetaData] = useState();
 
+  const [permissions, setPermissions] = useState([
+    {
+      creating: 0,
+      reading: 0,
+      updating: 0,
+      deleting: 0,
+      creatingEmployee: 0,
+    },
+  ]);
+  useEffect(() => {
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        return;
+      });
+  }, []);
+
   useEffect(() => {
     setLoading((prev) => prev + 1);
     axios
@@ -34,6 +56,15 @@ export const AssessStudents = () => {
     axios
       .put(`${API_ROUTE}/v1/student/assess-students`)
       .then(() => {
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `بدأ تنسيق الطلاب`,
+          objectId: "فارغ",
+          objectName: "فارغ",
+        });
         setLoading((prev) => prev - 1);
         toast.dismiss();
         toast("تم تنسيق الطلاب بنجاح");
@@ -64,7 +95,7 @@ export const AssessStudents = () => {
       />
       {loading > 0 && <Loading />}
 
-      {metaData && (
+      {metaData && permissions.reading == 1 && (
         <div className="flex flex-col">
           <span>عدد الطلاب المتقدمين:{metaData.applicantMalesCount}</span>
           <span>عدد الطالبات المتقدمات:{metaData.applicantFemalesCount}</span>
@@ -73,12 +104,14 @@ export const AssessStudents = () => {
       )}
 
       <div className="">
-        <button
-          className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500"
-          onClick={assess}
-        >
-          بدأ التنسيق
-        </button>
+        {permissions.updating == 1 && (
+          <button
+            className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500"
+            onClick={assess}
+          >
+            بدأ التنسيق
+          </button>
+        )}
       </div>
     </div>
   );

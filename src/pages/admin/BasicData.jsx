@@ -13,7 +13,29 @@ const BasicData = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData] = useOutletContext()
+  const [permissions, setPermissions] = useState([
+    {
+      creating: 0,
+      reading: 0,
+      updating: 0,
+      deleting: 0,
+      creatingEmployee: 0,
+    },
+  ]);
+  useEffect(() => {
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        return;
+      });
+  }, []);
+
+  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
   const [studentList, setStudentList] = useState([]);
 
   return (
@@ -51,24 +73,26 @@ const BasicData = () => {
           {/* Conditional rendering based on whether a student is selected */}
           {selectedStudentData ? (
             // Display student details when a student is selected
-            <div className="text-black">
-              <div>
-                <span>الاسم: </span>
-                <span>{selectedStudentData.name}</span>
+            permissions.reading == 1 && (
+              <div className="text-black">
+                <div>
+                  <span>الاسم: </span>
+                  <span>{selectedStudentData.name}</span>
+                </div>
+                <div>
+                  <span>الاسم: </span>
+                  <span>{selectedStudentData.dateOfApplying}</span>
+                </div>
+                <div>
+                  <span>الاسم: </span>
+                  <span>{selectedStudentData.nationalId}</span>
+                </div>
+                <div>
+                  <span>الاسم: </span>
+                  <span>{selectedStudentData.username}</span>
+                </div>
               </div>
-              <div>
-                <span>الاسم: </span>
-                <span>{selectedStudentData.dateOfApplying}</span>
-              </div>
-              <div>
-                <span>الاسم: </span>
-                <span>{selectedStudentData.nationalId}</span>
-              </div>
-              <div>
-                <span>الاسم: </span>
-                <span>{selectedStudentData.username}</span>
-              </div>
-            </div>
+            )
           ) : (
             // Display a message if no student is selected
             <p className="text-gray-900">

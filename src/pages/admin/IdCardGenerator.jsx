@@ -1,99 +1,122 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import MainSideBar from "../../components/minicomponent/MainSideBar";
+import axios from "axios";
+import { toast, Toaster } from "react-hot-toast";
+import Loading from "../../components/minicomponent/Loading";
+import { API_ROUTE } from "../../config/env";
+import QRCode from "react-qr-code";
+import universityLogo from "../../assets/auxillary/helwanLogoNoBg.png";
 
 const IDCardGenerator = () => {
-  const [studentDataList, setStudentDataList] = useState([]); // State to store multiple student data
-  const [selectedStudent, setSelectedStudent] = useState();
+  const [studentDataList, setStudentDataList] = useState([]);
+  const [gender, setGender] = useState();
+  const [loading, setLoading] = useState(0);
 
-  // Access the query parameter 'nationalId' from the URL
-  const location = useLocation();
-  const nationalId = new URLSearchParams(location.search).get("nationalId");
+  console.log(studentDataList);
 
-  useEffect(() => {
-    if (nationalId) {
-      const fetchData = async () => {
-        try {
-          // Fetch student data based on the national ID
-          const response = await fetch(`/api/student?id=${nationalId}`); // Adjust the API endpoint
-          if (!response.ok) {
-            throw new Error(
-              `Failed to fetch student data (${response.status})`
-            );
-          }
-          const data = await response.json();
-          // Append the new student data to the existing list
-          setStudentDataList([...studentDataList, data]);
-        } catch (error) {
-          console.error("Error fetching student data:", error);
-          // Handle errors, e.g., display an error message to the user
-        }
-      };
-
-      fetchData();
-    }
-  }, [nationalId]);
-
-  const handlePrint = () => {
-    // Use window.print() to initiate the printing process for the entire page
-    window.print();
+  const handleChange = (e) => {
+    setGender(e.target.value);
   };
 
-  const handleRemove = (index) => {
-    // Remove a student's data from the list based on its index
-    const updatedStudentDataList = [...studentDataList];
-    updatedStudentDataList.splice(index, 1);
-    setStudentDataList(updatedStudentDataList);
+  const handleButtonClick = () => {
+    if (gender) {
+      setLoading((prev) => prev + 1);
+      toast.dismiss();
+      axios
+        .get(`${API_ROUTE}/v1/student/get-by-gender/${gender}`)
+        .then((res) => {
+          setLoading((prev) => prev - 1);
+          return setStudentDataList(res.data);
+        })
+        .catch((err) => {
+          setLoading((prev) => prev - 1);
+          if (err && err.code === "ERR_BAD_REQUEST") {
+            return;
+          }
+          toast.dismiss();
+          return toast("Something went wrong");
+        });
+    } else {
+      toast.dismiss();
+      toast("اخنار النوع");
+    }
   };
 
   return (
-    <div className="id-card-container mt-10">
-      {/* Display multiple student ID cards */}
-      <div className="w-64">
-        <MainSideBar setStudent={setSelectedStudent} />
+    <div className="pt-20">
+      {loading > 0 && <Loading />}
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            border: "1px solid #A9872D",
+            backgroundColor: "#A9872D",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
+      <div className="bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl">
+        بطاقات استلام الوجبات - جامعة حلوان
       </div>
-
-      {studentDataList.map((studentData, index) => (
-        <div
-          key={index}
-          className="id-card"
-          style={{
-            width: "8.5cm",
-            height: "5.5cm",
-            backgroundColor: "lightblue",
-          }}
+      <div className="flex gap-5 text-2xl mr-10 mt-5">
+        <div className="flex">
+          <span>ذكر</span>
+          <input type="radio" name="gender" value="M" onChange={handleChange} />
+        </div>
+        <div className="flex">
+          <span>انثى</span>
+          <input type="radio" name="gender" value="F" onChange={handleChange} />
+        </div>
+        <button
+          className="bg-sky-700 w-40 h-10 text-fuchsia-50 text-center text-2xl hover:cursor-pointer hover:opacity-80 transition-all duration-200 rounded-sm"
+          onClick={handleButtonClick}
         >
-          {studentData ? (
-            <div className="id-card-content" style={{ display: "flex" }}>
-              <div
-                className="id-card-image"
-                style={{ width: "2cm", height: "3cm" }}
-              >
+          عرض
+        </button>
+      </div>
+      <div className="mt-28 w-screen flex flex-wrap gap-16">
+        {studentDataList.map((student) => (
+          <div
+            key={`${student.id}-recieveCard`}
+            className=" w-[650px] border-x-[12px] border-y-[15px] border-mainBlue "
+          >
+            <div className="w-full flex flex-col ">
+              <div className="flex items-center gap-10 w-full mb-2 -mt-2  bg-mainBlue">
+                <img src={universityLogo} alt="" className="h-14 " />
+                <span className="text-white font-bold text-3xl">
+                  كارنيه استلام الوجبات - جامعة حلوان
+                </span>
+              </div>
+              <div className="flex justify-between items-center m-3">
                 <img
-                  src={studentData.imageUrl}
-                  alt={studentData.name}
-                  style={{ width: "100%", height: "100%" }}
+                  src={student.image ? student.image : "/default-photo.jpg"}
+                  alt=""
+                  className="h-36 mr-[4px]"
+                />
+
+                <div className="flex flex-col text-xl">
+                  <div>الرقم القومي: {student.nationalId}</div>
+                  <div>الاسم: {student.name}</div>
+                  <div>المرحلة: {student.academicYear}</div>
+                  <div>المسلسل: {student.serialNumber}</div>
+                </div>
+                {/* <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${student.serialNumber}`}
+                alt="recieve card"
+                className="h-36"
+              /> */}
+                <QRCode
+                  value={`${student.serialNumber}`}
+                  style={{ height: "144px", marginLeft: "-52px" }}
                 />
               </div>
-              <div className="id-card-details" style={{ padding: "1cm" }}>
-                <h2>{studentData.name}</h2>
-                <p>Collage: {studentData.collage}</p>
-                <p>Grade: {studentData.grade}</p>
-                <p>Year: {studentData.year}</p>
-                <div>
-                  <p>Building: {studentData.building}</p>
-                  <p>Room Number: {studentData.roomNumber}</p>
-                </div>
-                <p>Barcode: {studentData.barcode}</p>
-              </div>
             </div>
-          ) : (
-            <p>Loading student data...</p>
-          )}
-          <button onClick={() => handleRemove(index)}>Remove ID Card</button>
-        </div>
-      ))}
-      <button onClick={() => handlePrint()}>Print All ID Cards</button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

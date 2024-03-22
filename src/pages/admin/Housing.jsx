@@ -25,6 +25,28 @@ const Housing = () => {
 
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
 
+  const [permissions, setPermissions] = useState([
+    {
+      creating: 0,
+      reading: 0,
+      updating: 0,
+      deleting: 0,
+      creatingEmployee: 0,
+    },
+  ]);
+  useEffect(() => {
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        return;
+      });
+  }, []);
+
   useEffect(() => {
     axios
       .get(`${API_ROUTE}/v1/housing/towns-buildings-floors`)
@@ -82,11 +104,20 @@ const Housing = () => {
         bedId: selectedBed,
       })
       .then(() => {
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `تسكين الطالب ${selectedStudentData.name} و الرقم القومي ${selectedStudentData.nationalId}`,
+          objectId: `${selectedStudentData.nationalId}`,
+          objectName: `${selectedStudentData.name}`,
+        });
         setStudentList((prev) =>
           prev.filter((student) => student.id != selectedStudentData.id)
         );
         setSelectedBed();
-        setSelectedFloorData([]);        
+        setSelectedFloorData([]);
         setSelectedStudentData([]);
 
         return;
@@ -126,7 +157,7 @@ const Housing = () => {
         <div className="w-64">
           <div>
             {/*-------------------------start Sidebar student  ----------------*/}
-            
+
             <MainSideBar
               studentList={studentList}
               setStudentList={setStudentList}
@@ -138,49 +169,86 @@ const Housing = () => {
             <div className="mt-10 select-none">
               <div className="flex flex-col">
                 {/*------- towns menu start-----*/}
-                {towns.map((town, index) => (
-                  <>
-                    <span
-                      className="hover:cursor-pointer hover:bg-mainYellow pr-5 select-none font-bold text-xl"
-                      onClick={() => handleSideBarTownClick(index)}
-                    >
-                      {town.name}
-                    </span>
-                    {/*-------start buildings menu -----*/}
-                    {sideBarTownsOpen[index] && (
-                      <div className="flex flex-col gap-1 pr-7 pt-1 ">
-                        {town.buildings.map((building) => (
-                          <div
-                            key={`Build-town-${building.id}`}
-                            className="flex flex-col"
-                          >
-                            <span
-                              className="hover:cursor-pointer hover:bg-mainYellow text-green-600 font-bold"
-                              onClick={handleBuildingClick}
-                            >
-                              {building.name}
-                            </span>
+                {towns.map(
+                  (town, index) =>
+                    permissions.reading == 1 && (
+                      <>
+                        <span
+                          className="hover:cursor-pointer hover:bg-slate-300 pr-5 select-none font-bold text-xl transition-all duration-200"
+                          onClick={() => handleSideBarTownClick(index)}
+                        >
+                          {town.name}
+                        </span>
+                        {/*-------start buildings menu -----*/}
+                        {sideBarTownsOpen[index] && (
+                          <div className="flex flex-col gap-1 pr-7 pt-1 mr-2 w-44">
+                            {town.buildings.map((building) =>
+                              selectedStudentData.gender ? (
+                                selectedStudentData.gender == building.type ? (
+                                  <div
+                                    key={`Build-town-${building.id}`}
+                                    className="flex flex-col"
+                                  >
+                                    <span
+                                      className="hover:cursor-pointer hover:bg-slate-300 text-gray-700 font-bold transition-all duration-200"
+                                      onClick={handleBuildingClick}
+                                    >
+                                      {building.name}
+                                    </span>
 
-                            {/*-------start floors menu -----*/}
-                            <div className="hidden flex-col">
-                              {building.floors.map((floor) => (
-                                <span
-                                  key={`floor-${floor.id}`}
-                                  className="hover:cursor-pointer hover:bg-mainYellow pr-5 text-blue-600 font-bold"
-                                  onClick={() => handleFloorClick(floor.id)}
+                                    {/*-------start floors menu -----*/}
+                                    <div className="hidden flex-col">
+                                      {building.floors.map((floor) => (
+                                        <span
+                                          key={`floor-${floor.id}`}
+                                          className="hover:cursor-pointer  hover:bg-slate-300 pr-5 text-blue-600 font-bold transition-all duration-200"
+                                          onClick={() =>
+                                            handleFloorClick(floor.id)
+                                          }
+                                        >
+                                          {floor.number}
+                                        </span>
+                                      ))}
+                                    </div>
+                                    {/*-------end floors menu -----*/}
+                                  </div>
+                                ) : null
+                              ) : (
+                                <div
+                                  key={`Build-town-${building.id}`}
+                                  className="flex flex-col"
                                 >
-                                  {floor.number}
-                                </span>
-                              ))}
-                            </div>
-                            {/*-------end floors menu -----*/}
+                                  <span
+                                    className="hover:cursor-pointer hover:bg-slate-300 text-gray-700 font-bold transition-all duration-200"
+                                    onClick={handleBuildingClick}
+                                  >
+                                    {building.name}
+                                  </span>
+
+                                  {/*-------start floors menu -----*/}
+                                  <div className="hidden flex-col">
+                                    {building.floors.map((floor) => (
+                                      <span
+                                        key={`floor-${floor.id}`}
+                                        className="hover:cursor-pointer  hover:bg-slate-300 pr-5 text-blue-600 font-bold transition-all duration-200"
+                                        onClick={() =>
+                                          handleFloorClick(floor.id)
+                                        }
+                                      >
+                                        {floor.number}
+                                      </span>
+                                    ))}
+                                  </div>
+                                  {/*-------end floors menu -----*/}
+                                </div>
+                              )
+                            )}
                           </div>
-                        ))}
-                      </div>
-                    )}
-                    {/*-------end buildings menu -----*/}
-                  </>
-                ))}
+                        )}
+                        {/*-------end buildings menu -----*/}
+                      </>
+                    )
+                )}
                 {/*-------end towns menu -----*/}
               </div>
             </div>
@@ -195,7 +263,7 @@ const Housing = () => {
         </div>
         {/* -------------------start student info ---------------------*/}
 
-        {selectedStudentData && (
+        {selectedStudentData && permissions.reading == 1 && (
           <div className="border-2 border-slate  mt-5 h-48 px-2 mx-2">
             <div className="flex justify-between items-center h-full">
               <div className="flex flex-col ">
@@ -240,43 +308,83 @@ const Housing = () => {
         {/* -------------------start Rooms-Beds ---------------------*/}
         <div className="mt-10">
           <div className="flex flex-wrap gap-10 justify-center">
-            {selectedFloorData.map((room) => (
-              <div key={`room-beds-${room.id}`} className="flex flex-col">
-                <div className="flex justify-center items-center text-white text-xl font-bold bg-mainBlue w-20 h-10 ">
-                  {room.number}
-                </div>
-                <div className="flex flex-col mt-2">
-                  {/* -------------------start Beds menu ---------------------*/}
-                  {room.beds.map((bed) => (
-                    <div key={`bed-${bed.id}`}>
-                      {bed.isOccupied == 1 ? (
-                        <div className="flex justify-center items-center text-white font-bold bg-blue-400 opacity-40 w-20 h-10 border">
-                          {bed.number}
-                        </div>
-                      ) : (
-                        <div>
-                          <input
-                            type="radio"
-                            name="bed"
-                            id={`bed-${bed.id}`}
-                            value={bed.id}
-                            className="peer hidden"
-                            onChange={handleRadioChange}
-                          />
-                          <label
-                            htmlFor={`bed-${bed.id}`}
-                            className="block cursor-pointer select-none p-2 border text-center hover:opacity-80 bg-blue-400 peer-checked:bg-red-800 font-bold text-white transition-all duration-200"
-                          >
-                            {bed.number}
-                          </label>
-                        </div>
-                      )}
+            {selectedFloorData.map((room) =>
+              selectedStudentData.accomodationType ? (
+                selectedStudentData.accomodationType == room.type ? (
+                  <div key={`room-beds-${room.id}`} className="flex flex-col">
+                    <div className="flex justify-center items-center text-white text-xl font-bold bg-mainBlue w-20 h-10 ">
+                      {room.number}
                     </div>
-                  ))}
-                  {/* -------------------end Beds menu ---------------------*/}
+                    <div className="flex flex-col mt-2">
+                      {/* -------------------start Beds menu ---------------------*/}
+                      {room.beds.map((bed) => (
+                        <div key={`bed-${bed.id}`}>
+                          {bed.isOccupied == 1 ? (
+                            <div className="flex justify-center items-center text-white font-bold bg-blue-400 opacity-40 w-20 h-10 border">
+                              {bed.number}
+                            </div>
+                          ) : (
+                            <div>
+                              <input
+                                type="radio"
+                                name="bed"
+                                id={`bed-${bed.id}`}
+                                value={bed.id}
+                                className="peer hidden"
+                                onChange={handleRadioChange}
+                              />
+                              <label
+                                htmlFor={`bed-${bed.id}`}
+                                className="block cursor-pointer select-none p-2 border text-center hover:opacity-80 bg-blue-400 peer-checked:bg-red-800 font-bold text-white transition-all duration-200"
+                              >
+                                {bed.number}
+                              </label>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                      {/* -------------------end Beds menu ---------------------*/}
+                    </div>
+                  </div>
+                ) : null
+              ) : (
+                <div key={`room-beds-${room.id}`} className="flex flex-col">
+                  <div className="flex justify-center items-center text-white text-xl font-bold bg-mainBlue w-20 h-10 ">
+                    {room.number}
+                  </div>
+                  <div className="flex flex-col mt-2">
+                    {/* -------------------start Beds menu ---------------------*/}
+                    {room.beds.map((bed) => (
+                      <div key={`bed-${bed.id}`}>
+                        {bed.isOccupied == 1 ? (
+                          <div className="flex justify-center items-center text-white font-bold bg-blue-400 opacity-40 w-20 h-10 border">
+                            {bed.number}
+                          </div>
+                        ) : (
+                          <div>
+                            <input
+                              type="radio"
+                              name="bed"
+                              id={`bed-${bed.id}`}
+                              value={bed.id}
+                              className="peer hidden"
+                              onChange={handleRadioChange}
+                            />
+                            <label
+                              htmlFor={`bed-${bed.id}`}
+                              className="block cursor-pointer select-none p-2 border text-center hover:opacity-80 bg-blue-400 peer-checked:bg-red-800 font-bold text-white transition-all duration-200"
+                            >
+                              {bed.number}
+                            </label>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    {/* -------------------end Beds menu ---------------------*/}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         </div>
         {/* -------------------end Rooms-Beds ---------------------*/}

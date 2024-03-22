@@ -16,14 +16,40 @@ const EditHousing = () => {
   const [insertionData, setInsertionData] = useState({
     bedNumber: null,
     roomNumber: null,
+    roomType: "سكن عادي",
     floorNumber: null,
     buildingName: null,
     townName: null,
+    buildingType: "M",
   });
+
   const [selectedFloorId, setSelectedFloorId] = useState();
   const [selectedFloorData, setSelectedFloorData] = useState([]);
   const [sideBarTownsOpen, setSideBarTownsOpen] = useState([]);
-  console.log(towns);
+
+  const [permissions, setPermissions] = useState([
+    {
+      creating: 0,
+      reading: 0,
+      updating: 0,
+      deleting: 0,
+      creatingEmployee: 0,
+    },
+  ]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        return;
+      });
+  }, []);
+
   useEffect(() => {
     setLoading((prev) => prev + 1);
     axios
@@ -169,7 +195,7 @@ const EditHousing = () => {
   };
 
   const handleAddRoom = (e) => {
-    if (insertionData.roomNumber) {
+    if (insertionData.roomNumber && insertionData.roomType) {
       if (isNaN(parseInt(insertionData.roomNumber))) {
         toast.dismiss();
         toast("ادخل رقم");
@@ -180,6 +206,7 @@ const EditHousing = () => {
           .post(`${API_ROUTE}/v1/room`, {
             floorId: selectedFloorId,
             number: insertionData.roomNumber,
+            type: insertionData.roomType,
           })
           .then((res) => {
             //dynamically add beds to the front end
@@ -190,6 +217,7 @@ const EditHousing = () => {
                   id: res.data.id,
                   floorId: selectedFloorId,
                   number: insertionData.roomNumber,
+                  type: insertionData.roomType,
                   beds: [],
                 },
               ];
@@ -221,6 +249,7 @@ const EditHousing = () => {
       .delete(`${API_ROUTE}/v1/room/${roomId}`)
       .then(() => {
         //dynamically add beds to the front end
+
         setSelectedFloorData((prev) => {
           let i = prev.findIndex((ele) => ele.id == roomId);
           prev.splice(i, 1);
@@ -254,6 +283,25 @@ const EditHousing = () => {
             number: insertionData.floorNumber,
           })
           .then((res) => {
+            let currentT = towns.findIndex((ele) => ele.id == townId);
+            let currentB = towns[currentT].buildings.findIndex(
+              (ele2) => ele2.id == buildingId
+            );
+
+            //handle logs
+            axios
+              .post(`${API_ROUTE}/v1/log`, {
+                adminId: sessionStorage.getItem("id"),
+                adminName: sessionStorage.getItem("name"),
+                adminUsername: sessionStorage.getItem("username"),
+                action: `اضافه دور برقم "${insertionData.floorNumber}" لمبني "${towns[currentT].buildings[currentB].name}" في مدينه "${towns[currentT].name}"`,
+                objectId: res.data.id,
+                objectName: insertionData.floorNumber,
+              })
+              .catch(() => {
+                return;
+              });
+
             //dynamically add beds to the front end
             setTowns((prev) => {
               prev = prev.map((ele) => {
@@ -300,6 +348,27 @@ const EditHousing = () => {
     axios
       .delete(`${API_ROUTE}/v1/floor/${floorId}`)
       .then(() => {
+        let currentT = towns.findIndex((ele) => ele.id == townId);
+        let currentB = towns[currentT].buildings.findIndex(
+          (ele2) => ele2.id == buildingId
+        );
+        let currentF = towns[currentT].buildings[currentB].floors.findIndex(
+          (ele3) => ele3.id == floorId
+        );
+        //handle logs
+        axios
+          .post(`${API_ROUTE}/v1/log`, {
+            adminId: sessionStorage.getItem("id"),
+            adminName: sessionStorage.getItem("name"),
+            adminUsername: sessionStorage.getItem("username"),
+            action: `ازاله دور برقم "${towns[currentT].buildings[currentB].floors[currentF].number}" من مبني "${towns[currentT].buildings[currentB].name}" في مدينه "${towns[currentT].name}"`,
+            objectId: floorId,
+            objectName:
+              towns[currentT].buildings[currentB].floors[currentF].number,
+          })
+          .catch(() => {
+            return;
+          });
         //dynamically add beds to the front end
         setTowns((prev) => {
           prev = prev.map((ele) => {
@@ -333,14 +402,31 @@ const EditHousing = () => {
   };
 
   const handleAddBuilding = (e, townId) => {
-    if (insertionData.buildingName) {
+    if (insertionData.buildingName && insertionData.buildingType) {
       setLoading((prev) => prev + 1);
       axios
         .post(`${API_ROUTE}/v1/building`, {
           townId: townId,
           name: insertionData.buildingName,
+          type: insertionData.buildingType,
         })
         .then((res) => {
+          let currentT = towns.findIndex((ele) => ele.id == townId);
+
+          //handle logs
+          axios
+            .post(`${API_ROUTE}/v1/log`, {
+              adminId: sessionStorage.getItem("id"),
+              adminName: sessionStorage.getItem("name"),
+              adminUsername: sessionStorage.getItem("username"),
+              action: `اضافه مبني جديد بأسم "${insertionData.buildingName}" لمدينه "${towns[currentT].name}"`,
+              objectId: res.data.id,
+              objectName: insertionData.buildingName,
+            })
+            .catch(() => {
+              return;
+            });
+
           //dynamically add beds to the front end
           setTowns((prev) => {
             prev = prev.map((ele) => {
@@ -349,6 +435,7 @@ const EditHousing = () => {
                   id: res.data.id,
                   name: insertionData.buildingName,
                   buildingOccupied: false,
+                  type: insertionData.buildingType,
                   floors: [],
                 });
               }
@@ -386,6 +473,24 @@ const EditHousing = () => {
     axios
       .delete(`${API_ROUTE}/v1/building/${buildingId}`)
       .then(() => {
+        let currentT = towns.findIndex((ele) => ele.id == townId);
+        let currentB = towns[currentT].buildings.findIndex(
+          (ele2) => ele2.id == buildingId
+        );
+        //handle logs
+        axios
+          .post(`${API_ROUTE}/v1/log`, {
+            adminId: sessionStorage.getItem("id"),
+            adminName: sessionStorage.getItem("name"),
+            adminUsername: sessionStorage.getItem("username"),
+            action: ` ازاله مبني بأسم "${towns[currentT].buildings[currentB].name}" من مدينه "${towns[currentT].name}"`,
+            objectId: buildingId,
+            objectName: towns[currentT].buildings[currentB].name,
+          })
+          .catch(() => {
+            return;
+          });
+
         //dynamically add beds to the front end
         setTowns((prev) => {
           prev = prev.map((ele) => {
@@ -395,9 +500,9 @@ const EditHousing = () => {
             }
             return ele;
           });
-          console.log(prev);
           return prev;
         });
+
         setLoading((prev) => prev - 1);
         toast.dismiss();
         return toast("أزالة بنجاح");
@@ -420,16 +525,30 @@ const EditHousing = () => {
           name: insertionData.townName,
         })
         .then((res) => {
-          //dynamically add beds to the front end
+          //dynamically add towns to the front end
           setTowns((prev) => {
             prev.push({
               id: res.data.id,
               name: insertionData.townName,
               buildings: [],
             });
-
             return prev;
           });
+
+          //handle logs
+          axios
+            .post(`${API_ROUTE}/v1/log`, {
+              adminId: sessionStorage.getItem("id"),
+              adminName: sessionStorage.getItem("name"),
+              adminUsername: sessionStorage.getItem("username"),
+              action: `اضافه مدينه جديده بأسم "${insertionData.townName}"`,
+              objectId: res.data.id,
+              objectName: insertionData.townName,
+            })
+            .catch(() => {
+              return;
+            });
+
           setInsertionData((prev) => {
             return { ...prev, townName: null };
           });
@@ -459,7 +578,22 @@ const EditHousing = () => {
     axios
       .delete(`${API_ROUTE}/v1/town/${townId}`)
       .then(() => {
-        //dynamically add beds to the front end
+        //handle logs
+        axios
+          .post(`${API_ROUTE}/v1/log`, {
+            adminId: sessionStorage.getItem("id"),
+            adminName: sessionStorage.getItem("name"),
+            adminUsername: sessionStorage.getItem("username"),
+            action: ` ازاله مدينه بأسم "${
+              towns[towns.findIndex((ele) => ele.id == townId)].name
+            }"`,
+            objectId: townId,
+            objectName: towns[towns.findIndex((ele) => ele.id == townId)].name,
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
         setTowns((prev) => {
           let i = prev.findIndex((ele2) => ele2.id == townId);
           prev.splice(i, 1);
@@ -496,158 +630,203 @@ const EditHousing = () => {
         }}
       />
       {loading > 0 && <Loading />}
-      <div className="w-64">
-        {/*------------------------- Sidebar ------------------------*/}
+      {permissions.reading == 1 && (
         <div className="w-64">
-          <div>
-            {/*-------------------------start Sidebar towns ----------------*/}
-            <div className="mt-36 select-none">
-              <div className="flex flex-col">
-                {/*------- towns menu start-----*/}
-                {towns.map((town, index) => (
-                  <div key={`edit-${town}-housing-${index}`}>
-                    <div className="flex">
-                      {!town.buildings.find(
-                        (ele) => ele.buildingOccupied == true
-                      ) && (
-                        <button
-                          onClick={() => handleRemoveTown(town.id)}
-                          className="flex items-center
-                                 absolute justify-center h-5 w-5 rounded-full bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold mt-1 mr-1"
-                        >
-                          X
-                        </button>
-                      )}
-                      <span
-                        className="hover:cursor-pointer hover:bg-mainYellow pr-5 select-none font-bold text-xl mr-3"
-                        onClick={() => handleSideBarTownClick(index)}
-                      >
-                        {town.name}
-                      </span>
-                    </div>
-                    {/*-------start buildings menu -----*/}
-                    {sideBarTownsOpen[index] && (
-                      <div className="flex flex-col gap-1 pr-7 pt-1 ">
-                        {town.buildings.map((building) => (
-                          <div
-                            key={`Build-town-${building.id}`}
-                            className="flex flex-col relative"
-                          >
-                            {building.buildingOccupied == false && (
-                              <button
-                                onClick={() =>
-                                  handleRemoveBuilding(building.id, town.id)
-                                }
-                                className="flex items-center
-                                 absolute justify-center h-5 w-5 rounded-full bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold"
-                              >
-                                X
-                              </button>
-                            )}
-                            <span
-                              className="hover:cursor-pointer hover:bg-mainYellow text-green-600 font-bold mr-8 w-24"
-                              onClick={handleBuildingClick}
+          {/*------------------------- Sidebar ------------------------*/}
+          <div className="w-64">
+            <div>
+              {/*-------------------------start Sidebar towns ----------------*/}
+              <div className="mt-36 select-none">
+                <div className="flex flex-col">
+                  {/*------- towns menu start-----*/}
+                  {towns.map((town, index) => (
+                    <div key={`edit-${town}-housing-${index}`}>
+                      <div className="flex items-center">
+                        {!town.buildings.find(
+                          (ele) => ele.buildingOccupied == true
+                        ) &&
+                          permissions.deleting == 1 && (
+                            <button
+                              onClick={() => handleRemoveTown(town.id)}
+                              className="flex items-center
+                                  justify-center h-5 w-5 rounded-md bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold mt-1 mr-1 "
                             >
-                              {building.name}
-                            </span>
+                              X
+                            </button>
+                          )}
+                        <span
+                          className={`hover:cursor-pointer hover:bg-slate-300 px-2 select-none 
+                        font-bold text-xl ${
+                          town.buildings.find(
+                            (ele) => ele.buildingOccupied == true
+                          )
+                            ? "mr-10"
+                            : "mr-4"
+                        } mb-1 transition-all duration-200`}
+                          onClick={() => handleSideBarTownClick(index)}
+                        >
+                          {town.name}
+                        </span>
+                      </div>
+                      {/*-------start buildings menu -----*/}
+                      {sideBarTownsOpen[index] && (
+                        <div className="flex flex-col gap-1 pr-7 pt-1 mr-4 mb-5">
+                          {town.buildings.map((building) => (
+                            <div
+                              key={`Build-town-${building.id}`}
+                              className="flex flex-col"
+                            >
+                              {building.buildingOccupied == false &&
+                                permissions.deleting == 1 && (
+                                  <button
+                                    onClick={() =>
+                                      handleRemoveBuilding(building.id, town.id)
+                                    }
+                                    className="flex items-center
+                                 justify-center h-5 w-5 rounded-md bg-red-700 hover:opacity-70 transition-all duration-200  text-white font-bold -mb-6"
+                                  >
+                                    X
+                                  </button>
+                                )}
+                              <span
+                                className="hover:cursor-pointer hover:bg-slate-300 text-gray-800 font-bold mr-8 transition-all duration-200"
+                                onClick={handleBuildingClick}
+                              >
+                                {building.name} |{" "}
+                                {building.type == "M" ? "طلاب" : "طالبات"}
+                              </span>
 
-                            {/*-------start floors menu -----*/}
-                            <div className="hidden flex-col">
-                              {building.floors.map((floor) => (
-                                <div
-                                  key={`floor-${floor.id}`}
-                                  className="flex mr-5"
-                                >
-                                  {floor.floorOccupied == false && (
-                                    <button
-                                      onClick={() =>
-                                        handleRemoveFloor(
-                                          floor.id,
-                                          building.id,
-                                          town.id
-                                        )
-                                      }
-                                      className="flex items-center justify-center h-5 w-5 rounded-full bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold"
+                              {/*-------start floors menu -----*/}
+                              <div className="hidden flex-col">
+                                {building.floors.map((floor) => (
+                                  <div
+                                    key={`floor-${floor.id}`}
+                                    className="flex mr-5"
+                                  >
+                                    {floor.floorOccupied == false &&
+                                      permissions.deleting == 1 && (
+                                        <button
+                                          onClick={() =>
+                                            handleRemoveFloor(
+                                              floor.id,
+                                              building.id,
+                                              town.id
+                                            )
+                                          }
+                                          className="flex items-center justify-center h-5 w-5 rounded-md bg-red-700 hover:opacity-70 transition-all duration-200 text-white font-bold"
+                                        >
+                                          X
+                                        </button>
+                                      )}
+                                    <span
+                                      className={`hover:cursor-pointer hover:bg-slate-300 pl-2 ${
+                                        floor.floorOccupied == false
+                                          ? "pr-6"
+                                          : "pr-6 mr-5"
+                                      } text-blue-600 font-bold transition-all duration-200`}
+                                      onClick={() => handleFloorClick(floor.id)}
                                     >
-                                      X
+                                      {floor.number}
+                                    </span>
+                                  </div>
+                                ))}
+                                <div className="flex items-center mr-5">
+                                  {permissions.creating == 1 && (
+                                    <button
+                                      onClick={(e) =>
+                                        handleAddFloor(e, building.id, town.id)
+                                      }
+                                      className="flex items-center justify-center h-5 w-5 rounded-md bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
+                                    >
+                                      +
                                     </button>
                                   )}
-                                  <span
-                                    className={`hover:cursor-pointer hover:bg-mainYellow pl-2 ${
-                                      floor.floorOccupied == false
-                                        ? "pr-9"
-                                        : "pr-14"
-                                    }  text-blue-600 font-bold`}
-                                    onClick={() => handleFloorClick(floor.id)}
-                                  >
-                                    {floor.number}
-                                  </span>
+                                  <input
+                                    name="floorNumber"
+                                    type="text"
+                                    autoComplete="off"
+                                    onChange={handleInputChange}
+                                    className="text-blue-600 font-bold bg-slate-300 h-5 w-10 mr-3"
+                                  />
                                 </div>
-                              ))}
-                              <div className="flex items-center mr-5">
+                              </div>
+                              {/*-------end floors menu -----*/}
+                            </div>
+                          ))}
+                          <div className="flex flex-col">
+                            <div className="flex ">
+                              {permissions.creating == 1 && (
                                 <button
-                                  onClick={(e) =>
-                                    handleAddFloor(e, building.id, town.id)
-                                  }
-                                  className="flex items-center justify-center h-5 w-5 rounded-full bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
+                                  onClick={(e) => handleAddBuilding(e, town.id)}
+                                  className="flex items-center justify-center h-5 w-5 rounded-md bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
                                 >
                                   +
                                 </button>
+                              )}
+                              <input
+                                name="buildingName"
+                                type="text"
+                                autoComplete="off"
+                                onChange={handleInputChange}
+                                className="text-gray-800 font-bold bg-slate-300 h-5 w-24 mr-3"
+                              />
+                            </div>
+                            <div className="flex flex-col">
+                              <div>
                                 <input
-                                  name="floorNumber"
-                                  type="text"
-                                  autoComplete="off"
+                                  type="radio"
+                                  name="buildingType"
+                                  value="M"
                                   onChange={handleInputChange}
-                                  className="text-blue-600 font-bold bg-yellow-600 h-5 w-10 mr-3"
+                                  required
+                                  className="mr-4"
                                 />
+                                <label className="mr-2 text-xl">طلاب</label>
+                              </div>
+                              <div>
+                                <input
+                                  type="radio"
+                                  name="buildingType"
+                                  value="F"
+                                  onChange={handleInputChange}
+                                  required
+                                  className="mr-4"
+                                />
+                                <label className="mr-2 text-xl">طالبات</label>
                               </div>
                             </div>
-                            {/*-------end floors menu -----*/}
                           </div>
-                        ))}
-                        <div className="flex items-center">
-                          <button
-                            onClick={(e) => handleAddBuilding(e, town.id)}
-                            className="flex items-center justify-center h-5 w-5 rounded-full bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
-                          >
-                            +
-                          </button>
-                          <input
-                            name="buildingName"
-                            type="text"
-                            autoComplete="off"
-                            onChange={handleInputChange}
-                            className="text-green-600 font-bold bg-yellow-600 h-5 w-24 mr-3"
-                          />
                         </div>
-                      </div>
+                      )}
+                      {/*-------end buildings menu -----*/}
+                    </div>
+                  ))}
+                  {/*-------end towns menu -----*/}
+                  <div className="flex items-center mr-1 mt-1">
+                    {permissions.creating == 1 && (
+                      <button
+                        onClick={handleAddTown}
+                        className="flex items-center justify-center h-5 w-5 rounded-md bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
+                      >
+                        +
+                      </button>
                     )}
-                    {/*-------end buildings menu -----*/}
+                    <input
+                      name="townName"
+                      type="text"
+                      autoComplete="off"
+                      onChange={handleInputChange}
+                      className="text-black font-bold bg-slate-300 h-5 w-24 mr-3"
+                    />
                   </div>
-                ))}
-                {/*-------end towns menu -----*/}
-                <div className="flex items-center mr-1 mt-1">
-                  <button
-                    onClick={handleAddTown}
-                    className="flex items-center justify-center h-5 w-5 rounded-full bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
-                  >
-                    +
-                  </button>
-                  <input
-                    name="townName"
-                    type="text"
-                    autoComplete="off"
-                    onChange={handleInputChange}
-                    className="text-black font-bold bg-yellow-600 h-5 w-24 mr-3"
-                  />
                 </div>
               </div>
+              {/*-------------------------end  Sidebar towns ----------------*/}
             </div>
-            {/*-------------------------end  Sidebar towns ----------------*/}
           </div>
+          {/* -------------------end Sidebar ---------------------*/}
         </div>
-        {/* -------------------end Sidebar ---------------------*/}
-      </div>
+      )}
       <div className=" flex-1 pt-4">
         <div className="bg-mainBlue mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
           التسكين - جامعة حلوان
@@ -661,15 +840,25 @@ const EditHousing = () => {
           <div className="flex flex-wrap gap-10 justify-center max-w-[700px]">
             {selectedFloorData.map((room) => (
               <div key={`room-beds-${room.id}`} className="flex flex-col">
+                <div
+                  className={`flex justify-center font-bold text-xl mr-9 w-20 ${
+                    room.type == "سكن عادي"
+                      ? "bg-slate-400 "
+                      : "bg-yellow-600 text-white"
+                  }`}
+                >
+                  {room.type}
+                </div>
                 <div className="flex">
-                  {!room.beds.find((e) => e.isOccupied == 1) && (
-                    <button
-                      onClick={() => handleRemoveRoom(room.id)}
-                      className="flex items-center justify-center w-8 h-8 bg-red-700 -ml-8 text-white rounded-full cursor-pointer font-bold  hover:opacity-80 transition-all duration-200"
-                    >
-                      X
-                    </button>
-                  )}
+                  {!room.beds.find((e) => e.isOccupied == 1) &&
+                    permissions.creating == 1 && (
+                      <button
+                        onClick={() => handleRemoveRoom(room.id)}
+                        className="flex items-center justify-center w-8 h-8 bg-red-700 -ml-8 text-white rounded-md cursor-pointer font-bold  hover:opacity-80 transition-all duration-200"
+                      >
+                        X
+                      </button>
+                    )}
                   <div className="flex justify-center items-center text-white text-xl font-bold bg-mainBlue w-20 h-10 mr-9">
                     {room.number}
                   </div>
@@ -684,12 +873,14 @@ const EditHousing = () => {
                         </div>
                       ) : (
                         <div className="flex items-center">
-                          <button
-                            onClick={() => handleRemoveBed(bed.id, room.id)}
-                            className="ml-1 rounded-full w-8 h-8 bg-red-700 flex items-center justify-center text text-white font-bold hover:opacity-80 cursor-pointer transition-all duration-200"
-                          >
-                            X
-                          </button>
+                          {permissions.deleting == 1 && (
+                            <button
+                              onClick={() => handleRemoveBed(bed.id, room.id)}
+                              className="ml-1 rounded-md w-8 h-8 bg-red-700 flex items-center justify-center text text-white font-bold hover:opacity-80 cursor-pointer transition-all duration-200"
+                            >
+                              X
+                            </button>
+                          )}
                           <input
                             type="radio"
                             disabled={true}
@@ -710,12 +901,14 @@ const EditHousing = () => {
                   ))}
                   {/* -------------------end Beds menu ---------------------*/}
                   <div className="flex mt-1">
-                    <button
-                      onClick={(e) => handleAddBed(e, room.id)}
-                      className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 text-white rounded-full ml-1 cursor-pointer hover:opacity-80 transition-all duration-200"
-                    >
-                      +
-                    </button>
+                    {permissions.creating == 1 && (
+                      <button
+                        onClick={(e) => handleAddBed(e, room.id)}
+                        className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 text-white rounded-md ml-1 cursor-pointer hover:opacity-80 transition-all duration-200"
+                      >
+                        +
+                      </button>
+                    )}
                     <input
                       name="bedNumber"
                       type="text"
@@ -728,20 +921,48 @@ const EditHousing = () => {
               </div>
             ))}
             {selectedFloorId && (
-              <div className="flex">
-                <button
-                  onClick={handleAddRoom}
-                  className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 ml-1 text-white rounded-full cursor-pointer hover:opacity-80 transition-all duration-200"
-                >
-                  +
-                </button>
-                <input
-                  name="roomNumber"
-                  type="text"
-                  autoComplete="off"
-                  onChange={handleInputChange}
-                  className="text-white font-bold bg-mainBlue h-10 w-20"
-                />
+              <div className="flex flex-col mt-8">
+                <div className="flex">
+                  {permissions.creating == 1 && (
+                    <button
+                      onClick={handleAddRoom}
+                      className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 ml-1 text-white rounded-md cursor-pointer hover:opacity-80 transition-all duration-200"
+                    >
+                      +
+                    </button>
+                  )}
+                  <input
+                    name="roomNumber"
+                    type="text"
+                    autoComplete="off"
+                    onChange={handleInputChange}
+                    className="text-white font-bold bg-mainBlue h-10 w-20"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <div>
+                    <input
+                      type="radio"
+                      name="roomType"
+                      value="سكن عادي"
+                      onChange={handleInputChange}
+                      required
+                      className="mr-4 text-xl"
+                    />
+                    <label className="mr-2 text-xl">سكن عادي</label>
+                  </div>
+                  <div>
+                    <input
+                      type="radio"
+                      name="roomType"
+                      value="سكن مميز"
+                      onChange={handleInputChange}
+                      required
+                      className="mr-4"
+                    />
+                    <label className="mr-2 text-xl">سكن مميز</label>
+                  </div>
+                </div>
               </div>
             )}
           </div>
