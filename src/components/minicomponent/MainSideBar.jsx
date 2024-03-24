@@ -9,6 +9,8 @@ const MainSideBar = ({
   studentList,
   setStudentList,
   setSelectedStudentData,
+  filters,
+  setFilters
 }) => {
   // State variables for filters
 
@@ -16,12 +18,7 @@ const MainSideBar = ({
   const [loading, setLoading] = useState(0);
   const [search, setSearch] = useState("");
   const [filteredList, setFilteredList] = useState([]);
-  const [filters, setFilters] = useState({
-    isApproved: null,
-    gender: null,
-    notHoused: false,
-    housed: false,
-  });
+
 
   console.log("rerender");
 
@@ -235,6 +232,7 @@ const MainSideBar = ({
             id="gender"
             name="gender"
             value="M"
+            checked={filters.gender == "M"}
             onChange={chooseFilters}
           ></input>
           <label htmlFor="applicants">طلاب</label>
@@ -245,6 +243,7 @@ const MainSideBar = ({
             id="gender"
             name="gender"
             value="F"
+            checked={filters.gender == "F"}
             onChange={chooseFilters}
           ></input>
           <label htmlFor="accepted">طالبات</label>
@@ -259,6 +258,7 @@ const MainSideBar = ({
             id="isApproved"
             name="isApproved"
             value={0}
+            checked={filters.isApproved == 0}
             onChange={chooseFilters}
           ></input>
           <label htmlFor="applicants">متقدمين</label>
@@ -269,6 +269,7 @@ const MainSideBar = ({
             id="isApproved"
             name="isApproved"
             value={1}
+            checked={filters.isApproved == 1}
             onChange={chooseFilters}
           ></input>
           <label htmlFor="accepted">مقبولين</label>
@@ -301,6 +302,7 @@ const MainSideBar = ({
             type="checkbox"
             id="notHoused"
             name="notHoused"
+            checked={filters.notHoused}
             onChange={chooseSecondaryFilter}
           ></input>
           <label htmlFor="notHoused" className="-mr-4">
@@ -312,6 +314,7 @@ const MainSideBar = ({
             type="checkbox"
             id="housed"
             name="housed"
+            checked={filters.housed}
             onChange={chooseSecondaryFilter}
           ></input>
           <label htmlFor="still" className="-mr-4">

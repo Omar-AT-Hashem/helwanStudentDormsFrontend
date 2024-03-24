@@ -15,7 +15,6 @@ import WhenToApply from "./pages/student/WhenToApply";
 import UserProfile from "./pages/student/UserProfile";
 import StudentApplicationForm from "./pages/student/StudentApplicationForm";
 import InstructionsViewer from "./pages/student/InstructionsViewer";
-import { IdGenerator } from "./pages/admin/IdGenerator.jsx";
 import ManageInsturctions from "./pages/admin/ManageInstructions";
 import StudentLogin from "./pages/login/StudentLogin";
 import Student from "./pages/student/student";
@@ -24,13 +23,10 @@ import AdminHome from "./pages/admin/AdminHome.jsx";
 import ManageApplicationDates from "./pages/admin/ManageApplicationDates";
 import ManageCategories from "./pages/admin/ManageCategories";
 import { ApplicationApprovals } from "./pages/admin/ApplicationApprovals.jsx";
-import HousedStudentsEdit from "./pages/admin/HousedStudentsEdit.jsx";
-import Rooms from "./pages/admin/Rooms.jsx";
 import Penalties from "./pages/admin/Penalties.jsx";
 import Fees from "./pages/admin/fees.jsx";
 import RecievingMeals from "./pages/admin/RecievingMeals.jsx";
-import ChangeApplicationStatus from "./pages/admin/ChangeApplicationStatus.jsx";
-import EditStudentData from "./pages/admin/EditStudentData.jsx";
+
 import { AssessStudents } from "./pages/admin/AssessStudents.jsx";
 import EditHousing from "./pages/admin/EditHousing.jsx";
 import Evacuation from "./pages/admin/Evacuation.jsx";
@@ -91,10 +87,6 @@ export const routes = createBrowserRouter([
             path: "housing",
             element: <Housing />,
           },
-          {
-            path: "HousedStudentsEdit",
-            element: <HousedStudentsEdit />,
-          },
 
           {
             path: "manageCategories",
@@ -112,10 +104,7 @@ export const routes = createBrowserRouter([
             path: "logs",
             element: <Logs />,
           },
-          {
-            path: "idgenerator",
-            element: <IdGenerator />,
-          },
+
           {
             path: "mealsreport",
             element: <MealsReport />,
@@ -153,10 +142,6 @@ export const routes = createBrowserRouter([
             element: <RecievingMeals />,
           },
           {
-            path: "editstudentdata",
-            element: <EditStudentData />,
-          },
-          {
             path: "assessStudents",
             element: <AssessStudents />,
           },
@@ -191,16 +176,8 @@ export const routes = createBrowserRouter([
             element: <StudentApplicationForm />,
           },
           {
-            path: "changeapplicationstatus",
-            element: <ChangeApplicationStatus />,
-          },
-          {
             path: "whenToApply",
             element: <WhenToApply />,
-          },
-          {
-            path: "rooms",
-            element: <Rooms />,
           },
         ],
       },

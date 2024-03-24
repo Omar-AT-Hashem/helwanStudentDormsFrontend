@@ -13,8 +13,8 @@ const Fees = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
-  const [studentList, setStudentList] = useState([]);
+  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
+  
   const [form, setForm] = useState({
     fees: "",
     date: "",
@@ -163,6 +163,8 @@ const Fees = () => {
           studentList={studentList}
           setStudentList={setStudentList}
           setSelectedStudentData={setSelectedStudentData}
+          filters={filters}
+          setFilters={setFilters}
         />
       </div>
 

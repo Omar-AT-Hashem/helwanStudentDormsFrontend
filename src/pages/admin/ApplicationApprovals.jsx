@@ -19,8 +19,8 @@ export const ApplicationApprovals = () => {
 
   // State to store the selected student's data
 
-  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
-  const [studentList, setStudentList] = useState([]);
+  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
+ 
   const [permissions, setPermissions] = useState([
     {
       creating: 0,
@@ -152,6 +152,8 @@ export const ApplicationApprovals = () => {
           studentList={studentList}
           setStudentList={setStudentList}
           setSelectedStudentData={setSelectedStudentData}
+          filters={filters}
+          setFilters={setFilters}
         />
       </div>
       {/* -------------------end Sidebar ---------------------*/}

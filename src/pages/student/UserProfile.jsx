@@ -18,13 +18,26 @@ function UserProfile() {
   const [isEditable, setIsEditable] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
 
- 
-
   const [userData, setUserData] = useState();
 
   // State variable to track the selected image file
   const [selectedImage, setSelectedImage] = useState(null);
-  console.log(formData);
+
+  const [faculties, setFaculties] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${API_ROUTE}/v1/university-structure/get-faculties`)
+      .then((res) => {
+        setFaculties(res.data);
+        return;
+      })
+      .catch((err) => {
+        toast.dismiss();
+        toast("حدث خطأ");
+        return;
+      });
+  }, []);
 
   useEffect(() => {
     axios
@@ -138,7 +151,7 @@ function UserProfile() {
             },
           }}
         />
-        <div className="flex justify-between mx-2 ml-20 my-2 bg-amber-50">
+        <div className="flex justify-between mx-5 ml-20 my-2 border-2 border-black p-3">
           <div className="flex flex-col">
             <span className="text-2xl">
               <span className="text-red-600 font-bold">الاسم:</span>{" "}
@@ -208,7 +221,7 @@ function UserProfile() {
                 required
                 disabled={!isEditable}
                 className=" w-96 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 py-2 mr-24"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 py-2 mr-20"
               />
             </label>
 
@@ -236,7 +249,7 @@ function UserProfile() {
                   id="birthday"
                   disabled={!isEditable}
                   className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-[72px]"
                 />
               </label>
               <label htmlFor="input2" className="ml-2 mr-20">
@@ -249,7 +262,7 @@ function UserProfile() {
                   value={formData.placeOfBirth}
                   disabled={!isEditable}
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-10"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-8"
                 />
               </label>
             </div>
@@ -264,11 +277,15 @@ function UserProfile() {
                   onChange={handleChange}
                   disabled={!isEditable}
                   className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-36"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-[134px]"
                 >
-                  <option>----</option>
-                  <option>انثى</option>
-                  <option>ذكر</option>
+                  {formData.gender ? (
+                    <option>{formData.gender == "M" ? "ذكر" : "انثى"}</option>
+                  ) : (
+                    <option>---</option>
+                  )}
+                  <option value="F">انثى</option>
+                  <option value="M">ذكر</option>
                 </select>
               </label>
               <label htmlFor="input2" className="ml-20 mr-20">
@@ -300,7 +317,7 @@ function UserProfile() {
                 required
                 disabled={!isEditable}
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-20"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-[78px]"
               />
             </label>
 
@@ -313,7 +330,7 @@ function UserProfile() {
                 required
                 disabled={!isEditable}
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-11"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-[32px]"
               />
             </label>
 
@@ -327,7 +344,7 @@ function UserProfile() {
                 disabled={!isEditable}
                 required
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-12 "
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-[28px] "
               />
             </label>
 
@@ -358,23 +375,30 @@ function UserProfile() {
                   disabled={!isEditable}
                   required
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-20"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-8"
                 />
               </label>
             </div>
 
             <label className="mb-4 ">
               الكليه :
-              <input
-                type="text"
+              <select
                 name="faculty"
                 value={formData.faculty}
                 onChange={handleChange}
-                disabled={!isEditable}
                 required
-                className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-36"
-              />
+                className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+          focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-[140px]"
+              >
+                {formData.faculty ? (
+                  <option>{formData.faculty}</option>
+                ) : (
+                  <option>----</option>
+                )}
+                {faculties.map((faculty) => (
+                  <option key={faculty.id}>{faculty.name}</option>
+                ))}
+              </select>
             </label>
 
             <label className="mb-4 ">
@@ -387,7 +411,7 @@ function UserProfile() {
                 disabled={!isEditable}
                 required
                 className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-28"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-[105px]"
               />
             </label>
 
@@ -401,7 +425,7 @@ function UserProfile() {
                 disabled={!isEditable}
                 required
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-12"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-5"
               />
             </label>
             <div className="mb-4">
@@ -415,7 +439,7 @@ function UserProfile() {
                   disabled={!isEditable}
                   required
                   className="  w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-20"
                 />
               </label>
 
@@ -429,7 +453,7 @@ function UserProfile() {
                   disabled={!isEditable}
                   required
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-6"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-5"
                 />
               </label>
             </div>
@@ -444,7 +468,7 @@ function UserProfile() {
                 disabled={!isEditable}
                 required
                 className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-20"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-14"
               />
             </label>
 
@@ -505,18 +529,22 @@ function UserProfile() {
             </div>
 
             <div className="mb-4">
-              <select>
+              <label htmlFor="highschoolSpecialization">
                 الشعبه بالثانويه العامه:
-                <input
-                  name="highschoolSpecialization"
-                  value={formData.highschoolSpecialization}
-                  onChange={handleChange}
-                  disabled={!isEditable}
-                  required
-                  className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-7"
-                />
-                <option>---</option>
+              </label>
+              <select
+                name="highschoolSpecialization"
+                value={formData.highschoolSpecialization}
+                onChange={handleChange}
+                disabled={!isEditable}
+                required
+                className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 text-xl mr-6"
+              >
+                {formData.highschoolSpecialization ? (
+                  <option>{formData.highschoolSpecialization}</option>
+                ) : (
+                  <option>---</option>
+                )}
                 <option>علمى علوم</option>
                 <option>علمى رياضة</option>
                 <option>أدبى</option>
@@ -529,6 +557,7 @@ function UserProfile() {
                 <option>شهادات معادلة</option>
                 <option>مدارس STEM للعلوم والتكنولوجيا</option>
               </select>
+
               <label className="mb-4 mr-20">
                 الثانويه بالخارج :
                 <input
@@ -564,9 +593,10 @@ function UserProfile() {
                   disabled={!isEditable}
                   required
                   className=" w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-24"
+            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-[120px]"
                 >
-                  <option>سكن عادى</option>
+                  <option>سكن عادي</option>
+                  <option>سكن مميز</option>
                 </select>
               </label>
               <label className="mb-4 mr-20">

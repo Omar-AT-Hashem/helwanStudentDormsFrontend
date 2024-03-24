@@ -6,8 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { API_ROUTE } from "../../config/env.js";
 
 const Penalties = () => {
-  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
-  const [studentList, setStudentList] = useState([]);
+  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
   const [form, setForm] = useState({ type: "", date: "", reason: "" });
   const [objects, setObjects] = useState([]);
 
@@ -109,12 +108,52 @@ const Penalties = () => {
           studentList={studentList}
           setStudentList={setStudentList}
           setSelectedStudentData={setSelectedStudentData}
+          filters={filters}
+          setFilters={setFilters}
         />
       </div>
       <div className=" bg-white-900 flex-1 pr-2">
         <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl">
           الجزاءات - جامعة حلوان
         </div>
+
+        <div className="border-2 border-slate  mt-5 h-48 px-2 mx-2 mb-10 ">
+            <div className="flex justify-between items-center h-full">
+              <div className="flex flex-col ">
+                <div>
+                  <span className="font bold text-2xl te ">الاسم: </span>
+                  <span className="font text-xl text-gray-400">
+                    {selectedStudentData.name}
+                  </span>
+                </div>
+                <div>
+                  <span className="font bold text-2xl">الرقم القومي: </span>
+                  <span className="font text-xl text-gray-400">
+                    {selectedStudentData.nationalId}
+                  </span>
+                </div>
+
+                <div>
+                  <span className="font bold text-2xl">نوع السكن : </span>
+                  <span className="font text-xl text-gray-400">
+                    {selectedStudentData.accomodationType}
+                  </span>
+                </div>
+              </div>
+              <div>
+                {" "}
+                <img
+                  src={
+                    selectedStudentData.image
+                      ? selectedStudentData.image
+                      : "/default-photo.jpg"
+                  }
+                  className="w-36 border-2 border-black"
+                  alt="default image"
+                />
+              </div>
+            </div>
+          </div>
 
         <div className="mb-4">
           <label className=" ml-10"> الاسم : </label>

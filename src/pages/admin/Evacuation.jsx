@@ -12,8 +12,7 @@ const Evacuation = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
-  const [studentList, setStudentList] = useState([]);
+  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
   const [tracedHousing, setTracedHousing] = useState();
 
   // const [selectedStudent, setSelectedStudent] = useState();
@@ -211,6 +210,8 @@ const Evacuation = () => {
               studentList={studentList}
               setStudentList={setStudentList}
               setSelectedStudentData={setSelectedStudentData}
+              filters={filters}
+              setFilters={setFilters}
             />
             {/*-------------------------end Sidebar student  ----------------*/}
 
@@ -273,7 +274,7 @@ const Evacuation = () => {
       </div>
       <div className=" flex-1 pt-4">
         <div className="bg-mainBlue	mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
-          التسكين - جامعة حلوان
+          الاخلاء - جامعة حلوان
         </div>
         {/* -------------------start student info ---------------------*/}
 

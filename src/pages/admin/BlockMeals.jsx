@@ -7,8 +7,8 @@ import { API_ROUTE } from "../../config/env";
 import Loading from "../../components/minicomponent/Loading";
 
 const BlockMeals = () => {
-  const [selectedStudentData, setSelectedStudentData] = useOutletContext();
-  const [studentList, setStudentList] = useState([]);
+  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
+
   const [form, setForm] = useState({});
   const [objects, setObjects] = useState([]);
 
@@ -145,6 +145,8 @@ const BlockMeals = () => {
           studentList={studentList}
           setStudentList={setStudentList}
           setSelectedStudentData={setSelectedStudentData}
+          filters={filters}
+          setFilters={setFilters}
         />
       </div>
 
