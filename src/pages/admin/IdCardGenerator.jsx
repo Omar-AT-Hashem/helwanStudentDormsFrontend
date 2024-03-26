@@ -5,7 +5,7 @@ import Loading from "../../components/minicomponent/Loading";
 import { API_ROUTE } from "../../config/env";
 import QRCode from "react-qr-code";
 import universityLogo from "../../assets/auxillary/helwanLogoNoBg.png";
-
+import Loading from "../../components/minicomponent/Loading";
 const IDCardGenerator = () => {
   const [studentDataList, setStudentDataList] = useState([]);
   const [gender, setGender] = useState();
@@ -25,7 +25,9 @@ const IDCardGenerator = () => {
         .get(`${API_ROUTE}/v1/student/get-by-gender/${gender}`)
         .then((res) => {
           setLoading((prev) => prev - 1);
-          return setStudentDataList(res.data);
+          return setStudentDataList(
+            res.data.filter((std) => std.isHoused == 1)
+          );
         })
         .catch((err) => {
           setLoading((prev) => prev - 1);
@@ -58,6 +60,7 @@ const IDCardGenerator = () => {
           },
         }}
       />
+      {loading > 0 && <Loading />}
       <div className="bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl">
         بطاقات استلام الوجبات - جامعة حلوان
       </div>

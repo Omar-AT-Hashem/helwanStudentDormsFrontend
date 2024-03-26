@@ -38,14 +38,17 @@ const EditHousing = () => {
   ]);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
@@ -128,6 +131,16 @@ const EditHousing = () => {
 
           return prev;
         });
+
+        //handle logs
+        axios.post (`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `ازاله سرير "${bedId}"`,
+          objectId: bedId,
+          objectName: bedId,
+        })
         setLoading((prev) => prev - 1);
         toast.dismiss();
         return toast("أزالة بنجاح");
@@ -173,6 +186,16 @@ const EditHousing = () => {
 
               return prev;
             });
+
+            axios.post(`${API_ROUTE}/v1/log`, {
+              adminId: sessionStorage.getItem("id"),
+              adminName: sessionStorage.getItem("name"),
+              adminUsername: sessionStorage.getItem("username"),
+              action: `اضافه سرير جديد برقم "${insertionData.bedNumber} "`,
+              objectId: res.data.id,
+              objectName: insertionData.bedNumber,
+            });
+
             setInsertionData((prev) => {
               return { ...prev, bedNumber: null };
             });
@@ -222,6 +245,14 @@ const EditHousing = () => {
                 },
               ];
             });
+            axios.post(`${API_ROUTE}/v1/log`, {
+              adminId: sessionStorage.getItem("id"),
+              adminName: sessionStorage.getItem("name"),
+              adminUsername: sessionStorage.getItem("username"),
+              action: `اضافه غرفه جديده برقم "${insertionData.roomNumber} "`,
+              objectId: res.data.id,
+              objectName: insertionData.roomNumber,
+            });
             setInsertionData((prev) => {
               return { ...prev, roomNumber: null };
             });
@@ -254,6 +285,15 @@ const EditHousing = () => {
           let i = prev.findIndex((ele) => ele.id == roomId);
           prev.splice(i, 1);
           return prev;
+        });
+
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `ازاله غرفه "${roomId}"`,
+          objectId: roomId,
+          objectName: roomId,
         });
         setLoading((prev) => prev - 1);
         toast.dismiss();

@@ -24,14 +24,17 @@ export const AssessStudents = () => {
     },
   ]);
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);

@@ -5,6 +5,8 @@ import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import MainSideBar from "../../components/minicomponent/MainSideBar.jsx";
 
+import Loading from "../../components/minicomponent/Loading.jsx";
+
 const Evacuation = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
@@ -14,6 +16,7 @@ const Evacuation = () => {
 
   const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
   const [tracedHousing, setTracedHousing] = useState();
+  const [loading, setLoading] = useState(0);
 
   // const [selectedStudent, setSelectedStudent] = useState();
 
@@ -35,28 +38,34 @@ const Evacuation = () => {
     },
   ]);
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/housing/towns-buildings-floors`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setTowns(res.data);
         const isOpen = Array(res.data.length).fill(false);
         setSideBarTownsOpen(isOpen);
         return;
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
@@ -66,9 +75,11 @@ const Evacuation = () => {
   }, []);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/housing/trace-student/${selectedStudentData.id}`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         if (res.data.message == "found") {
           setTracedHousing(res.data);
           setSelectedBed(res.data.bed.id);
@@ -79,6 +90,7 @@ const Evacuation = () => {
         }
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
@@ -202,6 +214,8 @@ const Evacuation = () => {
           },
         }}
       />
+
+      {loading > 0 && <Loading />}
       <div className="w-64">
         {/*------------------------- Sidebar ------------------------*/}
         <div className="w-64">

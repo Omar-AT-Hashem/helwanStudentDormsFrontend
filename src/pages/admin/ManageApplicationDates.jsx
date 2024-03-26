@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { API_ROUTE } from "../../config/env";
 import axios from "axios";
+import Loading from "../../components/minicomponent/Loading.jsx";
 
 export default function ManageApplicationDates() {
   if (sessionStorage.getItem("token")) {
@@ -15,7 +16,7 @@ export default function ManageApplicationDates() {
   const [preservedObjects, setPreservedObjects] = useState();
   const [updatedObjects, setUpdatedObjects] = useState([]);
   const [addedObjects, setAddedObjects] = useState([]);
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(0);
 
   const [deletable, setDeletable] = useState();
   const [editable, setEditable] = useState();
@@ -30,14 +31,17 @@ export default function ManageApplicationDates() {
     },
   ]);
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
@@ -304,12 +308,15 @@ export default function ManageApplicationDates() {
   };
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/application-date`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         return setObjects(res.data);
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
@@ -335,6 +342,7 @@ export default function ManageApplicationDates() {
         }}
       />
 
+      {loading > 0 && <Loading />}
       <div className="mx-auto w-fit mt-20">
         {(objects && objects.length > 0) ||
         (addedObjects && addedObjects.length > 0) ? (

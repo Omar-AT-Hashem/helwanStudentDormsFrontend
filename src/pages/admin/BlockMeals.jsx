@@ -7,10 +7,17 @@ import { API_ROUTE } from "../../config/env";
 import Loading from "../../components/minicomponent/Loading";
 
 const BlockMeals = () => {
+  if (sessionStorage.getItem("token")) {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
+  }
+
   const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
 
   const [form, setForm] = useState({});
   const [objects, setObjects] = useState([]);
+  const [loading, setLoading] = useState(0)
 
   const [permissions, setPermissions] = useState([
     {
@@ -23,29 +30,35 @@ const BlockMeals = () => {
   ]);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
 
-  console.log(form);
+ 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     if (selectedStudentData) {
       axios
         .get(
           `${API_ROUTE}/v1/blockmeals/get-by-studentId/${selectedStudentData.id}`
         )
         .then((res) => {
+          setLoading((prev) => prev - 1);
           setObjects(res.data);
         })
         .catch((err) => {
+          setLoading((prev) => prev - 1);
           toast.dismiss();
           toast("something went wrong");
         });
@@ -61,13 +74,15 @@ const BlockMeals = () => {
       };
     });
   };
-  console.log(objects);
+ 
 
   const handleAddDelete = (e) => {
     const [index, id] = e.target.name.split("-");
+    setLoading((prev) => prev + 1);
     axios
       .delete(`${API_ROUTE}/v1/blockmeals/${id}`)
       .then(() => {
+        setLoading((prev) => prev - 1);
         //handle Logs
         axios.post(`${API_ROUTE}/v1/log`, {
           adminId: sessionStorage.getItem("id"),
@@ -83,6 +98,7 @@ const BlockMeals = () => {
         });
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         toast.dismiss();
         toast("something went wrong");
       });
@@ -91,12 +107,14 @@ const BlockMeals = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedStudentData) {
+      setLoading((prev) => prev + 1);
       axios
         .post(`${API_ROUTE}/v1/blockmeals/`, {
           ...form,
           studentId: selectedStudentData.id,
         })
         .then((res) => {
+          setLoading((prev) => prev - 1);
           //handle Logs
           axios.post(`${API_ROUTE}/v1/log`, {
             adminId: sessionStorage.getItem("id"),
@@ -112,6 +130,7 @@ const BlockMeals = () => {
           });
         })
         .catch((err) => {
+          setLoading((prev) => prev - 1);
           toast.dismiss();
           toast("something went wrong");
         });
@@ -139,6 +158,8 @@ const BlockMeals = () => {
           },
         }}
       />
+
+      {loading > 0 && <Loading />}
       <div className="w-64">
         {/* Pass setSelectedStudent function to SearchForStudents to update selected student */}
         <MainSideBar

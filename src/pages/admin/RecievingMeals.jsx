@@ -4,11 +4,17 @@ import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { API_ROUTE } from "../../config/env.js";
-import csvtojson from "csvtojson";
+import Loading from "../../components/minicomponent/Loading.jsx";
 
 const RecievingMeals = () => {
+  if (sessionStorage.getItem("token")) {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
+  }
+
   const [file, setFile] = useState(null);
-  console.log(file);
+  const [loading, setLoading] = useState(0);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -19,6 +25,7 @@ const RecievingMeals = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("recievedMeals", file);
+    setLoading((prev) => prev + 1);
     axios
       .post(`${API_ROUTE}/v1/recieved-meal/recieve-meals`, formData, {
         headers: {
@@ -26,12 +33,20 @@ const RecievingMeals = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        setLoading((prev) => prev - 1);
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: "تم استلام الوجبات",
+          objectId: "فارغ",
+          objectName: "فارغ",
+        });
         toast.dismiss();
         toast.success("تم استلام الوجبات بنجاح");
       })
       .catch((err) => {
-        console.log(err);
+        setLoading((prev) => prev - 1);
         toast.dismiss();
         toast.error("حدث خطأ ما");
       });
@@ -52,7 +67,7 @@ const RecievingMeals = () => {
           },
         }}
       />
-
+      {loading > 0 && <Loading />}
       <div className=" bg-white-900 flex-1 pr-2">
         <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl">
           استلام الوجبات - جامعة حلوان

@@ -14,7 +14,7 @@ const Fees = () => {
   }
 
   const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
-  
+ 
   const [form, setForm] = useState({
     fees: "",
     date: "",
@@ -24,7 +24,6 @@ const Fees = () => {
   });
   const [objects, setObjects] = useState([]);
   const [feeTypes, setFeeTypes] = useState([]);
-  const [hideLastThreeDivs, setHideLastThreeDivs] = useState(false);
   const [loading, setLoading] = useState(0);
 
   const [permissions, setPermissions] = useState([
@@ -38,20 +37,24 @@ const Fees = () => {
   ]);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
 
   useEffect(() => {
     if (selectedStudentData) {
+      setLoading((prev) => prev + 1);
       axios
         .get(
           `${API_ROUTE}/v1/studentfee/get-by-studentId/${selectedStudentData.id}`
@@ -85,7 +88,6 @@ const Fees = () => {
 
   const handleChange = (e) => {
     e.preventDefault();
-
     setForm((prev) => {
       return {
         ...prev,
@@ -98,6 +100,7 @@ const Fees = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedStudentData.name) {
+      setLoading((prev) => prev + 1);
       axios
         .post(`${API_ROUTE}/v1/studentfee/`, {
           ...form,
@@ -114,8 +117,10 @@ const Fees = () => {
             objectName: `${selectedStudentData.name}`,
           });
           setForm({ fees: "", date: "", amount: "", type: "", isPayed: false });
+          setLoading((prev) => prev - 1);
         })
         .catch(() => {
+          setLoading((prev) => prev - 1);
           toast.dismiss();
           toast("something went wrong");
         });

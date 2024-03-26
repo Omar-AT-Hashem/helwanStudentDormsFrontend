@@ -13,7 +13,8 @@ const BasicData = () => {
       "Authorization"
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
-
+  
+  const [loading, setLoading] = useState(0);
   const [permissions, setPermissions] = useState([
     {
       creating: 0,
@@ -25,14 +26,19 @@ const BasicData = () => {
   ]);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        toast.dismiss();
+        toast("حدث خطأ");
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
@@ -41,7 +47,6 @@ const BasicData = () => {
  
 
   const [formData, setFormData] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [editableImage, setEditableImage] = useState(false);
   const [error, setError] = useState(null);
   const [isEditable, setIsEditable] = useState(true);
@@ -59,13 +64,16 @@ const BasicData = () => {
   }, [selectedStudentData]);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/university-structure/get-faculties`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setFaculties(res.data);
         return;
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         toast.dismiss();
         toast("حدث خطأ");
         return;
@@ -100,19 +108,17 @@ const BasicData = () => {
     if (e.target.name == "upload") {
       const form = new FormData();
       form.set("image", selectedImage);
-      form.set("id", sessionStorage.getItem("id"));
+      form.set("id", selectedStudentData.id);
       await axios.put(`${API_ROUTE}/v1/student/update-image`, form);
       const res = await axios.get(
-        `${API_ROUTE}/v1/student/get-by-nationalId/${sessionStorage.getItem(
-          "nationalId"
-        )}`
+        `${API_ROUTE}/v1/student/get-by-nationalId/${selectedStudentData.nationalId}`
       );
       setFormData(res.data);
       setEditableImage(false);
     }
     if (e.target.name == "delete") {
       await axios.put(`${API_ROUTE}/v1/student/delete-image`, {
-        id: sessionStorage.getItem("id"),
+        id: selectedStudentData.id,
       });
       setEditableImage(false);
     }
@@ -120,19 +126,25 @@ const BasicData = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    setLoading(true);
-    sessionStorage.setItem("nationalId", formData.nationalId);
-
+    setLoading(prev => prev + 1);
     axios
       .put(`${API_ROUTE}/v1/student/`, formData)
       .then((res) => {
+        setLoading(prev => prev - 1);
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `تم تعديل بيانات الطالب ${selectedStudentData.name} و الرقم القومى ${selectedStudentData.nationalId}`,
+          objectId: selectedStudentData.nationalId,
+          objectName: selectedStudentData.name,
+        });
         setLoading(false);
         toast.dismiss();
         toast("تم التعديل بنجاح");
       })
       .catch((err) => {
-        setLoading(false);
+        setLoading(prev => prev - 1);
         if (err.response.request.status == 409) {
           toast.dismiss();
           return toast("المستخدم موجود في النظام");

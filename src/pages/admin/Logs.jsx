@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { API_ROUTE } from "../../config/env.js";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import Loading from "../../components/minicomponent/Loading.jsx";
 
 const Logs = () => {
   if (sessionStorage.getItem("token")) {
@@ -64,6 +65,7 @@ const Logs = () => {
           },
         }}
       />
+      {loading > 0 && <Loading />}
 
       {/* Main content area */}
       {permissions.reading == 1 && (

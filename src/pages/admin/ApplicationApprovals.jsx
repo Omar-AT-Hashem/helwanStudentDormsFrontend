@@ -20,6 +20,8 @@ export const ApplicationApprovals = () => {
   // State to store the selected student's data
 
   const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
+
+  const [loading, setLoading] = useState(0);
  
   const [permissions, setPermissions] = useState([
     {
@@ -31,25 +33,30 @@ export const ApplicationApprovals = () => {
     },
   ]);
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
 
   const accept = () => {
+    setLoading((prev) => prev + 1);
     axios
       .post(`${API_ROUTE}/v1/student/approve-or-reject/approve`, {
         id: selectedStudentData.id,
         grade: selectedStudentData.grade,
       })
       .then(() => {
+        setLoading((prev) => prev - 1);
         //handle Logs
         axios.post(`${API_ROUTE}/v1/log`, {
           adminId: sessionStorage.getItem("id"),
@@ -66,6 +73,7 @@ export const ApplicationApprovals = () => {
         return;
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
@@ -74,12 +82,14 @@ export const ApplicationApprovals = () => {
       });
   };
   const reject = () => {
+    setLoading((prev) => prev + 1);
     axios
       .post(`${API_ROUTE}/v1/student/approve-or-reject/reject`, {
         id: selectedStudentData.id,
         grade: selectedStudentData.grade,
       })
       .then(() => {
+        setLoading((prev) => prev - 1);
         //handle Logs
         axios.post(`${API_ROUTE}/v1/log`, {
           adminId: sessionStorage.getItem("id"),
@@ -97,6 +107,7 @@ export const ApplicationApprovals = () => {
         return;
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }

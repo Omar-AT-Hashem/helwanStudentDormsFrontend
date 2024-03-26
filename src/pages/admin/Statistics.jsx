@@ -4,17 +4,22 @@ import { API_ROUTE } from "../../config/env";
 import { useState, useEffect } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
+import Loading from "../../components/minicomponent/Loading";
 
 const Statistics = () => {
   const [statistics, setStatistics] = useState([]);
+  const [loading, setLoading] = useState(0);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/statistics/applicants-statistics`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         return setStatistics((prev) => [...prev, res.data]);
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
@@ -24,27 +29,34 @@ const Statistics = () => {
   }, []);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/statistics/housed-statistics`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         return setStatistics((prev) => [...prev, res.data]);
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
+
         toast.dismiss();
         return toast("Something went wrong");
       });
   }, []);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/statistics/housing-statistics`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         return setStatistics((prev) => [...prev, res.data]);
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
@@ -54,12 +66,15 @@ const Statistics = () => {
   }, []);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/statistics/meals-statistics`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         return setStatistics((prev) => [...prev, res.data]);
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
@@ -68,9 +83,23 @@ const Statistics = () => {
       });
   }, []);
 
-  
   return (
     <div className="pt-20">
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            border: "1px solid #A9872D",
+            backgroundColor: "#A9872D",
+            padding: "16px",
+            color: "white",
+            fontWeight: "Bold",
+            marginTop: "65px",
+            textAlign: "center",
+          },
+        }}
+      />
+      {loading > 0 && <Loading />}
       <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl">
         الإحصائيات - جامعة حلوان
       </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { API_ROUTE } from "../../config/env";
 import axios from "axios";
+import Loading from "../../components/minicomponent/Loading.jsx";
 
 export default function ManageCategories() {
   if (sessionStorage.getItem("token")) {
@@ -15,7 +16,7 @@ export default function ManageCategories() {
   const [preservedObjects, setPreservedObjects] = useState([]);
   const [updatedObjects, setUpdatedObjects] = useState([]);
   const [addedObjects, setAddedObjects] = useState([]);
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(0);
 
   const [deletable, setDeletable] = useState();
   const [editable, setEditable] = useState();
@@ -303,6 +304,7 @@ export default function ManageCategories() {
           },
         }}
       />
+      {loading > 0 && <Loading />}
 
       <div className="mx-auto w-fit mt-20">
         {(objects && objects.length > 0) ||

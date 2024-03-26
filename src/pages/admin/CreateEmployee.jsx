@@ -34,14 +34,17 @@ const CreateEmployee = () => {
     },
   ]);
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
@@ -60,7 +63,6 @@ const CreateEmployee = () => {
   };
 
   const handleSaveClick = () => {
-    setLoading((prev) => prev + 1);
     if (
       formData.name != "" &&
       formData.username != "" &&
@@ -68,6 +70,7 @@ const CreateEmployee = () => {
       formData.confirmPassword != ""
     ) {
       if (formData.password === formData.confirmPassword) {
+        setLoading((prev) => prev + 1);
         axios
           .post(`${API_ROUTE}/v1/employee/register`, {
             name: formData.name,
@@ -105,6 +108,7 @@ const CreateEmployee = () => {
             return toast("تم انشاء حساب بنجاح");
           })
           .catch((err) => {
+
             setLoading((prev) => prev - 1);
             if (err && err.code === "ERR_BAD_REQUEST") {
               return;

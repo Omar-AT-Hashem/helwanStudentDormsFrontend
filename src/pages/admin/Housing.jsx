@@ -4,7 +4,7 @@ import axios from "axios";
 import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import MainSideBar from "../../components/minicomponent/MainSideBar.jsx";
-
+import Loading from "../../components/minicomponent/Loading.jsx";
 const Housing = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
@@ -15,7 +15,7 @@ const Housing = () => {
   const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
   
 
-  // const [selectedStudent, setSelectedStudent] = useState();
+  const [loading, setLoading] = useState(0);
 
   const [towns, setTowns] = useState([]);
 
@@ -35,28 +35,34 @@ const Housing = () => {
     },
   ]);
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/housing/towns-buildings-floors`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setTowns(res.data);
         const isOpen = Array(res.data.length).fill(false);
         setSideBarTownsOpen(isOpen);
         return;
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
@@ -98,12 +104,14 @@ const Housing = () => {
   };
 
   const handleHouseClick = () => {
+    setLoading((prev) => prev + 1);
     axios
       .post(`${API_ROUTE}/v1/bed/occupy`, {
         studentId: selectedStudentData.id,
         bedId: selectedBed,
       })
       .then(() => {
+        setLoading((prev) => prev - 1);
         //handle Logs
         axios.post(`${API_ROUTE}/v1/log`, {
           adminId: sessionStorage.getItem("id"),
@@ -123,6 +131,7 @@ const Housing = () => {
         return;
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
@@ -152,6 +161,7 @@ const Housing = () => {
           },
         }}
       />
+      {loading > 0 && <Loading />}
       <div className="w-64">
         {/*------------------------- Sidebar ------------------------*/}
         <div className="w-64">

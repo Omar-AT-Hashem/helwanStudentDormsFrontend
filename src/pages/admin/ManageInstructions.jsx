@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_ROUTE } from "../../config/env";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
+import Loading from "../../components/minicomponent/Loading";
 
 const ManageInsturctions = () => {
   if (sessionStorage.getItem("token")) {
@@ -30,25 +31,31 @@ const ManageInsturctions = () => {
     },
   ]);
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/instruction`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         return setObjects(res.data);
       })
       .catch((err) => {
+        setLoading((prev) => prev - 1);
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
@@ -234,6 +241,7 @@ const ManageInsturctions = () => {
           },
         }}
       />
+      {loading > 0 && <Loading />}
       <div className=" flex-1 mt-4 snap-x ">
         <div className="bg-mainBlue w-3/4 h-10  mr-56 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
           اداره التعليمات - جامعة حلوان
