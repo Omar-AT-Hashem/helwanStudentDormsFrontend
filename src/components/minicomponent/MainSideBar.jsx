@@ -10,14 +10,16 @@ const MainSideBar = ({
   setStudentList,
   setSelectedStudentData,
   filters,
-  setFilters
+  setFilters,
+  filteredList,
+  setFilteredList
 }) => {
   // State variables for filters
 
   // State variable for search query
   const [loading, setLoading] = useState(0);
   const [search, setSearch] = useState("");
-  const [filteredList, setFilteredList] = useState([]);
+  
 
 
   console.log("rerender");

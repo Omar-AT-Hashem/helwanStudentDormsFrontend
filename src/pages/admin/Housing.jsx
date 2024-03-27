@@ -12,7 +12,7 @@ const Housing = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
+  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters, filteredList, setFilteredList] = useOutletContext();
   
 
   const [loading, setLoading] = useState(0);
@@ -174,6 +174,8 @@ const Housing = () => {
               setSelectedStudentData={setSelectedStudentData}
               filters={filters}
               setFilters={setFilters}
+              filteredList={filteredList}
+          setFilteredList={setFilteredList}
             />
             {/*-------------------------end Sidebar student  ----------------*/}
 

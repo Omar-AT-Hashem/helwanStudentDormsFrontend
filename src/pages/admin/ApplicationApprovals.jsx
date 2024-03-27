@@ -19,7 +19,7 @@ export const ApplicationApprovals = () => {
 
   // State to store the selected student's data
 
-  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
+  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters, filteredList, setFilteredList] = useOutletContext();
 
   const [loading, setLoading] = useState(0);
  
@@ -134,30 +134,7 @@ export const ApplicationApprovals = () => {
       />
       {/*------------------------- Sidebar ------------------------*/}
       <div className="w-64  mt-4 rounded-lg">
-        {/* <div className=" h-screen pt-4 ">
-          <div className="flex gap-10 " onChange={handleChange}>
-            <div className="flex gap-2 text-2xl">
-              <input type="radio" id="gender" name="gender" value="m" />
-              <label htmlFor="gender">طلاب</label>
-            </div>
-            <div className="flex gap-2 text-2xl">
-              <input type="radio" id="gender" name="gender" value="f" />
-              <label htmlFor="gender">طالبات</label>
-            </div>
-          </div>
-
-          <div className="w-full h-3/4 text-mainBlue overflow-y-scroll mt-8 ">
-            {studentList.map((student) => (
-              <div
-                key={`${student.id}-unapprr`}
-                className="hover:cursor-pointer hover:bg-mainYellow"
-                onClick={() => handleStudentSelect(student.id)}
-              >
-                {student.name}
-              </div>
-            ))}
-          </div>
-        </div> */}
+      
 
         <MainSideBar
           studentList={studentList}
@@ -165,7 +142,9 @@ export const ApplicationApprovals = () => {
           setSelectedStudentData={setSelectedStudentData}
           filters={filters}
           setFilters={setFilters}
-        />
+          filteredList={filteredList}
+          setFilteredList={setFilteredList}
+                  />
       </div>
       {/* -------------------end Sidebar ---------------------*/}
 

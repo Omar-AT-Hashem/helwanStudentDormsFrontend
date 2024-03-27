@@ -13,8 +13,17 @@ const Fees = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
- 
+  const [
+    selectedStudentData,
+    setSelectedStudentData,
+    studentList,
+    setStudentList,
+    filters,
+    setFilters,
+    filteredList,
+    setFilteredList,
+  ] = useOutletContext();
+
   const [form, setForm] = useState({
     fees: "",
     date: "",
@@ -170,6 +179,8 @@ const Fees = () => {
           setSelectedStudentData={setSelectedStudentData}
           filters={filters}
           setFilters={setFilters}
+          filteredList={filteredList}
+          setFilteredList={setFilteredList}
         />
       </div>
 
@@ -249,9 +260,7 @@ const Fees = () => {
             <option value="option2">السبب الثاني</option>
             <option value="option3">السبب الثالث</option>
           </select>
-        </div> */}    
-
-    
+        </div> */}
 
         <div className="mb-2">
           <label className="ml-10"> الدفع الالكتروني :</label>

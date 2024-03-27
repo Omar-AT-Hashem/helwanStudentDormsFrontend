@@ -13,7 +13,7 @@ const BlockMeals = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
+  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters, filteredList, setFilteredList] = useOutletContext();
 
   const [form, setForm] = useState({});
   const [objects, setObjects] = useState([]);
@@ -168,6 +168,8 @@ const BlockMeals = () => {
           setSelectedStudentData={setSelectedStudentData}
           filters={filters}
           setFilters={setFilters}
+          filteredList={filteredList}
+          setFilteredList={setFilteredList}
         />
       </div>
 

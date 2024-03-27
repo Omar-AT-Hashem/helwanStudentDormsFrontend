@@ -5,7 +5,6 @@ import Loading from "../../components/minicomponent/Loading";
 import { API_ROUTE } from "../../config/env";
 import QRCode from "react-qr-code";
 import universityLogo from "../../assets/auxillary/helwanLogoNoBg.png";
-import Loading from "../../components/minicomponent/Loading";
 const IDCardGenerator = () => {
   const [studentDataList, setStudentDataList] = useState([]);
   const [gender, setGender] = useState();

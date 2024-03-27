@@ -13,8 +13,20 @@ const BasicData = () => {
       "Authorization"
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
-  
+
   const [loading, setLoading] = useState(0);
+
+  const [formData, setFormData] = useState(null);
+  const [editableImage, setEditableImage] = useState(false);
+  const [error, setError] = useState(null);
+  const [isEditable, setIsEditable] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [faculties, setFaculties] = useState([]);
+
+  const [userData, setUserData] = useState();
+
+  // State variable to track the selected image file
+  const [selectedImage, setSelectedImage] = useState(null);
   const [permissions, setPermissions] = useState([
     {
       creating: 0,
@@ -24,6 +36,16 @@ const BasicData = () => {
       creatingEmployee: 0,
     },
   ]);
+  const [
+    selectedStudentData,
+    setSelectedStudentData,
+    studentList,
+    setStudentList,
+    filters,
+    setFilters,
+    filteredList,
+    setFilteredList,
+  ] = useOutletContext();
 
   useEffect(() => {
     setLoading((prev) => prev + 1);
@@ -42,22 +64,6 @@ const BasicData = () => {
         return;
       });
   }, []);
-
-  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters] = useOutletContext();
- 
-
-  const [formData, setFormData] = useState(null);
-  const [editableImage, setEditableImage] = useState(false);
-  const [error, setError] = useState(null);
-  const [isEditable, setIsEditable] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [faculties, setFaculties] = useState([]);
-
-  const [userData, setUserData] = useState();
-
-  // State variable to track the selected image file
-  const [selectedImage, setSelectedImage] = useState(null);
-  console.log(formData);
 
   useEffect(() => {
     setFormData(selectedStudentData);
@@ -109,28 +115,84 @@ const BasicData = () => {
       const form = new FormData();
       form.set("image", selectedImage);
       form.set("id", selectedStudentData.id);
-      await axios.put(`${API_ROUTE}/v1/student/update-image`, form);
-      const res = await axios.get(
-        `${API_ROUTE}/v1/student/get-by-nationalId/${selectedStudentData.nationalId}`
-      );
-      setFormData(res.data);
-      setEditableImage(false);
+      await axios
+        .put(`${API_ROUTE}/v1/student/update-image`, form)
+        .then((res) => {
+          setFormData(res.data);
+          const ind1 = studentList.findIndex(
+            (ele) => ele.id == selectedStudentData.id
+          );
+          const ind2 = filteredList.findIndex(
+            (ele) => ele.id == selectedStudentData.id
+          );
+          setStudentList((prev) => {
+            prev[ind1] = { ...formData, image: res.data.filePath };
+            return prev;
+          });
+          setFilteredList((prev) => {
+            prev[ind2] = { ...formData, image: res.data.filePath };
+            return prev;
+          });
+          setSelectedStudentData({ ...formData, image: res.data.filePath });
+
+          setEditableImage(false);
+        })
+        .catch((err) => {
+          toast.dismiss();
+          toast("حدث خطأ");
+          return;
+        });
     }
+
     if (e.target.name == "delete") {
       await axios.put(`${API_ROUTE}/v1/student/delete-image`, {
         id: selectedStudentData.id,
       });
+      const ind = studentList.findIndex(
+        (ele) => ele.id == selectedStudentData.id
+      );
+      const ind2 = filteredList.findIndex(
+        (ele) => ele.id == selectedStudentData.id
+      );
+      setStudentList((prev) => {
+        prev[ind] = { ...formData, image: null };
+        return prev;
+      });
+      setFilteredList((prev) => {
+        prev[ind2] = { ...formData, image: null };
+        return prev;
+      });
+      setSelectedStudentData({ ...formData, image: null });
       setEditableImage(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(prev => prev + 1);
+    setLoading((prev) => prev + 1);
     axios
       .put(`${API_ROUTE}/v1/student/`, formData)
       .then((res) => {
-        setLoading(prev => prev - 1);
+        const ind = studentList.findIndex(
+          (ele) => ele.id == selectedStudentData.id
+        );
+        const ind2 = filteredList.findIndex(
+          (ele) => ele.id == selectedStudentData.id
+        );
+
+        setStudentList((prev) => {
+          prev[ind] = { ...formData };
+          return prev;
+        });
+
+        setFilteredList((prev) => {
+          prev[ind2] = { ...formData };
+          return prev;
+        });
+
+        setSelectedStudentData({ ...formData });
+
+        setLoading((prev) => prev - 1);
         axios.post(`${API_ROUTE}/v1/log`, {
           adminId: sessionStorage.getItem("id"),
           adminName: sessionStorage.getItem("name"),
@@ -144,7 +206,7 @@ const BasicData = () => {
         toast("تم التعديل بنجاح");
       })
       .catch((err) => {
-        setLoading(prev => prev - 1);
+        setLoading((prev) => prev - 1);
         if (err.response.request.status == 409) {
           toast.dismiss();
           return toast("المستخدم موجود في النظام");
@@ -180,6 +242,8 @@ const BasicData = () => {
             setSelectedStudentData={setSelectedStudentData}
             filters={filters}
             setFilters={setFilters}
+            filteredList={filteredList}
+            setFilteredList={setFilteredList}
           />
         </div>
         {/* Main content area */}

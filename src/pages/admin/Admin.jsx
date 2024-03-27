@@ -11,12 +11,13 @@ const Admin = () => {
     notHoused: false,
     housed: false,
   });
+  const [filteredList, setFilteredList] = useState([]);
 
   return (
     <>
       <AdminNavbar />
 
-      <Outlet context={[selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters]} />
+      <Outlet context={[selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters, filteredList, setFilteredList]} />
     </>
   );
 };

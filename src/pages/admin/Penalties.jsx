@@ -12,14 +12,8 @@ const Penalties = () => {
       "Authorization"
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
-  const [
-    selectedStudentData,
-    setSelectedStudentData,
-    studentList,
-    setStudentList,
-    filters,
-    setFilters,
-  ] = useOutletContext();
+  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters, filteredList, setFilteredList] = useOutletContext();
+
   const [form, setForm] = useState({ type: "", date: "", reason: "" });
   const [objects, setObjects] = useState([]);
   const [loading, setLoading] = useState(0);
@@ -143,6 +137,8 @@ const Penalties = () => {
           setSelectedStudentData={setSelectedStudentData}
           filters={filters}
           setFilters={setFilters}
+          filteredList={filteredList}
+          setFilteredList={setFilteredList}
         />
       </div>
       <div className=" bg-white-900 flex-1 pr-2">
