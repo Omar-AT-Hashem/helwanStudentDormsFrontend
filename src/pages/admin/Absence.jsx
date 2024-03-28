@@ -1,23 +1,34 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MainSideBar from "../../components/minicomponent/MainSideBar";
+import Records from "../../assets/fakeData/Records.json";
 import { useOutletContext } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 import { API_ROUTE } from "../../config/env";
 import Loading from "../../components/minicomponent/Loading";
+import { useEffect } from "react";
 
-const BlockMeals = () => {
+const Absence = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters, filteredList, setFilteredList] = useOutletContext();
+  const [
+    selectedStudentData,
+    setSelectedStudentData,
+    studentList,
+    setStudentList,
+    filters,
+    setFilters,
+    filteredList,
+    setFilteredList,
+  ] = useOutletContext();
 
   const [form, setForm] = useState({});
   const [objects, setObjects] = useState([]);
-  const [loading, setLoading] = useState(0)
+  const [loading, setLoading] = useState(0);
 
   const [permissions, setPermissions] = useState([
     {
@@ -45,7 +56,6 @@ const BlockMeals = () => {
       });
   }, []);
 
- 
   useEffect(() => {
     setLoading((prev) => prev + 1);
     if (selectedStudentData) {
@@ -74,7 +84,6 @@ const BlockMeals = () => {
       };
     });
   };
- 
 
   const handleAddDelete = (e) => {
     const [index, id] = e.target.name.split("-");
@@ -177,7 +186,7 @@ const BlockMeals = () => {
         <div className="Data">
           <div className="box h-full flex-1">
             <div className="bg-mainBlue w-full h-10 text-fuchsia-50 text-center text-2xl mt-3 rounded-lg text-mr-1">
-              حجب الوجبات - جامعة حلوان
+              الغياب والتصاريح - جامعة حلوان
             </div>
             <div className="flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8">
               <label className="mb-4 ">
@@ -217,28 +226,6 @@ const BlockMeals = () => {
                 ></input>
               </div>
 
-              <div>
-                <label className="font-bold text-2xl"> الوجبات:</label>
-                <input
-                  id="radio1"
-                  type="radio"
-                  name="meal"
-                  className="form-radio h-5 w-5 text-gray-600 mr-10"
-                  value="lunch"
-                  onChange={handleChange}
-                ></input>
-                <label>غداء</label>
-                <input
-                  id="radio2"
-                  type="radio"
-                  name="meal"
-                  className="form-radio h-5 w-5  mr-10 text-xl text-gray-400"
-                  value="dinner"
-                  onChange={handleChange}
-                ></input>
-                <label>عشاء</label>
-              </div>
-
               <div className="mb-2">
                 <label className="font-bold text-2xl">السبب :</label>
                 <input
@@ -249,6 +236,7 @@ const BlockMeals = () => {
                   onChange={handleChange}
                   className="border border-gray-400 text-xl text-gray-400 mr-4"
                 ></input>
+                
               </div>
               <div className="flex items-center w-full ">
                 {permissions.creating == 1 && (
@@ -267,7 +255,6 @@ const BlockMeals = () => {
                   <tr>
                     <th className="px-4 py-2">من تاريخ</th>
                     <th className="px-4 py-2">الى تاريخ</th>
-                    <th className="px-4 py-2">الوجبه</th>
                     <th className="px-4 py-2">السبب</th>
                   </tr>
                 </thead>
@@ -277,7 +264,6 @@ const BlockMeals = () => {
                       <tr key={`blk-meal-ind${index}`}>
                         <td>{object.fromDate}</td>
                         <td>{object.toDate}</td>
-                        <td>{object.meal}</td>
                         <td>{object.reason}</td>
                         {permissions.deleting == 1 && (
                           <button
@@ -300,4 +286,4 @@ const BlockMeals = () => {
   );
 };
 
-export default BlockMeals;
+export default Absence;

@@ -10,7 +10,7 @@ import UniversityStructureReport from "./pages/admin/UniversityStructureReport";
 import DormReport from "./pages/admin/DormReport";
 import MealsReport from "./pages/admin/MealsReport";
 import BlockMeals from "./pages/admin/BlockMeals";
-import Asbsenteeism from "./pages/admin/Asbsenteeism";
+import Absence from "./pages/admin/Absence.jsx";
 import WhenToApply from "./pages/student/WhenToApply";
 import UserProfile from "./pages/student/UserProfile";
 import StudentApplicationForm from "./pages/student/StudentApplicationForm";
@@ -35,6 +35,7 @@ import CreateEmployee from "./pages/admin/CreateEmployee.jsx";
 import Logs from "./pages/admin/Logs.jsx";
 import Statistics from "./pages/admin/Statistics.jsx";
 import IDCardGenerator from "./pages/admin/IdCardGenerator.jsx";
+
 
 export const routes = createBrowserRouter([
   {
@@ -110,8 +111,8 @@ export const routes = createBrowserRouter([
             element: <MealsReport />,
           },
           {
-            path: "asbsenteeism",
-            element: <Asbsenteeism />,
+            path: "absence",
+            element: <Absence />,
           },
           {
             path: "manageInstructions",
