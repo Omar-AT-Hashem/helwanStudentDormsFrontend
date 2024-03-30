@@ -13,6 +13,7 @@ const Logs = () => {
   }
 
   const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(0);
 
   const [permissions, setPermissions] = useState([
     {
@@ -24,25 +25,31 @@ const Logs = () => {
     },
   ]);
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(
         `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
       )
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setPermissions(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         return;
       });
   }, []);
 
   useEffect(() => {
+    setLoading((prev) => prev + 1);
     axios
       .get(`${API_ROUTE}/v1/log`)
       .then((res) => {
+        setLoading((prev) => prev - 1);
         setLogs(res.data);
       })
       .catch(() => {
+        setLoading((prev) => prev - 1);
         toast.dismiss();
         toast("حدث خطا");
       });

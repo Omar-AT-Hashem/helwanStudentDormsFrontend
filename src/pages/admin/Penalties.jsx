@@ -12,9 +12,18 @@ const Penalties = () => {
       "Authorization"
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
-  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters, filteredList, setFilteredList] = useOutletContext();
+  const [
+    selectedStudentData,
+    setSelectedStudentData,
+    studentList,
+    setStudentList,
+    filters,
+    setFilters,
+    filteredList,
+    setFilteredList,
+  ] = useOutletContext();
 
-  const [form, setForm] = useState({ type: "", date: "", reason: "" });
+  const [form, setForm] = useState({ date: "", reason: "" });
   const [objects, setObjects] = useState([]);
   const [loading, setLoading] = useState(0);
 
@@ -103,7 +112,6 @@ const Penalties = () => {
         });
 
       setForm({
-        type: "",
         reason: "",
         Date: "",
       });
@@ -111,6 +119,38 @@ const Penalties = () => {
       toast.dismiss();
       toast("please select a student");
     }
+  };
+
+  const handleSuspension = () => {
+    setLoading((prev) => prev + 1);
+    axios
+      .put(`${API_ROUTE}/v1/student/suspend/${selectedStudentData.id}`)
+      .then((res) => {
+        setLoading((prev) => prev - 1);
+
+        const ind2 = filteredList.findIndex(
+          (ele) => ele.id == selectedStudentData.id
+        );
+        setSelectedStudentData([]);
+        setStudentList((prev) => {
+          prev = prev.filter((ele) => ele.id != selectedStudentData.id);
+          return prev;
+        });
+        setFilteredList((prev) => {
+          prev[ind2] = {
+            ...prev[ind2],
+            isHoused: -1,
+            isAccepted: 0,
+            isApproved: -1,
+          };
+          return prev;
+        });
+      })
+      .catch((err) => {
+        setLoading((prev) => prev - 1);
+        toast.dismiss();
+        toast("something went wrong");
+      });
   };
 
   return (
@@ -200,22 +240,6 @@ const Penalties = () => {
         </div>
 
         <div className="mb-2">
-          <label className="ml-10">نوع الجزاء :</label>
-          <select
-            required
-            // value={form.type}
-            name="type"
-            onChange={handleChange}
-            className="border border-gray-400"
-          >
-            <option value="">------</option>
-            <option value="option1">السبب الأول</option>
-            <option value="option2">السبب الثاني</option>
-            <option value="option3">السبب الثالث</option>
-          </select>
-        </div>
-
-        <div className="mb-2">
           <label className="ml-10">السبب :</label>
           <input
             type="text"
@@ -238,18 +262,25 @@ const Penalties = () => {
           ></input>
         </div>
         {permissions.creating == 1 && (
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded"
-            onClick={handleSubmit}
-          >
-            حفظ
-          </button>
+          <div>
+            <button
+              className="bg-green-500 text-white px-4 py-2 rounded"
+              onClick={handleSubmit}
+            >
+              حفظ
+            </button>
+            <button
+              className="bg-red-500 text-white px-4 py-2 rounded"
+              onClick={handleSuspension}
+            >
+              فصل
+            </button>
+          </div>
         )}
 
         <table className="table-auto w-4/5 mx-auto">
           <thead className="border-b border-black">
-            <tr>
-              <th className="px-4 py-2">النوع </th>
+            <tr className="text-right">
               <th className="px-4 py-2">السبب</th>
               <th className="px-4 py-2"> التاريخ</th>
             </tr>
@@ -262,7 +293,6 @@ const Penalties = () => {
                     className="border-b border-black"
                     key={`blk-meal-ind${index}`}
                   >
-                    <td>{object.type}</td>
                     <td>{object.reason}</td>
                     <td>{object.date}</td>
                   </tr>

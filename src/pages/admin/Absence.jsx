@@ -61,7 +61,7 @@ const Absence = () => {
     if (selectedStudentData) {
       axios
         .get(
-          `${API_ROUTE}/v1/blockmeals/get-by-studentId/${selectedStudentData.id}`
+          `${API_ROUTE}/v1/absence/get-by-studentId/${selectedStudentData.id}`
         )
         .then((res) => {
           setLoading((prev) => prev - 1);
@@ -89,7 +89,7 @@ const Absence = () => {
     const [index, id] = e.target.name.split("-");
     setLoading((prev) => prev + 1);
     axios
-      .delete(`${API_ROUTE}/v1/blockmeals/${id}`)
+      .delete(`${API_ROUTE}/v1/absence/${id}`)
       .then(() => {
         setLoading((prev) => prev - 1);
         //handle Logs
@@ -97,7 +97,7 @@ const Absence = () => {
           adminId: sessionStorage.getItem("id"),
           adminName: sessionStorage.getItem("name"),
           adminUsername: sessionStorage.getItem("username"),
-          action: `ازاله وجبه محجوبه من الطالب ${selectedStudentData.name} و الرقم القومي ${selectedStudentData.nationalId}`,
+          action: `ازاله تصريح من ${form.fromDate} الى ${form.toDate} للسبب ${form.reason}`,
           objectId: `${selectedStudentData.nationalId}`,
           objectName: `${selectedStudentData.name}`,
         });
@@ -118,7 +118,7 @@ const Absence = () => {
     if (selectedStudentData) {
       setLoading((prev) => prev + 1);
       axios
-        .post(`${API_ROUTE}/v1/blockmeals/`, {
+        .post(`${API_ROUTE}/v1/absence/`, {
           ...form,
           studentId: selectedStudentData.id,
         })
@@ -129,7 +129,7 @@ const Absence = () => {
             adminId: sessionStorage.getItem("id"),
             adminName: sessionStorage.getItem("name"),
             adminUsername: sessionStorage.getItem("username"),
-            action: `اضافه وجبه محجوبه للطالب ${selectedStudentData.name} و الرقم القومي ${selectedStudentData.nationalId}`,
+            action: `  اضافه تصريح من ${form.fromDate} الى ${form.toDate} للسبب ${form.reason}`,
             objectId: `${selectedStudentData.nationalId}`,
             objectName: `${selectedStudentData.name}`,
           });
