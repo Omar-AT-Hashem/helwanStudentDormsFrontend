@@ -35,7 +35,8 @@ import CreateEmployee from "./pages/admin/CreateEmployee.jsx";
 import Logs from "./pages/admin/Logs.jsx";
 import Statistics from "./pages/admin/Statistics.jsx";
 import IDCardGenerator from "./pages/admin/IdCardGenerator.jsx";
-
+import ApplicationReview from "./pages/student/ApplicationReview.jsx";
+import MealRecievingCard from "./pages/student/MealRecievingCard.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -180,6 +181,14 @@ export const routes = createBrowserRouter([
             path: "whenToApply",
             element: <WhenToApply />,
           },
+          {
+            path: "applicationReview",
+            element: <ApplicationReview />,
+          },
+          {
+            path: "mealsRecievingCard",
+            element: <MealRecievingCard />,
+          }
         ],
       },
     ],

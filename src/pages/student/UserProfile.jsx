@@ -13,9 +13,9 @@ function UserProfile() {
 
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [editableImage, setEditableImage] = useState(false);
+  const [editableImage, setEditableImage] = useState();
   const [error, setError] = useState(null);
-  const [isEditable, setIsEditable] = useState(true);
+  const [isEditable, setIsEditable] = useState();
   const [errorMessage, setErrorMessage] = useState(null);
 
   const [userData, setUserData] = useState();
@@ -48,6 +48,7 @@ function UserProfile() {
       )
       .then((response) => {
         setFormData({ ...response.data[0], id: sessionStorage.getItem("id") });
+        setIsEditable(response.data[0].isApproved == 1 ? false : true);
         setUserData(response.data);
         setLoading(false);
       })
@@ -268,7 +269,7 @@ function UserProfile() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="input1">
+              <label htmlFor="gender">
                 النوع :{" "}
                 <select
                   id="Gender"
@@ -279,11 +280,8 @@ function UserProfile() {
                   className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-[134px]"
                 >
-                  {formData.gender ? (
-                    <option>{formData.gender == "M" ? "ذكر" : "انثى"}</option>
-                  ) : (
-                    <option>---</option>
-                  )}
+                  <option>---</option>
+
                   <option value="F">انثى</option>
                   <option value="M">ذكر</option>
                 </select>
