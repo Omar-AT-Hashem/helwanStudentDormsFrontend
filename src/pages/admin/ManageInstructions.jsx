@@ -226,7 +226,7 @@ const ManageInsturctions = () => {
   };
 
   return (
-    <div className=" pt-16 flex flex-row w-full h-screen relative font-sans">
+    <div className=" pt-20 w-screen min-h-screen ">
       <Toaster
         toastOptions={{
           className: "",
@@ -242,10 +242,8 @@ const ManageInsturctions = () => {
         }}
       />
       {loading > 0 && <Loading />}
-      <div className=" flex-1 mt-4 snap-x ">
-        <div className="bg-mainBlue w-3/4 h-10  mr-56 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
-          اداره التعليمات - جامعة حلوان
-        </div>
+      <div className=" mx-auto w-fit mt-14 -z-30">
+    
 
         {objects ? (
           <div className="flex flex-col  font-sans">
