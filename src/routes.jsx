@@ -5,7 +5,7 @@ import ExcludedCitiesReport from "./pages/admin/ExcludedCitiesReport";
 import BasicData from "./pages/admin/BasicData";
 import Housing from "./pages/admin/Housing";
 import HousingReport from "./pages/admin/HousingReport";
-import UniversityStructureReport from "./pages/admin/UniversityStructureReport";
+import UniversityStructureReport from "./components/reports/UniversityStructureReport.jsx";
 import DormReport from "./pages/admin/DormReport";
 import MealsReport from "./pages/admin/MealsReport";
 import BlockMeals from "./pages/admin/BlockMeals";
@@ -37,6 +37,7 @@ import IDCardGenerator from "./pages/admin/IdCardGenerator.jsx";
 import ApplicationReview from "./pages/student/ApplicationReview.jsx";
 import MealRecievingCard from "./pages/student/MealRecievingCard.jsx";
 import MassImageUpload from "./pages/admin/MassImageUpload.jsx";
+import Reports from "./pages/admin/Reports.jsx";
 
 export const routes = createBrowserRouter([
   {
@@ -158,6 +159,10 @@ export const routes = createBrowserRouter([
           {
             path: "massImageUpload",
             element: <MassImageUpload />,
+          },
+          {
+            path: "reports",
+            element: <Reports />,
           },
         ],
       },
