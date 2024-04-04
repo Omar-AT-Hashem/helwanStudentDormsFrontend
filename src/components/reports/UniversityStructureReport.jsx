@@ -46,7 +46,7 @@ const UniversityStructureReport = () => {
   return (
     <div
       id="main-container"
-      className="bg-gray-100 p-2 rounded h-[500px] overflow-scroll"
+      className="bg-neutral-50 p-2 rounded h-[500px] w-[700px] overflow-y-scroll flex justify-center border shadow-xl shadow-slate-300"
     >
       <Toaster
         toastOptions={{
@@ -67,7 +67,7 @@ const UniversityStructureReport = () => {
         <div id="select-and-label-container">
           <span className="font-bold text-xl">الكليه :</span>
           <select
-            className="text-xl w-[400px] h-[30px] bg-slate-100 border border-slate-800 rounded"
+            className="text-xl w-[400px] h-[30px] bg-neutral-100 border border-slate-800 rounded mr-2"
             onChange={handleChange}
           >
             <option value="">--------</option>
