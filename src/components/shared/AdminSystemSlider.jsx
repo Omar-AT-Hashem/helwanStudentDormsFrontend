@@ -7,9 +7,9 @@ export const AdminSystemSlider = ({ setAdminSliderOpen }) => {
   };
   return (
     <div>
-      <aside className="flex flex-col-  w-64 h-screen px-5 py-8 overflow-y-scroll bg-white border  dark:bg-sky-900	 dark:border-gray-700">
-        <div className="flex flex-col justify-between flex-1 mt-6">
-          <nav className="-mx-3 space-y-6 ">
+      <aside className="flex flex-col  w-64 px-5 py-8 overflow-y-scroll h-screen bg-white border  dark:bg-sky-900	 dark:border-gray-700">
+        <div className="flex flex-col justify-between flex-1 mt-6 h-[2000px]">
+          <nav className="-mx-3 space-y-6">
             <div className="space-y-3 ">
               <Link
                 to="/admin/manageApplicationDates"
