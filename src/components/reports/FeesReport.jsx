@@ -6,7 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { API_ROUTE } from "../../config/env.js";
 import Loading from "../minicomponent/Loading.jsx";
 
-const PenaltiesReport = () => {
+const FeesReport = () => {
   const [data, setData] = useState([]);
   const [filters, setFilters] = useState({
     fromDate: "",
@@ -44,17 +44,17 @@ const PenaltiesReport = () => {
       prev[ind] = prev[ind] ? 0 : 1;
       return prev;
     });
-    setRerenderTrigger(prev => prev + 1);
-  }
+    setRerenderTrigger((prev) => prev + 1);
+  };
 
   const handleDisplayClick = (e) => {
     e.preventDefault();
     setLoading((prev) => prev + 1);
     axios
-      .post(`${API_ROUTE}/v1/penalty/student-penalties`, filters)
+      .post(`${API_ROUTE}/v1/studentfee/student-fees`, filters)
       .then((res) => {
         setData(res.data);
-        setOpen(Array(res.data.length).fill(0))
+        setOpen(Array(res.data.length).fill(0));
         setLoading((prev) => prev - 1);
       })
       .catch((err) => {
@@ -136,7 +136,10 @@ const PenaltiesReport = () => {
         </button>
       </div>
 
-      <div id="data-container" className="flex flex-col gap-4 h-[350px] overflow-y-scroll border mt-10 shadow-md ">
+      <div
+        id="data-container"
+        className="flex flex-col gap-4 h-[350px] overflow-y-scroll border mt-10 shadow-md "
+      >
         {data.map((student, studentInd) => (
           <div
             key={`rep-pen-stddta-${student.id}`}
@@ -159,26 +162,33 @@ const PenaltiesReport = () => {
                 <span>{student.academicYear}</span>
               </div>
             </div>
-            <div id="bottom-row-container" className={`pr-24 ${open[studentInd] ? "flex flex-col gap-2" : "hidden"}`}>
-              {student.penalties.map((penalty) => (
-                <div key={`rep-pen-${penalty.id}`} className={`bg-zinc-100`}>
-                  <div
-                    
-                    id="label-field-container"
-                    className="flex gap-2"
-                  >
-                    <span>سبب الجزاء: </span>
-                    <span>{penalty.reason}</span>
+            <div
+              id="bottom-row-container"
+              className={`pr-24 ${
+                open[studentInd] ? "flex flex-col gap-2" : "hidden"
+              }`}
+            >
+              {student.fees.map((fee) => (
+                <div key={`rep-fee-${fee.id}`} className={`bg-zinc-100`}>
+                  <div id="label-field-container" className="flex gap-2">
+                    <span> نوع الرسوم: </span>
+                    <span>{fee.type}</span>
                   </div>
                   <div id="label-field-container" className="flex gap-2">
-                    <span>تاريخ الجزاء: </span>
+                    <span>تاريخ الرسوم: </span>
                     <span>
-                      {penalty.date
-                        .split("T")[0]
-                        .split("-")
-                        .reverse()
-                        .join("-")}
+                      {fee.date.split("T")[0].split("-").reverse().join("-")}
                     </span>
+                  </div>
+
+                  <div id="label-field-container" className="flex gap-2">
+                    <span> المبلغ: </span>
+                    <span>{fee.sum}</span>
+                  </div>
+
+                  <div id="label-field-container" className="flex gap-2">
+                    <span> مدفوعه: </span>
+                    <span>{fee.isPayed ? "نعم" : "لا"}</span>
                   </div>
                 </div>
               ))}
@@ -190,5 +200,4 @@ const PenaltiesReport = () => {
   );
 };
 
-
-export default PenaltiesReport;
+export default FeesReport;
