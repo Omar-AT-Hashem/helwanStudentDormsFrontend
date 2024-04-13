@@ -129,8 +129,8 @@ export const AdminSystemSlider = ({ setAdminSliderOpen }) => {
               </Link>
             </div>
 
-            <div className="space-y-3 ">
-              <Link
+            <div className=" ">
+              {/* <Link
                 to="/admin/manageCategories"
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
                 onClick={handleLinkClick}
@@ -146,9 +146,9 @@ export const AdminSystemSlider = ({ setAdminSliderOpen }) => {
                 </svg>
 
                 <span className="mx-2 text-sm font-medium"> الفئات</span>
-              </Link>
+              </Link> */}
 
-              <Link
+              {/* <Link
                 to="/admin/country"
                 className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
                 href="#"
@@ -165,7 +165,7 @@ export const AdminSystemSlider = ({ setAdminSliderOpen }) => {
                 </svg>
 
                 <span className="mx-2 text-sm font-medium"> البلاد</span>
-              </Link>
+              </Link> */}
 
               <Link
                 to="/admin/createEmployee"

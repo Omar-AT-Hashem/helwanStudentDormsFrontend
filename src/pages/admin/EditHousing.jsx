@@ -29,11 +29,8 @@ const EditHousing = () => {
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      editHousingResources: 0,
+      superAdmin: 0,
     },
   ]);
 
@@ -133,14 +130,14 @@ const EditHousing = () => {
         });
 
         //handle logs
-        axios.post (`${API_ROUTE}/v1/log`, {
+        axios.post(`${API_ROUTE}/v1/log`, {
           adminId: sessionStorage.getItem("id"),
           adminName: sessionStorage.getItem("name"),
           adminUsername: sessionStorage.getItem("username"),
           action: `ازاله سرير "${bedId}"`,
           objectId: bedId,
           objectName: bedId,
-        })
+        });
         setLoading((prev) => prev - 1);
         toast.dismiss();
         return toast("أزالة بنجاح");
@@ -670,7 +667,8 @@ const EditHousing = () => {
         }}
       />
       {loading > 0 && <Loading />}
-      {permissions.reading == 1 && (
+      {(Boolean(permissions.superAdmin) ||
+        Boolean(permissions.editHousingResources)) && (
         <div className="w-64">
           {/*------------------------- Sidebar ------------------------*/}
           <div className="w-64">
@@ -685,7 +683,8 @@ const EditHousing = () => {
                         {!town.buildings.find(
                           (ele) => ele.buildingOccupied == true
                         ) &&
-                          permissions.deleting == 1 && (
+                          (Boolean(permissions.superAdmin) ||
+                            Boolean(permissions.editHousingResources)) && (
                             <button
                               onClick={() => handleRemoveTown(town.id)}
                               className="flex items-center
@@ -717,7 +716,10 @@ const EditHousing = () => {
                               className="flex flex-col"
                             >
                               {building.buildingOccupied == false &&
-                                permissions.deleting == 1 && (
+                                (Boolean(permissions.superAdmin) ||
+                                  Boolean(
+                                    permissions.editHousingResources
+                                  )) && (
                                   <button
                                     onClick={() =>
                                       handleRemoveBuilding(building.id, town.id)
@@ -744,7 +746,10 @@ const EditHousing = () => {
                                     className="flex mr-5"
                                   >
                                     {floor.floorOccupied == false &&
-                                      permissions.deleting == 1 && (
+                                      (Boolean(permissions.superAdmin) ||
+                                        Boolean(
+                                          permissions.editHousingResources
+                                        )) && (
                                         <button
                                           onClick={() =>
                                             handleRemoveFloor(
@@ -771,7 +776,10 @@ const EditHousing = () => {
                                   </div>
                                 ))}
                                 <div className="flex items-center mr-5">
-                                  {permissions.creating == 1 && (
+                                  {(Boolean(permissions.superAdmin) ||
+                                    Boolean(
+                                      permissions.editHousingResources
+                                    )) && (
                                     <button
                                       onClick={(e) =>
                                         handleAddFloor(e, building.id, town.id)
@@ -795,7 +803,8 @@ const EditHousing = () => {
                           ))}
                           <div className="flex flex-col">
                             <div className="flex ">
-                              {permissions.creating == 1 && (
+                              {(Boolean(permissions.superAdmin) ||
+                                Boolean(permissions.editHousingResources)) && (
                                 <button
                                   onClick={(e) => handleAddBuilding(e, town.id)}
                                   className="flex items-center justify-center h-5 w-5 rounded-md bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
@@ -843,7 +852,8 @@ const EditHousing = () => {
                   ))}
                   {/*-------end towns menu -----*/}
                   <div className="flex items-center mr-1 mt-1">
-                    {permissions.creating == 1 && (
+                    {(Boolean(permissions.superAdmin) ||
+                      Boolean(permissions.editHousingResources)) && (
                       <button
                         onClick={handleAddTown}
                         className="flex items-center justify-center h-5 w-5 rounded-md bg-green-700 hover:opacity-70 transition-all duration-200 text-white text-2xl"
@@ -891,7 +901,8 @@ const EditHousing = () => {
                 </div>
                 <div className="flex">
                   {!room.beds.find((e) => e.isOccupied == 1) &&
-                    permissions.creating == 1 && (
+                    (Boolean(permissions.superAdmin) ||
+                      Boolean(permissions.editHousingResources)) && (
                       <button
                         onClick={() => handleRemoveRoom(room.id)}
                         className="flex items-center justify-center w-8 h-8 bg-red-700 -ml-8 text-white rounded-md cursor-pointer font-bold  hover:opacity-80 transition-all duration-200"
@@ -913,7 +924,8 @@ const EditHousing = () => {
                         </div>
                       ) : (
                         <div className="flex items-center">
-                          {permissions.deleting == 1 && (
+                          {(Boolean(permissions.superAdmin) ||
+                            Boolean(permissions.editHousingResources)) && (
                             <button
                               onClick={() => handleRemoveBed(bed.id, room.id)}
                               className="ml-1 rounded-md w-8 h-8 bg-red-700 flex items-center justify-center text text-white font-bold hover:opacity-80 cursor-pointer transition-all duration-200"
@@ -941,7 +953,8 @@ const EditHousing = () => {
                   ))}
                   {/* -------------------end Beds menu ---------------------*/}
                   <div className="flex mt-1">
-                    {permissions.creating == 1 && (
+                    {(Boolean(permissions.superAdmin) ||
+                      Boolean(permissions.editHousingResources)) && (
                       <button
                         onClick={(e) => handleAddBed(e, room.id)}
                         className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 text-white rounded-md ml-1 cursor-pointer hover:opacity-80 transition-all duration-200"
@@ -960,51 +973,53 @@ const EditHousing = () => {
                 </div>
               </div>
             ))}
-            {selectedFloorId && (
-              <div className="flex flex-col mt-8">
-                <div className="flex">
-                  {permissions.creating == 1 && (
-                    <button
-                      onClick={handleAddRoom}
-                      className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 ml-1 text-white rounded-md cursor-pointer hover:opacity-80 transition-all duration-200"
-                    >
-                      +
-                    </button>
-                  )}
-                  <input
-                    name="roomNumber"
-                    type="text"
-                    autoComplete="off"
-                    onChange={handleInputChange}
-                    className="text-white font-bold bg-mainBlue h-10 w-20"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <div>
+            {selectedFloorId &&
+              (Boolean(permissions.superAdmin) ||
+                Boolean(permissions.editHousingResources)) && (
+                <div className="flex flex-col mt-8">
+                  <div className="flex">
+                    {
+                      <button
+                        onClick={handleAddRoom}
+                        className="text-4xl flex items-center justify-center w-8 h-8 bg-green-700 ml-1 text-white rounded-md cursor-pointer hover:opacity-80 transition-all duration-200"
+                      >
+                        +
+                      </button>
+                    }
                     <input
-                      type="radio"
-                      name="roomType"
-                      value="سكن عادي"
+                      name="roomNumber"
+                      type="text"
+                      autoComplete="off"
                       onChange={handleInputChange}
-                      required
-                      className="mr-4 text-xl"
+                      className="text-white font-bold bg-mainBlue h-10 w-20"
                     />
-                    <label className="mr-2 text-xl">سكن عادي</label>
                   </div>
-                  <div>
-                    <input
-                      type="radio"
-                      name="roomType"
-                      value="سكن مميز"
-                      onChange={handleInputChange}
-                      required
-                      className="mr-4"
-                    />
-                    <label className="mr-2 text-xl">سكن مميز</label>
+                  <div className="flex flex-col">
+                    <div>
+                      <input
+                        type="radio"
+                        name="roomType"
+                        value="سكن عادي"
+                        onChange={handleInputChange}
+                        required
+                        className="mr-4 text-xl"
+                      />
+                      <label className="mr-2 text-xl">سكن عادي</label>
+                    </div>
+                    <div>
+                      <input
+                        type="radio"
+                        name="roomType"
+                        value="سكن مميز"
+                        onChange={handleInputChange}
+                        required
+                        className="mr-4"
+                      />
+                      <label className="mr-2 text-xl">سكن مميز</label>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
         {/* -------------------end Rooms-Beds ---------------------*/}

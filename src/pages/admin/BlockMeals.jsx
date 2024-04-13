@@ -13,19 +13,25 @@ const BlockMeals = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters, filteredList, setFilteredList] = useOutletContext();
+  const [
+    selectedStudentData,
+    setSelectedStudentData,
+    studentList,
+    setStudentList,
+    filters,
+    setFilters,
+    filteredList,
+    setFilteredList,
+  ] = useOutletContext();
 
   const [form, setForm] = useState({});
   const [objects, setObjects] = useState([]);
-  const [loading, setLoading] = useState(0)
+  const [loading, setLoading] = useState(0);
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      manageBlockMeals: 0,
+      superAdmin: 0,
     },
   ]);
 
@@ -45,7 +51,6 @@ const BlockMeals = () => {
       });
   }, []);
 
- 
   useEffect(() => {
     setLoading((prev) => prev + 1);
     if (selectedStudentData) {
@@ -74,7 +79,6 @@ const BlockMeals = () => {
       };
     });
   };
- 
 
   const handleAddDelete = (e) => {
     const [index, id] = e.target.name.split("-");
@@ -224,7 +228,7 @@ const BlockMeals = () => {
                   type="radio"
                   name="meal"
                   className="form-radio h-5 w-5 text-gray-600 mr-10"
-                  value="lunch"
+                  value="غداء"
                   onChange={handleChange}
                 ></input>
                 <label>غداء</label>
@@ -233,7 +237,7 @@ const BlockMeals = () => {
                   type="radio"
                   name="meal"
                   className="form-radio h-5 w-5  mr-10 text-xl text-gray-400"
-                  value="dinner"
+                  value="عشاء"
                   onChange={handleChange}
                 ></input>
                 <label>عشاء</label>
@@ -251,7 +255,8 @@ const BlockMeals = () => {
                 ></input>
               </div>
               <div className="flex items-center w-full ">
-                {permissions.creating == 1 && (
+                {(Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.manageBlockMeals)) && (
                   <button
                     className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500"
                     onClick={handleSubmit}
@@ -265,29 +270,22 @@ const BlockMeals = () => {
               <table className="table-auto w-4/5 mx-auto">
                 <thead>
                   <tr>
-                    <th className="px-4 py-2">من تاريخ</th>
-                    <th className="px-4 py-2">الى تاريخ</th>
-                    <th className="px-4 py-2">الوجبه</th>
-                    <th className="px-4 py-2">السبب</th>
+                    <th className="px-4 py-2 text-right">من تاريخ</th>
+                    <th className="px-4 py-2 text-right">الى تاريخ</th>
+                    <th className="px-4 py-2 text-right">الوجبه</th>
+                    <th className="px-4 py-2 text-right">السبب</th>
                   </tr>
                 </thead>
                 <tbody>
                   {objects.length > 0 &&
                     objects.map((object, index) => (
                       <tr key={`blk-meal-ind${index}`}>
-                        <td>{object.fromDate}</td>
-                        <td>{object.toDate}</td>
+                        <td>
+                          {object.fromDate.split("-").reverse().join("-")}
+                        </td>
+                        <td>{object.toDate.split("-").reverse().join("-")}</td>
                         <td>{object.meal}</td>
                         <td>{object.reason}</td>
-                        {permissions.deleting == 1 && (
-                          <button
-                            className="w-20 h-8 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 m-4"
-                            onClick={handleAddDelete}
-                            name={`${index}-${object.id}`}
-                          >
-                            حذف
-                          </button>
-                        )}
                       </tr>
                     ))}
                 </tbody>

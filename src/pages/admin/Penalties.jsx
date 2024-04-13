@@ -29,11 +29,9 @@ const Penalties = () => {
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      managePenalties: 0,
+      suspendStudent: 0,
     },
   ]);
   useEffect(() => {
@@ -261,20 +259,24 @@ const Penalties = () => {
             className="border border-gray-400"
           ></input>
         </div>
-        {permissions.creating == 1 && (
-          <div>
+        {(Boolean(permissions.superAdmin) ||
+          Boolean(permissions.managePenalties)) && (
+          <div className="flex gap-40">
             <button
-              className="bg-green-500 text-white px-4 py-2 rounded"
+              className="bg-green-500  text-white px-4 py-2 rounded hover:opacity-70 transition-all duration-200"
               onClick={handleSubmit}
             >
               حفظ
             </button>
-            <button
-              className="bg-red-500 text-white px-4 py-2 rounded"
-              onClick={handleSuspension}
-            >
-              فصل
-            </button>
+            {(Boolean(permissions.superAdmin) ||
+              Boolean(permissions.suspendStudent)) && (
+              <button
+                className="bg-red-500 text-white px-4 py-2  rounded hover:opacity-70 transition-all duration-200"
+                onClick={handleSuspension}
+              >
+                فصل
+              </button>
+            )}
           </div>
         )}
 
@@ -285,7 +287,7 @@ const Penalties = () => {
               <th className="px-4 py-2"> التاريخ</th>
             </tr>
           </thead>
-          {permissions.reading == 1 && (
+          {
             <tbody>
               {objects.length > 0 &&
                 objects.map((object, index) => (
@@ -294,11 +296,13 @@ const Penalties = () => {
                     key={`blk-meal-ind${index}`}
                   >
                     <td>{object.reason}</td>
-                    <td>{object.date}</td>
+                    <td>
+                      {object.date.split("T")[0].split("-").reverse().join("-")}
+                    </td>
                   </tr>
                 ))}
             </tbody>
-          )}
+          }
         </table>
       </div>
     </div>

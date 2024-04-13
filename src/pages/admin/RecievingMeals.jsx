@@ -15,6 +15,27 @@ const RecievingMeals = () => {
 
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(0);
+  const [permissions, setPermissions] = useState([
+    {
+      superAdmin: 0,
+      uploadMeals: 0,
+    },
+  ]);
+  useEffect(() => {
+    setLoading((prev) => prev + 1);
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setLoading((prev) => prev - 1);
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        setLoading((prev) => prev - 1);
+        return;
+      });
+  }, []);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -79,13 +100,16 @@ const RecievingMeals = () => {
             onChange={handleFileChange}
             type="file"
           />
-          <button
-            onClick={handleSubmit}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:opacity-70 transition-all duration-200 hover:cursor-pointer"
-          >
-            {" "}
-            رفع الملف Excel
-          </button>
+          {(Boolean(permissions.superAdmin) ||
+            Boolean(permissions.uploadMeals)) && (
+            <button
+              onClick={handleSubmit}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:opacity-70 transition-all duration-200 hover:cursor-pointer"
+            >
+              {" "}
+              رفع الملف Excel
+            </button>
+          )}
         </div>
       </div>
     </div>

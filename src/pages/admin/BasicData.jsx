@@ -19,7 +19,7 @@ const BasicData = () => {
   const [formData, setFormData] = useState(null);
   const [editableImage, setEditableImage] = useState(false);
   const [error, setError] = useState(null);
-  const [isEditable, setIsEditable] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [faculties, setFaculties] = useState([]);
 
@@ -29,11 +29,8 @@ const BasicData = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      editStudentData: 0,
     },
   ]);
   const [
@@ -56,6 +53,11 @@ const BasicData = () => {
       .then((res) => {
         setLoading((prev) => prev - 1);
         setPermissions(res.data);
+        if (res.data.superAdmin) {
+          setIsEditable(res.data.superAdmin);
+        } else {
+          setIsEditable(res.data.editStudentData);
+        }
       })
       .catch(() => {
         toast.dismiss();
@@ -271,15 +273,17 @@ const BasicData = () => {
                 className="w-40"
                 alt="default image"
               />
-              {!editableImage && (
-                <button
-                  className="bg-blue-600 text-white font-bold w-20 h-10 hover:opacity-70"
-                  name="edit"
-                  onClick={handleEditImage}
-                >
-                  تعديل
-                </button>
-              )}
+              {!editableImage &&
+                (Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.editStudentData)) && (
+                  <button
+                    className="bg-blue-600 text-white font-bold w-20 h-10 hover:opacity-70"
+                    name="edit"
+                    onClick={handleEditImage}
+                  >
+                    تعديل
+                  </button>
+                )}
               {editableImage && (
                 <div>
                   <input type="file" onChange={handleImageChange} />
@@ -382,9 +386,8 @@ const BasicData = () => {
                     className="w-96 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 mr-[134px]"
                   >
-                    
-                      <option>---</option>
-                    
+                    <option>---</option>
+
                     <option value="F">انثى</option>
                     <option value="M">ذكر</option>
                   </select>
@@ -716,7 +719,8 @@ const BasicData = () => {
             </div>
             <div>
               <div className="mt-10 w-auto items-center">
-                {
+                {(Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.editStudentData)) && (
                   <button
                     type="submit"
                     className={`bg-blue-500 w-56 hover:opacity-70 h-14${
@@ -730,7 +734,7 @@ const BasicData = () => {
                       <span>حفظ التعديل </span>
                     )}
                   </button>
-                }
+                )}
               </div>
             </div>
           </form>

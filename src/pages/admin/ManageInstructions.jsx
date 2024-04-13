@@ -23,11 +23,8 @@ const ManageInsturctions = () => {
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      editInstructions: 0,
     },
   ]);
   useEffect(() => {
@@ -243,8 +240,6 @@ const ManageInsturctions = () => {
       />
       {loading > 0 && <Loading />}
       <div className=" mx-auto w-fit mt-14 -z-30">
-    
-
         {objects ? (
           <div className="flex flex-col  font-sans">
             <div>
@@ -257,7 +252,7 @@ const ManageInsturctions = () => {
               )}
               {objects.map((instruction, index) => (
                 <div key={111 + index}>
-                  <div className="flex gap-2 mx-5 my-3   border-yellow-300 bg-yellow-50 w-[80vw] min- h-suto items-center  resize-none p-1 h-full  border rounded-2xl text-slate-600">
+                  <div className="flex gap-2 mx-5 my-3   border-slate-300 bg-slate-50 w-[80vw] min- h-suto items-center  resize-none p-1 h-full  border rounded-2xl text-slate-600">
                     <div>
                       {" "}
                       <span className="mx-2">{index + 1}-</span>
@@ -275,7 +270,7 @@ const ManageInsturctions = () => {
                       value={instruction.instruction}
                       id={instruction.id}
                       name={index}
-                      className={`w-[100%] resize-none p-1 h-auto bg-yellow-50 ${
+                      className={`w-[100%] resize-none p-1 h-auto bg-slate-50 ${
                         !editable && "bg-slate-300"
                       }`}
                       onChange={handleTextChange}
@@ -305,7 +300,8 @@ const ManageInsturctions = () => {
                   </>
                 ) : (
                   <>
-                    {permissions.creating == 1 && (
+                    {(Boolean(permissions.superAdmin) ||
+                      Boolean(permissions.editInstructions)) && (
                       <button
                         className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded"
                         onClick={handleEdit}
@@ -314,7 +310,8 @@ const ManageInsturctions = () => {
                         تعديل
                       </button>
                     )}
-                    {permissions.creating == 1 && (
+                    {(Boolean(permissions.superAdmin) ||
+                      Boolean(permissions.editInstructions)) && (
                       <button
                         className="bg-red-500 hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
                         onClick={handleDelete}
@@ -349,7 +346,7 @@ const ManageInsturctions = () => {
                 <textarea
                   value={addedInstruction}
                   name={index}
-                  className={`w-[100%] resize-none p-1 h-full bg-green-100 border-2 border-green-500 rounded-2xl	 `}
+                  className={`w-[100%] resize-none p-1 h-full bg-slate-100 border-2 border-slate-300 rounded-2xl	 `}
                   onChange={handleAddChange}
                 ></textarea>
               </div>
@@ -367,7 +364,8 @@ const ManageInsturctions = () => {
               اضافه الكل
             </button>
           )}
-          {permissions.creating == 1 && (
+          {(Boolean(permissions.superAdmin) ||
+            Boolean(permissions.editInstructions)) && (
             <button
               className="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded m-auto"
               onClick={handleAdd}

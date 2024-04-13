@@ -39,11 +39,8 @@ const Evacuation = () => {
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      unHouseStudents: 0,
     },
   ]);
   useEffect(() => {
@@ -241,7 +238,7 @@ const Evacuation = () => {
             {/*-------------------------end Sidebar student  ----------------*/}
 
             {/*-------------------------start Sidebar towns ----------------*/}
-            {permissions.reading == 1 && (
+            {
               <div className="mt-10 select-none">
                 <div className="flex flex-col">
                   {/*------- towns menu start-----*/}
@@ -291,7 +288,7 @@ const Evacuation = () => {
                   {/*-------end towns menu -----*/}
                 </div>
               </div>
-            )}
+            }
             {/*-------------------------end  Sidebar towns ----------------*/}
           </div>
         </div>
@@ -303,7 +300,7 @@ const Evacuation = () => {
         </div>
         {/* -------------------start student info ---------------------*/}
 
-        {selectedStudentData && permissions.reading == 1 && (
+        {selectedStudentData && (
           <div className="border-2 border-slate  mt-5 h-48 px-2 mx-2">
             <div className="flex justify-between items-center h-full">
               <div className="flex flex-col ">
@@ -347,48 +344,44 @@ const Evacuation = () => {
 
         {/* -------------------start tracedHousing info ---------------------*/}
 
-        {tracedHousing &&
-          tracedHousing.message == "found" &&
-          permissions.reading == 1 && (
-            <div className="w-full flex justify-center">
-              <div className="flex flex-col font-bold text-xl">
-                <div>
-                  <span>المدينه : </span>
-                  <span className="text-blue-700">
-                    {tracedHousing.town.name}
-                  </span>
-                </div>
+        {tracedHousing && tracedHousing.message == "found" && (
+          <div className="w-full flex justify-center">
+            <div className="flex flex-col font-bold text-xl">
+              <div>
+                <span>المدينه : </span>
+                <span className="text-blue-700">{tracedHousing.town.name}</span>
+              </div>
 
-                <div>
-                  <span>المبنى : </span>
-                  <span className="text-blue-700">
-                    {tracedHousing.building.name}
-                  </span>
-                </div>
+              <div>
+                <span>المبنى : </span>
+                <span className="text-blue-700">
+                  {tracedHousing.building.name}
+                </span>
+              </div>
 
-                <div>
-                  <span>الطابق : </span>
-                  <span className="text-blue-700">
-                    {tracedHousing.floor.number}
-                  </span>
-                </div>
+              <div>
+                <span>الطابق : </span>
+                <span className="text-blue-700">
+                  {tracedHousing.floor.number}
+                </span>
+              </div>
 
-                <div>
-                  <span>الغرفه : </span>
-                  <span className="text-blue-700">
-                    {tracedHousing.room.number}
-                  </span>
-                </div>
+              <div>
+                <span>الغرفه : </span>
+                <span className="text-blue-700">
+                  {tracedHousing.room.number}
+                </span>
+              </div>
 
-                <div>
-                  <span>السرير :</span>
-                  <span className="text-blue-700">
-                    {tracedHousing.bed.number}
-                  </span>
-                </div>
+              <div>
+                <span>السرير :</span>
+                <span className="text-blue-700">
+                  {tracedHousing.bed.number}
+                </span>
               </div>
             </div>
-          )}
+          </div>
+        )}
         {/* -------------------end tracedHousing info ---------------------*/}
 
         {/* -------------------start Rooms-Beds ---------------------*/}
@@ -442,7 +435,8 @@ const Evacuation = () => {
             (selectedBed &&
               selectedStudentData &&
               tracedHousing.message == "found")) &&
-            permissions.updating == 1 && (
+            (Boolean(permissions.superAdmin) ||
+              Boolean(permissions.unHouseStudents)) && (
               <button
                 className="bg-red-800 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded"
                 onClick={handleEvacuationClick}

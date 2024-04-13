@@ -23,11 +23,8 @@ export default function ManageApplicationDates() {
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      editApplicationDates: 0,
     },
   ]);
   useEffect(() => {
@@ -484,7 +481,8 @@ export default function ManageApplicationDates() {
               {!deletable &&
                 !editable &&
                 addedObjects.length == 0 &&
-                permissions.deleting == 1 && (
+                (Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.editApplicationDates)) && (
                   <button
                     onClick={handleDelete}
                     className="bg-red-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
@@ -500,14 +498,17 @@ export default function ManageApplicationDates() {
                   إلغاء
                 </button>
               )}{" "}
-              {!editable && !deletable && permissions.creating == 1 && (
-                <button
-                  onClick={handleAdd}
-                  className="bg-blue-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
-                >
-                  إضافة
-                </button>
-              )}
+              {!editable &&
+                !deletable &&
+                (Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.editApplicationDates)) && (
+                  <button
+                    onClick={handleAdd}
+                    className="bg-blue-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"
+                  >
+                    إضافة
+                  </button>
+                )}
               {editable && (
                 <button
                   onClick={handleSubmit}
@@ -519,7 +520,8 @@ export default function ManageApplicationDates() {
               {!deletable &&
                 !editable &&
                 addedObjects.length == 0 &&
-                permissions.updating == 1 && (
+                (Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.editApplicationDates)) && (
                   <button
                     onClick={handleEdit}
                     className="bg-blue-600 w-36 h-10 rounded text-white hover:opacity-80 transition-all duration-200"

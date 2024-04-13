@@ -12,8 +12,16 @@ const Housing = () => {
     ] = `Bearer ${sessionStorage.getItem("token")}`;
   }
 
-  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters, filteredList, setFilteredList] = useOutletContext();
-  
+  const [
+    selectedStudentData,
+    setSelectedStudentData,
+    studentList,
+    setStudentList,
+    filters,
+    setFilters,
+    filteredList,
+    setFilteredList,
+  ] = useOutletContext();
 
   const [loading, setLoading] = useState(0);
 
@@ -27,11 +35,8 @@ const Housing = () => {
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      houseStudents: 0,
     },
   ]);
   useEffect(() => {
@@ -175,7 +180,7 @@ const Housing = () => {
               filters={filters}
               setFilters={setFilters}
               filteredList={filteredList}
-          setFilteredList={setFilteredList}
+              setFilteredList={setFilteredList}
             />
             {/*-------------------------end Sidebar student  ----------------*/}
 
@@ -183,86 +188,79 @@ const Housing = () => {
             <div className="mt-10 select-none">
               <div className="flex flex-col">
                 {/*------- towns menu start-----*/}
-                {towns.map(
-                  (town, index) =>
-                    permissions.reading == 1 && (
-                      <>
-                        <span
-                          className="hover:cursor-pointer hover:bg-slate-300 pr-5 select-none font-bold text-xl transition-all duration-200"
-                          onClick={() => handleSideBarTownClick(index)}
-                        >
-                          {town.name}
-                        </span>
-                        {/*-------start buildings menu -----*/}
-                        {sideBarTownsOpen[index] && (
-                          <div className="flex flex-col gap-1 pr-7 pt-1 mr-2 w-44">
-                            {town.buildings.map((building) =>
-                              selectedStudentData.gender ? (
-                                selectedStudentData.gender == building.type ? (
-                                  <div
-                                    key={`Build-town-${building.id}`}
-                                    className="flex flex-col"
-                                  >
-                                    <span
-                                      className="hover:cursor-pointer hover:bg-slate-300 text-gray-700 font-bold transition-all duration-200"
-                                      onClick={handleBuildingClick}
-                                    >
-                                      {building.name}
-                                    </span>
-
-                                    {/*-------start floors menu -----*/}
-                                    <div className="hidden flex-col">
-                                      {building.floors.map((floor) => (
-                                        <span
-                                          key={`floor-${floor.id}`}
-                                          className="hover:cursor-pointer  hover:bg-slate-300 pr-5 text-blue-600 font-bold transition-all duration-200"
-                                          onClick={() =>
-                                            handleFloorClick(floor.id)
-                                          }
-                                        >
-                                          {floor.number}
-                                        </span>
-                                      ))}
-                                    </div>
-                                    {/*-------end floors menu -----*/}
-                                  </div>
-                                ) : null
-                              ) : (
-                                <div
-                                  key={`Build-town-${building.id}`}
-                                  className="flex flex-col"
+                {towns.map((town, index) => (
+                  <>
+                    <span
+                      className="hover:cursor-pointer hover:bg-slate-300 pr-5 select-none font-bold text-xl transition-all duration-200"
+                      onClick={() => handleSideBarTownClick(index)}
+                    >
+                      {town.name}
+                    </span>
+                    {/*-------start buildings menu -----*/}
+                    {sideBarTownsOpen[index] && (
+                      <div className="flex flex-col gap-1 pr-7 pt-1 mr-2 w-44">
+                        {town.buildings.map((building) =>
+                          selectedStudentData.gender ? (
+                            selectedStudentData.gender == building.type ? (
+                              <div
+                                key={`Build-town-${building.id}`}
+                                className="flex flex-col"
+                              >
+                                <span
+                                  className="hover:cursor-pointer hover:bg-slate-300 text-gray-700 font-bold transition-all duration-200"
+                                  onClick={handleBuildingClick}
                                 >
-                                  <span
-                                    className="hover:cursor-pointer hover:bg-slate-300 text-gray-700 font-bold transition-all duration-200"
-                                    onClick={handleBuildingClick}
-                                  >
-                                    {building.name}
-                                  </span>
+                                  {building.name}
+                                </span>
 
-                                  {/*-------start floors menu -----*/}
-                                  <div className="hidden flex-col">
-                                    {building.floors.map((floor) => (
-                                      <span
-                                        key={`floor-${floor.id}`}
-                                        className="hover:cursor-pointer  hover:bg-slate-300 pr-5 text-blue-600 font-bold transition-all duration-200"
-                                        onClick={() =>
-                                          handleFloorClick(floor.id)
-                                        }
-                                      >
-                                        {floor.number}
-                                      </span>
-                                    ))}
-                                  </div>
-                                  {/*-------end floors menu -----*/}
+                                {/*-------start floors menu -----*/}
+                                <div className="hidden flex-col">
+                                  {building.floors.map((floor) => (
+                                    <span
+                                      key={`floor-${floor.id}`}
+                                      className="hover:cursor-pointer  hover:bg-slate-300 pr-5 text-blue-600 font-bold transition-all duration-200"
+                                      onClick={() => handleFloorClick(floor.id)}
+                                    >
+                                      {floor.number}
+                                    </span>
+                                  ))}
                                 </div>
-                              )
-                            )}
-                          </div>
+                                {/*-------end floors menu -----*/}
+                              </div>
+                            ) : null
+                          ) : (
+                            <div
+                              key={`Build-town-${building.id}`}
+                              className="flex flex-col"
+                            >
+                              <span
+                                className="hover:cursor-pointer hover:bg-slate-300 text-gray-700 font-bold transition-all duration-200"
+                                onClick={handleBuildingClick}
+                              >
+                                {building.name}
+                              </span>
+
+                              {/*-------start floors menu -----*/}
+                              <div className="hidden flex-col">
+                                {building.floors.map((floor) => (
+                                  <span
+                                    key={`floor-${floor.id}`}
+                                    className="hover:cursor-pointer  hover:bg-slate-300 pr-5 text-blue-600 font-bold transition-all duration-200"
+                                    onClick={() => handleFloorClick(floor.id)}
+                                  >
+                                    {floor.number}
+                                  </span>
+                                ))}
+                              </div>
+                              {/*-------end floors menu -----*/}
+                            </div>
+                          )
                         )}
-                        {/*-------end buildings menu -----*/}
-                      </>
-                    )
-                )}
+                      </div>
+                    )}
+                    {/*-------end buildings menu -----*/}
+                  </>
+                ))}
                 {/*-------end towns menu -----*/}
               </div>
             </div>
@@ -277,7 +275,7 @@ const Housing = () => {
         </div>
         {/* -------------------start student info ---------------------*/}
 
-        {selectedStudentData && permissions.reading == 1 && (
+        {selectedStudentData && (
           <div className="border-2 border-slate  mt-5 h-48 px-2 mx-2">
             <div className="flex justify-between items-center h-full">
               <div className="flex flex-col ">
@@ -404,14 +402,17 @@ const Housing = () => {
         {/* -------------------end Rooms-Beds ---------------------*/}
 
         <div className="flex justify-center mt-20">
-          {selectedBed && selectedStudentData && (
-            <button
-              className="bg-green-600 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded"
-              onClick={handleHouseClick}
-            >
-              تسكين
-            </button>
-          )}
+          {selectedBed &&
+            selectedStudentData &&
+            (Boolean(permissions.superAdmin) ||
+              Boolean(permissions.houseStudents)) && (
+              <button
+                className="bg-green-600 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded"
+                onClick={handleHouseClick}
+              >
+                تسكين
+              </button>
+            )}
         </div>
       </div>
     </div>

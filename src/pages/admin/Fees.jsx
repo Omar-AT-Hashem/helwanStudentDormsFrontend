@@ -37,11 +37,8 @@ const Fees = () => {
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      manageStudentFees: 0,
     },
   ]);
 
@@ -188,8 +185,7 @@ const Fees = () => {
         <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl mb-10">
           الرسوم - جامعة حلوان
         </div>
-
-        {selectedStudentData && permissions.reading == 1 && (
+        {selectedStudentData && (
           <div className="border-2 border-slate  mt-5 h-48 px-2 mx-2 mb-10 ">
             <div className="flex justify-between items-center h-full">
               <div className="flex flex-col ">
@@ -228,7 +224,6 @@ const Fees = () => {
             </div>
           </div>
         )}
-
         <div className="mb-2">
           <label className="ml-10">النوع :</label>
           <select
@@ -245,7 +240,6 @@ const Fees = () => {
             ))}
           </select>
         </div>
-
         {/* <div className="mb-2">
           <label className="ml-10">نوع الدفع :</label>
           <select
@@ -261,7 +255,6 @@ const Fees = () => {
             <option value="option3">السبب الثالث</option>
           </select>
         </div> */}
-
         <div className="mb-2">
           <label className="ml-10"> الدفع الالكتروني :</label>
           <input
@@ -272,7 +265,6 @@ const Fees = () => {
             className="border border-gray-400"
           />
         </div>
-
         <div className="mb-2">
           <label className="ml-10"> التاريخ</label>
           <input
@@ -282,7 +274,6 @@ const Fees = () => {
             className="border border-gray-400"
           />
         </div>
-
         {/* {!hideLastThreeDivs && (
           <>
             <div className="mb-2">
@@ -324,7 +315,6 @@ const Fees = () => {
             </div>
           </>
         )} */}
-
         <div className="mb-2">
           <label className="ml-10"> المبلغ :</label>
           <input
@@ -336,8 +326,8 @@ const Fees = () => {
             className="border border-gray-400 "
           ></input>
         </div>
-
-        {permissions.creating == 1 && (
+        {(Boolean(permissions.superAdmin) ||
+          Boolean(permissions.manageStudentFees)) && (
           <button
             className="bg-green-500 text-white px-4 py-2 rounded"
             onClick={handleSubmit}
@@ -345,33 +335,32 @@ const Fees = () => {
             حفظ
           </button>
         )}
-
-        {permissions.reading == 1 && (
-          <table className="table-auto w-4/5 mx-auto ">
-            <thead className="border-b border-black">
-              <tr className="text-right">
-                <th className="px-4 py-2">الرسوم </th>
-                <th className="px-4 py-2">عن شهر</th>
-                <th className="px-4 py-2"> المبلغ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {objects.length > 0 &&
-                objects.map((object, index) => (
-                  <tr
-                    className="border-b border-black"
-                    key={`blk-meal-ind${index}`}
-                  >
-                    <td className="py-1">{object.type}</td>
-                    <td className="py-1">
-                      {object.date.split("-").reverse().join("-")}
-                    </td>
-                    <td className="py-1">{object.sum}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        )}
+        
+        <table className="table-auto w-4/5 mx-auto ">
+          <thead className="border-b border-black">
+            <tr className="text-right">
+              <th className="px-4 py-2 text-right">الرسوم </th>
+              <th className="px-4 py-2 text-right">عن شهر</th>
+              <th className="px-4 py-2 text-right"> المبلغ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {objects.length > 0 &&
+              objects.map((object, index) => (
+                <tr
+                  className="border-b border-black"
+                  key={`blk-meal-ind${index}`}
+                >
+                  <td className="py-1">{object.type}</td>
+                  <td className="py-1">
+                    {object.date.split("T")[0].split("-").reverse().join("-")}
+                  </td>
+                  <td className="py-1">{object.sum}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      
       </div>
     </div>
   );

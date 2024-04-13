@@ -19,17 +19,23 @@ export const ApplicationApprovals = () => {
 
   // State to store the selected student's data
 
-  const [selectedStudentData, setSelectedStudentData, studentList, setStudentList, filters, setFilters, filteredList, setFilteredList] = useOutletContext();
+  const [
+    selectedStudentData,
+    setSelectedStudentData,
+    studentList,
+    setStudentList,
+    filters,
+    setFilters,
+    filteredList,
+    setFilteredList,
+  ] = useOutletContext();
 
   const [loading, setLoading] = useState(0);
- 
+
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      applicationApprovals: 0,
     },
   ]);
   useEffect(() => {
@@ -134,8 +140,6 @@ export const ApplicationApprovals = () => {
       />
       {/*------------------------- Sidebar ------------------------*/}
       <div className="w-64  mt-4 rounded-lg">
-      
-
         <MainSideBar
           studentList={studentList}
           setStudentList={setStudentList}
@@ -144,7 +148,7 @@ export const ApplicationApprovals = () => {
           setFilters={setFilters}
           filteredList={filteredList}
           setFilteredList={setFilteredList}
-                  />
+        />
       </div>
       {/* -------------------end Sidebar ---------------------*/}
 
@@ -154,7 +158,7 @@ export const ApplicationApprovals = () => {
           <div className="bg-mainBlue mx-4 h-10 text-fuchsia-50 text-center text-2xl mt-4 rounded-lg text-mr-1">
             قبول الطلب - جامعة حلوان
           </div>
-          {selectedStudentData.nationalId && permissions.reading == 1 ? (
+          {selectedStudentData.nationalId ? (
             <div>
               <div className="grid grid-cols-2 gap  p-4 border rounded-lg border-mainBlue mt-2">
                 <div className={fieldContainer}>
@@ -330,7 +334,8 @@ export const ApplicationApprovals = () => {
               </div>
 
               <div className="flex gap-10 mt-10 text-white font-bold w-1/2 m-auto justify-center">
-                {permissions.updating == 1 && (
+                {(Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.applicationApprovals)) && (
                   <button
                     className="w-40 h-10 bg-green-600  hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
                     onClick={accept}
@@ -338,7 +343,8 @@ export const ApplicationApprovals = () => {
                     قبول
                   </button>
                 )}
-                {permissions.updating == 1 && (
+                {(Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.applicationApprovals)) && (
                   <button
                     className="w-40 h-10 bg-red-600  hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 rounded"
                     onClick={reject}
@@ -350,9 +356,7 @@ export const ApplicationApprovals = () => {
             </div>
           ) : (
             // Display a message if no student is selected
-            <p className="text-gray-900">
-              Select a student from the sidebar to view their details.
-            </p>
+            <p className="text-gray-900">اختر طالب للمراجعه</p>
           )}
         </div>
       </div>

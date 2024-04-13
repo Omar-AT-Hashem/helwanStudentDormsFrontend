@@ -16,11 +16,8 @@ export const AssessStudents = () => {
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      studentEvaluation: 0,
     },
   ]);
   useEffect(() => {
@@ -98,7 +95,7 @@ export const AssessStudents = () => {
       />
       {loading > 0 && <Loading />}
 
-      {metaData && permissions.reading == 1 && (
+      {metaData && (
         <div className="flex flex-col">
           <span>عدد الطلاب المتقدمين:{metaData.applicantMalesCount}</span>
           <span>عدد الطالبات المتقدمات:{metaData.applicantFemalesCount}</span>
@@ -107,7 +104,8 @@ export const AssessStudents = () => {
       )}
 
       <div className="">
-        {permissions.updating == 1 && (
+        {(Boolean(permissions.superAdmin) ||
+          Boolean(permissions.studentEvaluation)) && (
           <button
             className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500"
             onClick={assess}

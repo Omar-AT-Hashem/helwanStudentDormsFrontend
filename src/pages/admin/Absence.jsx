@@ -32,11 +32,8 @@ const Absence = () => {
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      manageAbscence: 0,
     },
   ]);
 
@@ -83,34 +80,6 @@ const Absence = () => {
         [e.target.name]: e.target.value,
       };
     });
-  };
-
-  const handleAddDelete = (e) => {
-    const [index, id] = e.target.name.split("-");
-    setLoading((prev) => prev + 1);
-    axios
-      .delete(`${API_ROUTE}/v1/absence/${id}`)
-      .then(() => {
-        setLoading((prev) => prev - 1);
-        //handle Logs
-        axios.post(`${API_ROUTE}/v1/log`, {
-          adminId: sessionStorage.getItem("id"),
-          adminName: sessionStorage.getItem("name"),
-          adminUsername: sessionStorage.getItem("username"),
-          action: `ازاله تصريح من ${form.fromDate} الى ${form.toDate} للسبب ${form.reason}`,
-          objectId: `${selectedStudentData.nationalId}`,
-          objectName: `${selectedStudentData.name}`,
-        });
-        setObjects((prev) => {
-          prev.splice(index, 1);
-          return [...prev];
-        });
-      })
-      .catch((err) => {
-        setLoading((prev) => prev - 1);
-        toast.dismiss();
-        toast("something went wrong");
-      });
   };
 
   const handleSubmit = (e) => {
@@ -236,10 +205,9 @@ const Absence = () => {
                   onChange={handleChange}
                   className="border border-gray-400 text-xl text-gray-400 mr-4"
                 ></input>
-                
               </div>
               <div className="flex items-center w-full ">
-                {permissions.creating == 1 && (
+                {(Boolean(permissions.superAdmin) || Boolean(permissions.manageAbscence)) && (
                   <button
                     className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500"
                     onClick={handleSubmit}
@@ -253,27 +221,30 @@ const Absence = () => {
               <table className="table-auto w-4/5 mx-auto">
                 <thead>
                   <tr>
-                    <th className="px-4 py-2">من تاريخ</th>
-                    <th className="px-4 py-2">الى تاريخ</th>
-                    <th className="px-4 py-2">السبب</th>
+                    <th className="px-4 py-2 text-right">من تاريخ</th>
+                    <th className="px-4 py-2 text-right">الى تاريخ</th>
+                    <th className="px-4 py-2 text-right">السبب</th>
                   </tr>
                 </thead>
                 <tbody>
                   {objects.length > 0 &&
                     objects.map((object, index) => (
                       <tr key={`blk-meal-ind${index}`}>
-                        <td>{object.fromDate}</td>
-                        <td>{object.toDate}</td>
+                        <td>
+                          {object.fromDate
+                            .split("T")[0]
+                            .split("-")
+                            .reverse()
+                            .join("-")}
+                        </td>
+                        <td>
+                          {object.toDate
+                            .split("T")[0]
+                            .split("-")
+                            .reverse()
+                            .join("-")}
+                        </td>
                         <td>{object.reason}</td>
-                        {permissions.deleting == 1 && (
-                          <button
-                            className="w-20 h-8 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500 m-4"
-                            onClick={handleAddDelete}
-                            name={`${index}-${object.id}`}
-                          >
-                            حذف
-                          </button>
-                        )}
                       </tr>
                     ))}
                 </tbody>

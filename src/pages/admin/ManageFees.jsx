@@ -25,11 +25,8 @@ const ManageFees = () => {
 
   const [permissions, setPermissions] = useState([
     {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
+      superAdmin: 0,
+      editFees: 0,
     },
   ]);
 
@@ -252,21 +249,19 @@ const ManageFees = () => {
             <div className="mt-10 select-none">
               <div className="flex flex-col mt-24 mr-5">
                 <div className="flex flex-col gap-1 hover:">
-                  {fees.map(
-                    (fee) =>
-                      permissions.reading == 1 && (
-                        <div
-                          key={`fee-side-${fee.id}`}
-                          className="w-28 cursor-pointer hover:bg-slate-100"
-                          onClick={() => handleSideFeeClick(fee)}
-                        >
-                          <span>{fee.name}</span>
-                        </div>
-                      )
-                  )}
+                  {fees.map((fee) => (
+                    <div
+                      key={`fee-side-${fee.id}`}
+                      className="w-28 cursor-pointer hover:bg-slate-100"
+                      onClick={() => handleSideFeeClick(fee)}
+                    >
+                      <span>{fee.name}</span>
+                    </div>
+                  ))}
                 </div>
 
-                {permissions.creating == 1 && (
+                {(Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.editFees)) && (
                   <div className="flex gap-2 mt-2">
                     <button
                       className=" flex items-center justify-center w-6 h-6 bg-blue-700 font-bold text-white text-2xl rounded-sm"
@@ -348,30 +343,36 @@ const ManageFees = () => {
               </div>
             </div>
             <div className="mr-32 mt-5">
-              {!editable && permissions.updating == 1 && (
-                <button
-                  className="font-bold text-white text-xl bg-green-700 hover:opacity-70 hover:pointer transition-all duration-200 w-20 h-10 rounded-md"
-                  onClick={handleEditClick}
-                >
-                  تعديل
-                </button>
-              )}
-              {!editable && permissions.deleting == 1 && (
-                <button
-                  className="font-bold text-white text-xl bg-red-700 hover:opacity-70 hover:pointer transition-all duration-200 w-20 h-10 rounded-md mr-10"
-                  onClick={handleDeleteClick}
-                >
-                  ازاله
-                </button>
-              )}
-              {editable && (
-                <button
-                  className="font-bold text-white text-xl bg-blue-700 hover:opacity-70 hover:pointer transition-all duration-200 w-20 h-10 rounded-md"
-                  onClick={handleSaveClick}
-                >
-                  حفظ
-                </button>
-              )}
+              {!editable &&
+                (Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.editFees)) && (
+                  <button
+                    className="font-bold text-white text-xl bg-green-700 hover:opacity-70 hover:pointer transition-all duration-200 w-20 h-10 rounded-md"
+                    onClick={handleEditClick}
+                  >
+                    تعديل
+                  </button>
+                )}
+              {!editable &&
+                (Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.editFees)) && (
+                  <button
+                    className="font-bold text-white text-xl bg-red-700 hover:opacity-70 hover:pointer transition-all duration-200 w-20 h-10 rounded-md mr-10"
+                    onClick={handleDeleteClick}
+                  >
+                    ازاله
+                  </button>
+                )}
+              {editable &&
+                (Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.editFees)) && (
+                  <button
+                    className="font-bold text-white text-xl bg-blue-700 hover:opacity-70 hover:pointer transition-all duration-200 w-20 h-10 rounded-md"
+                    onClick={handleSaveClick}
+                  >
+                    حفظ
+                  </button>
+                )}
             </div>
           </div>
         )}

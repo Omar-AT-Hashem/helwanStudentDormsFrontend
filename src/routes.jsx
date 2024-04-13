@@ -1,12 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import Login from "./pages/login/login";
-import ExcludedCitiesReport from "./pages/admin/ExcludedCitiesReport";
 import BasicData from "./pages/admin/BasicData";
 import Housing from "./pages/admin/Housing";
 import HousingReport from "./pages/admin/HousingReport";
 import UniversityStructureReport from "./components/reports/UniversityStructureReport.jsx";
-import DormReport from "./pages/admin/DormReport";
+
 import MealsReport from "./pages/admin/MealsReport";
 import BlockMeals from "./pages/admin/BlockMeals";
 import Absence from "./pages/admin/Absence.jsx";
@@ -69,10 +68,6 @@ export const routes = createBrowserRouter([
             path: "housingreport",
             element: <HousingReport />,
           },
-          {
-            path: "dormreport",
-            element: <DormReport />,
-          },
 
           {
             path: "editHousing",
@@ -81,10 +76,6 @@ export const routes = createBrowserRouter([
           {
             path: "evacuation",
             element: <Evacuation />,
-          },
-          {
-            path: "excludedcitiesreport",
-            element: <ExcludedCitiesReport />,
           },
           {
             path: "housing",

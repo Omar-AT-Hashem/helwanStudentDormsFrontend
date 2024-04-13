@@ -16,6 +16,28 @@ const MassImageUpload = () => {
   const [files, setFiles] = useState(null);
   const [loading, setLoading] = useState(0);
 
+  const [permissions, setPermissions] = useState([
+    {
+      superAdmin: 0,
+      uploadStudentImages: 0,
+    },
+  ]);
+  useEffect(() => {
+    setLoading((prev) => prev + 1);
+    axios
+      .get(
+        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
+      )
+      .then((res) => {
+        setLoading((prev) => prev - 1);
+        setPermissions(res.data);
+      })
+      .catch(() => {
+        setLoading((prev) => prev - 1);
+        return;
+      });
+  }, []);
+
   const handleFileChange = async (event) => {
     setFiles(event.target.files);
     console.log(event.target.files[0]);
@@ -86,13 +108,16 @@ const MassImageUpload = () => {
             type="file"
             multiple
           />
-          <button
-            onClick={handleSubmit}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:opacity-70 transition-all duration-200 hover:cursor-pointer"
-          >
-            {" "}
-            رفع الصور
-          </button>
+          {(Boolean(permissions.superAdmin) ||
+            Boolean(permissions.uploadStudentImages)) && (
+            <button
+              onClick={handleSubmit}
+              className="bg-green-500 text-white px-4 py-2 rounded hover:opacity-70 transition-all duration-200 hover:cursor-pointer"
+            >
+              {" "}
+              رفع الصور
+            </button>
+          )}
         </div>
       </div>
     </div>
