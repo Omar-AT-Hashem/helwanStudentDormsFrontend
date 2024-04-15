@@ -12,6 +12,7 @@ import FeesReport from "../../components/reports/FeesReport.jsx";
 import AbsenceReport from "../../components/reports/AbsenceReport.jsx";
 import StudentsWithoutPicturesReport from "../../components/reports/StudentsWithoutPicturesReport.jsx";
 import SuspendedStudentsReport from "../../components/reports/SuspendedStudentsReport.jsx";
+import UsersAndPermissionsReport from "../../components/reports/UsersAndPermissionsReport.jsx";
 
 const Reports = () => {
   const [openReport, setOpenReport] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -159,6 +160,24 @@ const Reports = () => {
             </button>
           </div>
         </div>
+
+        <div
+          id="button-7"
+          className={`border-2 border-black ${
+            openReport[7] && "border-4 border-mainYellow"
+          } w-[300px] text-2xl p-3 bg-mainBlue`}
+        >
+          <div className="flex flex-col items-center gap-5 ">
+            <span className="text-white font-bold">المستخدمين و الصلاحيات</span>
+            <button
+              name="7"
+              className="text-white bg-green-600 font-bold w-20 h-10 rounded hover:opacity-70 transition-all duration-200"
+              onClick={handleShowClick}
+            >
+              عرض
+            </button>
+          </div>
+        </div>
       </div>
 
       <div id="report-container" className="mt-20 flex justify-center">
@@ -169,6 +188,7 @@ const Reports = () => {
         {openReport[4] == 1 && <AbsenceReport />}
         {openReport[5] == 1 && <StudentsWithoutPicturesReport />}
         {openReport[6] == 1 && <SuspendedStudentsReport />}
+        {openReport[7] == 1 && <UsersAndPermissionsReport />}
       </div>
     </div>
   );
