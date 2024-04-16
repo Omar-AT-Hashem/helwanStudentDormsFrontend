@@ -129,6 +129,10 @@ const CreateEmployee = () => {
               objectName: `${formData.name}`,
             });
             setLoading((prev) => prev - 1);
+            setEmployees((prev) => {
+              prev = [...prev, { ...formData, id: res.data.id }];
+              return prev;
+            });
             setFormData({
               name: "",
               username: "",
@@ -548,19 +552,20 @@ const CreateEmployee = () => {
                             onChange={(e) => handleEmployeeChange(e, index)}
                             disabled={!editable}
                             required
-                            
                             className="mr-1"
                           />
                         </div>
                       </div>
                       <div className="flex gap-5"></div>
                     </div>
-                   {Boolean(permissions.superAdmin) && <button
-                      className="bg-blue-600 w-40 h-10 rounded hover:opacity-70 text-white font-bold transition-all duration-200 mb-4 -mt-4"
-                      onClick={(e) => handleEmployeeChangesSave(e, index)}
-                    >
-                      حفظ
-                    </button>}
+                    {Boolean(permissions.superAdmin) && (
+                      <button
+                        className="bg-blue-600 w-40 h-10 rounded hover:opacity-70 text-white font-bold transition-all duration-200 mb-4 -mt-4"
+                        onClick={(e) => handleEmployeeChangesSave(e, index)}
+                      >
+                        حفظ
+                      </button>
+                    )}
                   </div>
                 </div>
               </>

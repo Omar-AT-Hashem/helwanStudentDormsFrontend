@@ -13,32 +13,10 @@ const Logs = () => {
   }
 
   const [logs, setLogs] = useState([]);
+  const [filteredLogs, setFilteredLogs] = useState([]);
   const [loading, setLoading] = useState(0);
 
-  const [permissions, setPermissions] = useState([
-    {
-      creating: 0,
-      reading: 0,
-      updating: 0,
-      deleting: 0,
-      creatingEmployee: 0,
-    },
-  ]);
-  useEffect(() => {
-    setLoading((prev) => prev + 1);
-    axios
-      .get(
-        `${API_ROUTE}/v1/employee/permissions/${sessionStorage.getItem("id")}`
-      )
-      .then((res) => {
-        setLoading((prev) => prev - 1);
-        setPermissions(res.data);
-      })
-      .catch(() => {
-        setLoading((prev) => prev - 1);
-        return;
-      });
-  }, []);
+  
 
   useEffect(() => {
     setLoading((prev) => prev + 1);
@@ -47,6 +25,7 @@ const Logs = () => {
       .then((res) => {
         setLoading((prev) => prev - 1);
         setLogs(res.data);
+        setFilteredLogs(res.data);
       })
       .catch(() => {
         setLoading((prev) => prev - 1);
@@ -54,6 +33,16 @@ const Logs = () => {
         toast("حدث خطا");
       });
   }, []);
+
+  const handleSearchBarChange = (e) => {
+    setFilteredLogs(
+      logs.filter(
+        (log) =>
+          log.adminName.includes(e.target.value) ||
+          log.adminUsername.includes(e.target.value)
+      )
+    );
+  };
 
   return (
     <div className="pt-16 flex flex-row w-full h-screen">
@@ -75,16 +64,29 @@ const Logs = () => {
       {loading > 0 && <Loading />}
 
       {/* Main content area */}
-      {permissions.reading == 1 && (
+      {
         <div className=" h-full w-full flex-1">
           {/* Header */}
           <div className="bg-mainBlue h-10  text-fuchsia-50 text-center text-2xl mt-8 rounded-lg text-mr-1 mx-20 mb-0">
             سجلات النظام - جامعة حلوان
           </div>
 
+          <div className="text-2xl font-bold m-auto w-[400px] mt-10">
+            <label className="" htmlFor="adminUsernameSearch">
+              البحث بالاسم:{" "}
+            </label>
+            <input
+              type="text"
+              name="adminUsernameSearch"
+              id=""
+              className="bg-slate-100 rounded border border-slate-500 shadow-md "
+              onChange={handleSearchBarChange}
+            />
+          </div>
+
           <div className="flex flex-col items-center">
             <div className="flex flex-col gap-5 mr-10 mt-10 max-w-[750px] text-xl justify-center ">
-              {logs.map((log) => (
+              {filteredLogs.map((log) => (
                 <div
                   key={`${log.id}-log-display`}
                   className="flex flex-col bg-slate-200 py-3 px-20"
@@ -164,7 +166,7 @@ const Logs = () => {
             </div>
           </div>
         </div>
-      )}
+      }
     </div>
   );
 };
