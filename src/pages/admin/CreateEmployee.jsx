@@ -4,6 +4,7 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../../components/minicomponent/Loading.jsx";
 
+
 const CreateEmployee = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
@@ -55,6 +56,10 @@ const CreateEmployee = () => {
       superAdmin: 0,
     },
   ]);
+
+
+
+
   useEffect(() => {
     setLoading((prev) => prev + 1);
     axios
@@ -221,6 +226,9 @@ const CreateEmployee = () => {
         return toast("حدث خطأ");
       });
   };
+
+
+
   return (
     <div className="pt-16 flex flex-row w-screen h-screen overflow-x-hidden">
       <Toaster

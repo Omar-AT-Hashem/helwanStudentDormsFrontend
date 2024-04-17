@@ -1,12 +1,13 @@
 import { useState } from "react";
 import MainSideBar from "../../components/minicomponent/MainSideBar";
-import Records from "../../assets/fakeData/Records.json";
+
 import { useOutletContext } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { API_ROUTE } from "../../config/env";
 import Loading from "../../components/minicomponent/Loading";
 import { useEffect } from "react";
+
 
 const Absence = () => {
   if (sessionStorage.getItem("token")) {
@@ -207,7 +208,8 @@ const Absence = () => {
                 ></input>
               </div>
               <div className="flex items-center w-full ">
-                {(Boolean(permissions.superAdmin) || Boolean(permissions.manageAbscence)) && (
+                {(Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.manageAbscence)) && (
                   <button
                     className="w-40 h-10 bg-green-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500"
                     onClick={handleSubmit}

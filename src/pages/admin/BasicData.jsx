@@ -7,6 +7,7 @@ import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 
+
 const BasicData = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
@@ -43,6 +44,24 @@ const BasicData = () => {
     filteredList,
     setFilteredList,
   ] = useOutletContext();
+
+  const [loadPage, setLoadPage] = useState(false);
+
+  useEffect(() => {
+    axios
+      .post(`${API_ROUTE}/v1/employee/verify-token-page-load`)
+      .then((res) => {
+        if (res.status == 200) {
+          return setLoadPage(true);
+        }
+        if (res.status == 401 || res.status == 403) {
+          return setLoadPage(false);
+        }
+      })
+      .catch(() => {
+        return setLoadPage(false);
+      });
+  });
 
   useEffect(() => {
     setLoading((prev) => prev + 1);
@@ -217,6 +236,7 @@ const BasicData = () => {
         toast("حدث خطأ");
       });
   };
+
 
   return (
     formData && (

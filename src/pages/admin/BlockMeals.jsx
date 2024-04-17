@@ -80,34 +80,6 @@ const BlockMeals = () => {
     });
   };
 
-  const handleAddDelete = (e) => {
-    const [index, id] = e.target.name.split("-");
-    setLoading((prev) => prev + 1);
-    axios
-      .delete(`${API_ROUTE}/v1/blockmeals/${id}`)
-      .then(() => {
-        setLoading((prev) => prev - 1);
-        //handle Logs
-        axios.post(`${API_ROUTE}/v1/log`, {
-          adminId: sessionStorage.getItem("id"),
-          adminName: sessionStorage.getItem("name"),
-          adminUsername: sessionStorage.getItem("username"),
-          action: `ازاله وجبه محجوبه من الطالب ${selectedStudentData.name} و الرقم القومي ${selectedStudentData.nationalId}`,
-          objectId: `${selectedStudentData.nationalId}`,
-          objectName: `${selectedStudentData.name}`,
-        });
-        setObjects((prev) => {
-          prev.splice(index, 1);
-          return [...prev];
-        });
-      })
-      .catch((err) => {
-        setLoading((prev) => prev - 1);
-        toast.dismiss();
-        toast("something went wrong");
-      });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedStudentData) {

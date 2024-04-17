@@ -3,13 +3,16 @@ import { useState } from "react";
 import AdminSystemSlider from "./AdminSystemSlider";
 // import AdminStudentSlider from './AdminStudentSlider';
 import AdminStudentSlider from "./AdminStudentSlider";
-
+import { Link, useNavigate } from "react-router-dom";
 import logoImg from "../../assets/login/logo-removebg.png";
 
 export const AdminNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+ 
   const [studentSliderOpen, setStudentSliderOpen] = useState(false);
   const [adminSliderOpen, setAdminSliderOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleStudentSlider = () => {
     setAdminSliderOpen(false);
@@ -19,6 +22,11 @@ export const AdminNavbar = () => {
   const handleAdminSlider = () => {
     setStudentSliderOpen(false);
     setAdminSliderOpen(!adminSliderOpen);
+  };
+
+  const handleLogout = async (e) => {
+    sessionStorage.clear();
+    navigate("/");
   };
 
   return (
@@ -34,67 +42,31 @@ export const AdminNavbar = () => {
                 </h2>
                 <img className="h-20 w-20  " src={logoImg} alt="logo" />
               </div>
-              <div className="hidden md:block ">
-                <div className="mr-10 w-2/3 flex items-baseline flex-row-reverse space-x-4">
-                  <button
-                    onClick={handleStudentSlider}
-                    className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    بيانات الطلاب
-                  </button>
+              <div className="flex w-full justify-between ">
+                <button
+                  onClick={handleLogout}
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  تسجيل الخروج
+                </button>
+                <div className="block ">
+                  <div className="mr-10 w-2/3 flex items-baseline flex-row-reverse space-x-4">
+                    <button
+                      onClick={handleStudentSlider}
+                      className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      بيانات الطلاب
+                    </button>
 
-                  <button
-                    onClick={handleAdminSlider}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    الإشراف على النظام
-                  </button>
+                    <button
+                      onClick={handleAdminSlider}
+                      className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      الإشراف على النظام
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="-mr-2 flex md:hidden bg-red-700 absolute">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                type="button"
-                className="bg-gray-900 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                aria-controls="mobile-menu"
-                aria-expanded="false"
-              >
-                <span className="sr-only">Open main menu</span>
-                {!isOpen ? (
-                  <svg
-                    className="block h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="block h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                )}
-              </button>
             </div>
           </div>
         </div>

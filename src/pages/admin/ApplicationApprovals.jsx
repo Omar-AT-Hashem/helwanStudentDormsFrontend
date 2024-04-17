@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import MainSideBar from "../../components/minicomponent/MainSideBar.jsx";
 import { useOutletContext } from "react-router-dom";
 
+
 export const ApplicationApprovals = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
@@ -38,6 +39,9 @@ export const ApplicationApprovals = () => {
       applicationApprovals: 0,
     },
   ]);
+
+
+
   useEffect(() => {
     setLoading((prev) => prev + 1);
     axios
@@ -121,6 +125,7 @@ export const ApplicationApprovals = () => {
         return toast("Something went wrong");
       });
   };
+
 
   return (
     <div className="pt-20 flex flex-row w-full h-screen">

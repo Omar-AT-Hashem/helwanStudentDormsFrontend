@@ -5,12 +5,37 @@ import Loading from "../../components/minicomponent/Loading";
 import { API_ROUTE } from "../../config/env";
 import QRCode from "react-qr-code";
 import universityLogo from "../../assets/auxillary/helwanLogoNoBg.png";
+
+import { useCallback, useRef } from "react";
+import { toPng } from "html-to-image";
+
 const IDCardGenerator = () => {
   const [studentDataList, setStudentDataList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
   const [gender, setGender] = useState();
   const [loading, setLoading] = useState(0);
 
-  console.log(studentDataList);
+  const ref = useRef(null);
+
+  const onButtonClick = useCallback(
+    (nationalId) => {
+      if (ref.current === null) {
+        return;
+      }
+
+      toPng(ref.current, { cacheBust: true })
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+          link.download = `${nationalId}-card.png`;
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    [ref]
+  );
 
   const handleChange = (e) => {
     setGender(e.target.value);
@@ -24,6 +49,7 @@ const IDCardGenerator = () => {
         .get(`${API_ROUTE}/v1/student/get-by-gender/${gender}`)
         .then((res) => {
           setLoading((prev) => prev - 1);
+          setFilteredList(res.data.filter((std) => std.isHoused == 1));
           return setStudentDataList(
             res.data.filter((std) => std.isHoused == 1)
           );
@@ -40,6 +66,14 @@ const IDCardGenerator = () => {
       toast.dismiss();
       toast("اخنار النوع");
     }
+  };
+
+  const handleSearchBarChange = (e) => {
+    setFilteredList(
+      studentDataList.filter((student) =>
+        student.nationalId.includes(e.target.value)
+      )
+    );
   };
 
   return (
@@ -65,11 +99,11 @@ const IDCardGenerator = () => {
       </div>
       <div className="flex gap-5 text-2xl mr-10 mt-5">
         <div className="flex">
-          <span>ذكر</span>
+          <span>طلاب</span>
           <input type="radio" name="gender" value="M" onChange={handleChange} />
         </div>
         <div className="flex">
-          <span>انثى</span>
+          <span>طالبات</span>
           <input type="radio" name="gender" value="F" onChange={handleChange} />
         </div>
         <button
@@ -79,43 +113,64 @@ const IDCardGenerator = () => {
           عرض
         </button>
       </div>
-      <div className="mt-28 w-screen flex flex-wrap gap-16">
-        {studentDataList.map((student) => (
-          <div
-            key={`${student.id}-recieveCard`}
-            className=" w-[650px] border-x-[12px] border-y-[15px] border-mainBlue "
-          >
-            <div className="w-full flex flex-col ">
-              <div className="flex items-center gap-10 w-full mb-2 -mt-2  bg-mainBlue">
-                <img src={universityLogo} alt="" className="h-14 " />
-                <span className="text-white font-bold text-3xl">
-                  كارنيه استلام الوجبات - جامعة حلوان
-                </span>
-              </div>
-              <div className="flex justify-between items-center m-3">
-                <img
-                  src={student.image ? student.image : "/default-photo.jpg"}
-                  alt=""
-                  className="h-36 mr-[4px]"
-                />
 
-                <div className="flex flex-col text-xl">
-                  <div>الرقم القومي: {student.nationalId}</div>
-                  <div>الاسم: {student.name}</div>
-                  <div>المرحلة: {student.academicYear}</div>
-                  <div>المسلسل: {student.serialNumber}</div>
+      {studentDataList.length > 0 && (
+        <div className="text-2xl font-bold m-auto w-[400px] mt-10">
+          <label className="" htmlFor="adminUsernameSearch">
+            البحث بالقم القومي:{" "}
+          </label>
+          <input
+            type="text"
+            name="adminUsernameSearch"
+            id=""
+            className="bg-slate-100 rounded border border-slate-500 shadow-md "
+            onChange={handleSearchBarChange}
+          />
+        </div>
+      )}
+
+      <div className="mt-28 w-screen flex flex-wrap gap-16 m-10">
+        {filteredList.map((student) => (
+          <div key={`${student.id}-recieveCard`} className="flex flex-col items-center">
+            <div
+              className=" w-[650px] border-x-[12px] border-y-[15px] border-mainBlue "
+              ref={ref}
+            >
+              <div className="w-full flex flex-col ">
+                <div className="flex items-center gap-10 w-full  -mt-2  bg-mainBlue">
+                  <img src={universityLogo} alt="" className="h-14 " />
+                  <span className="text-white font-bold text-3xl">
+                    كارنيه استلام الوجبات - جامعة حلوان
+                  </span>
                 </div>
-                {/* <img
+                <div className="flex justify-between items-center p-4  bg-white ">
+                  <img
+                    src={student.image ? student.image : "/default-photo.jpg"}
+                    alt=""
+                    className="h-36 mr-[4px]"
+                  />
+
+                  <div className="flex flex-col text-xl bg-white">
+                    <div>الرقم القومي: {student.nationalId}</div>
+                    <div>الاسم: {student.name}</div>
+                    <div>المرحلة: {student.academicYear}</div>
+                    <div>المسلسل: {student.serialNumber}</div>
+                  </div>
+                  {/* <img
                 src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${student.serialNumber}`}
                 alt="recieve card"
                 className="h-36"
               /> */}
-                <QRCode
-                  value={`${student.serialNumber}`}
-                  style={{ height: "144px", marginLeft: "-52px" }}
-                />
+                  <QRCode
+                    value={`${student.serialNumber}`}
+                    style={{ height: "144px", marginLeft: "-52px" }}
+                  />
+                </div>
               </div>
             </div>
+            <button onClick={() => onButtonClick(student.nationalId)} className="mt-3 text-2xl bg-orange-500 w-[100px] h-[40px] rounded text-white font-bold transition-all duration-200 hover:opacity-70">
+              تحميل
+            </button>
           </div>
         ))}
       </div>

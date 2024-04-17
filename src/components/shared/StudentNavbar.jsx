@@ -22,6 +22,7 @@ export default function StudentNavbar() {
     sessionStorage.clear();
     setLoggedIn(false);
     navigate("/");
+    navigate(0);
   };
 
   return (
