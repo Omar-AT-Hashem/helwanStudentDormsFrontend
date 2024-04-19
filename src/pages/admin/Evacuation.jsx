@@ -178,6 +178,8 @@ const Evacuation = () => {
         );
         setSelectedBed();
         setSelectedRoom();
+        setTracedHousing();
+        setSelectedStudentData([]);
         setSelectedFloorData((prev) => {
           prev = prev.map((ele) => {
             if (ele.id == selectedRoom) {
@@ -194,6 +196,49 @@ const Evacuation = () => {
         });
         setSelectedStudentData([]);
         return;
+      })
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("حدث خطأ ما");
+      });
+  };
+
+  const handleEvacuateAll = () => {
+    axios
+      .put(`${API_ROUTE}/v1/bed/unoccupy-all`, {
+        studentId: selectedStudentData.id,
+        bedId: selectedBed,
+      })
+      .then(() => {
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `تم اخلاء الجميع`,
+          objectId: `فارغ`,
+          objectName: `فارغ`,
+        });
+
+        setSelectedBed();
+        setSelectedRoom();
+        setSelectedFloorData([]);
+        setStudentList((prev) => {
+          prev = prev.map((student) => {
+            return { ...student, isHoused: 0 };
+          });
+          return prev;
+        });
+
+        setFilteredList((prev) => {
+          prev = prev.map((student) => {
+            return { ...student, isHoused: 0 };
+          });
+          return prev;
+        });
       })
       .catch((err) => {
         if (err && err.code === "ERR_BAD_REQUEST") {
@@ -341,7 +386,17 @@ const Evacuation = () => {
         )}
 
         {/* -------------------end student info ---------------------*/}
-
+        <div className="w-full flex justify-end">
+          {(Boolean(permissions.superAdmin) ||
+            Boolean(permissions.unHouseStudents)) && (
+            <button
+              className="bg-red-800 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded mt-6 ml-10"
+              onClick={handleEvacuateAll}
+            >
+              اخلاء الجميع
+            </button>
+          )}
+        </div>
         {/* -------------------start tracedHousing info ---------------------*/}
 
         {tracedHousing && tracedHousing.message == "found" && (
@@ -438,7 +493,7 @@ const Evacuation = () => {
             (Boolean(permissions.superAdmin) ||
               Boolean(permissions.unHouseStudents)) && (
               <button
-                className="bg-red-800 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded"
+                className="bg-red-800 w-32 h-10 text-white hover:opacity-70 transition-all duration-200 rounded mb-16"
                 onClick={handleEvacuationClick}
               >
                 اخلاء

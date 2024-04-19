@@ -4,7 +4,6 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../../components/minicomponent/Loading.jsx";
 
-
 export const AssessStudents = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
@@ -19,6 +18,7 @@ export const AssessStudents = () => {
     {
       superAdmin: 0,
       studentEvaluation: 0,
+      systemWash: 0,
     },
   ]);
 
@@ -78,6 +78,31 @@ export const AssessStudents = () => {
       });
   };
 
+  const systemWash = () => {
+    setLoading((prev) => prev + 1);
+    axios
+      .put(`${API_ROUTE}/v1/student/system-wash`)
+      .then(() => {
+        setLoading((prev) => prev - 1);
+        //handle Logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `تنظيف النظام`,
+          objectId: "فارغ",
+          objectName: "فارغ",
+        });
+        toast.dismiss();
+        toast("تم تنظيف النظام");
+      })
+      .catch(() => {
+        setLoading((prev) => prev - 1);
+        toast.dismiss();
+        toast("حدث خطا");
+      });
+  };
+
   // State to store the selected student's data
   return (
     <div className="pt-36 flex flex-col gap-10 w-full h-screen items-center">
@@ -105,7 +130,7 @@ export const AssessStudents = () => {
         </div>
       )}
 
-      <div className="">
+      <div className="flex flex-col gap-16">
         {(Boolean(permissions.superAdmin) ||
           Boolean(permissions.studentEvaluation)) && (
           <button
@@ -113,6 +138,16 @@ export const AssessStudents = () => {
             onClick={assess}
           >
             بدأ التنسيق
+          </button>
+        )}
+
+        {(Boolean(permissions.superAdmin) ||
+          Boolean(permissions.systemWash)) && (
+          <button
+            className="w-40 h-10 bg-red-600 rounded-md hover:opacity-70 transition-all duration-200  hover:bg-red-400 text-white font-bold py-2 px-4 border-b-4 border-red-700 hover:border-red-500"
+            onClick={systemWash}
+          >
+            غسل النظام
           </button>
         )}
       </div>

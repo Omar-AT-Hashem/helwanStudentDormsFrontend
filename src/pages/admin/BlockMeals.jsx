@@ -134,7 +134,7 @@ const BlockMeals = () => {
           },
         }}
       />
-
+                    
       {loading > 0 && <Loading />}
       <div className="w-64">
         {/* Pass setSelectedStudent function to SearchForStudents to update selected student */}
