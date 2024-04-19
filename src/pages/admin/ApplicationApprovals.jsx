@@ -5,7 +5,6 @@ import toast, { Toaster } from "react-hot-toast";
 import MainSideBar from "../../components/minicomponent/MainSideBar.jsx";
 import { useOutletContext } from "react-router-dom";
 
-
 export const ApplicationApprovals = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
@@ -39,8 +38,6 @@ export const ApplicationApprovals = () => {
       applicationApprovals: 0,
     },
   ]);
-
-
 
   useEffect(() => {
     setLoading((prev) => prev + 1);
@@ -125,7 +122,6 @@ export const ApplicationApprovals = () => {
         return toast("Something went wrong");
       });
   };
-
 
   return (
     <div className="pt-20 flex flex-row w-full h-screen">
@@ -338,7 +334,7 @@ export const ApplicationApprovals = () => {
                 </div>
               </div>
 
-              <div className="flex gap-10 mt-10 text-white font-bold w-1/2 m-auto justify-center">
+              <div className="flex gap-10 mt-10 text-white font-bold w-1/2 m-auto justify-center mb-10 h-[200px]">
                 {(Boolean(permissions.superAdmin) ||
                   Boolean(permissions.applicationApprovals)) && (
                   <button

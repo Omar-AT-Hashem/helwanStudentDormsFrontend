@@ -12,17 +12,29 @@ const MainSideBar = ({
   filters,
   setFilters,
   filteredList,
-  setFilteredList
+  setFilteredList,
 }) => {
   // State variables for filters
 
   // State variable for search query
   const [loading, setLoading] = useState(0);
   const [search, setSearch] = useState("");
-  
+  const [faculties, setFaculties] = useState([]);
 
-
-  console.log("rerender");
+  useEffect(() => {
+    axios
+      .get(`${API_ROUTE}/v1/university-structure/get-faculties`)
+      .then((res) => {
+        setFaculties(res.data);
+      })
+      .catch((err) => {
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        toast("Something went wrong");
+      });
+  }, []);
 
   useEffect(() => {
     if (search.length == 0) {
@@ -46,16 +58,33 @@ const MainSideBar = ({
   }, [studentList]);
 
   const returnFilteredList = (list, filters) => {
-    const { isApproved, gender, notHoused, housed } = filters;
+    const { faculty, isApproved, gender, notHoused, housed } = filters;
+
+    console.log(filters);
 
     let filtered = [];
     let overlayArray = [];
     filtered = list.filter((ele) => {
       if (ele.gender == gender) {
-        if (isApproved == 0 && ele.isApproved == isApproved) {
-          return ele;
-        } else if (isApproved == 1 && ele.isApproved == isApproved) {
-          if (ele.isAccepted == 1) {
+        if (faculty != "" && faculty != null) {
+          if (isApproved == -2) {
+            if (
+              ele.isApproved == 1 &&
+              ele.isAccepted == 0 &&
+              ele.faculty == faculty
+            ) {
+              return ele;
+            }
+          }
+          if (ele.isApproved == isApproved && ele.faculty == faculty) {
+            return ele;
+          }
+        } else {
+          if (isApproved == -2) {
+            if (ele.isApproved == 1 && ele.isAccepted == 0) {
+              return ele;
+            }
+          } else if (ele.isApproved == isApproved) {
             return ele;
           }
         }
@@ -143,17 +172,15 @@ const MainSideBar = ({
   };
 
   const chooseFilters = (e) => {
-    if (e.target.type == "radio") {
-      setFilters((prev) => {
-        return { ...prev, [e.target.name]: e.target.value };
-      });
+    setFilters((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
 
-      const filtered = returnFilteredList(studentList, {
-        ...filters,
-        [e.target.name]: e.target.value,
-      });
-      setFilteredList(filtered.length > 0 ? filtered : []);
-    }
+    const filtered = returnFilteredList(studentList, {
+      ...filters,
+      [e.target.name]: e.target.value,
+    });
+    setFilteredList(filtered.length > 0 ? filtered : []);
   };
 
   const chooseSecondaryFilter = (e) => {
@@ -194,35 +221,23 @@ const MainSideBar = ({
         }}
       />
       <form className="mt-4 text-gray-200">
-        <div className="m-1 text-gray-500">
-          <label className="  text-gray-900" htmlFor="years">
-            العام الدراسي{" "}
-          </label>
-
-          <select
-            className=" mr-2 text-gray-500 border w-54"
-            name="years"
-            id="years"
-          >
-            <option className="text-gray-500" value="">
-              2022-2023
-            </option>
-            <option value="">2023-2024</option>
-          </select>
-        </div>
         <div className="text-gray-500 m-1">
           <label className="ro text-gray-900" htmlFor="college">
             {" "}
             الكلية
           </label>
-
           <select
             className=" text-gray-500 mx-2 border"
-            name="college"
-            id="college"
+            name="faculty"
+            id="faculty"
+            onChange={chooseFilters}
           >
-            <option value="">الحاسبات والذكاء الاصطناعي</option>
-            <option value="">الاداب</option>
+            <option value="">كلية</option>
+            {faculties.map((faculty) => (
+              <option key={faculty.id} value={faculty.name}>
+                {faculty.name}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -253,28 +268,70 @@ const MainSideBar = ({
         {/*------------ end filter for gender  --------------*/}
 
         {/*------------ start filter for applicants --------------*/}
-        <div className=" text-gray-900">
-          <input
-            className=" mx-2"
-            type="radio"
-            id="isApproved"
-            name="isApproved"
-            value={0}
-            checked={filters.isApproved == 0}
-            onChange={chooseFilters}
-          ></input>
-          <label htmlFor="applicants">متقدمين</label>
+        <div className=" text-gray-900 grid grid-cols-2">
+          <div>
+            <input
+              className=" mx-2"
+              type="radio"
+              id="isApproved"
+              name="isApproved"
+              value={0}
+              checked={filters.isApproved == 0}
+              onChange={chooseFilters}
+            ></input>
+            <label htmlFor="applicants">متقدمين</label>
+          </div>
 
-          <input
-            className=" mx-2 mr-10"
-            type="radio"
-            id="isApproved"
-            name="isApproved"
-            value={1}
-            checked={filters.isApproved == 1}
-            onChange={chooseFilters}
-          ></input>
-          <label htmlFor="accepted">مقبولين</label>
+          <div>
+            <input
+              className=" mx-2"
+              type="radio"
+              id="isApproved"
+              name="isApproved"
+              value={1}
+              checked={filters.isApproved == 1}
+              onChange={chooseFilters}
+            ></input>
+            <label htmlFor="accepted">مقبولين</label>
+          </div>
+
+          <div>
+            <input
+              className=" mx-2"
+              type="radio"
+              id="isApproved"
+              name="isApproved"
+              value={-1}
+              checked={filters.isApproved == -1}
+              onChange={chooseFilters}
+            ></input>
+            <label htmlFor="accepted">مرفوضين </label>
+          </div>
+
+          <div>
+            <input
+              className=" mx-2"
+              type="radio"
+              id="isApproved"
+              name="isApproved"
+              value={-2}
+              checked={filters.isApproved == -2}
+              onChange={chooseFilters}
+            ></input>
+            <label htmlFor="accepted">غير مقبولين تنسيق</label>
+          </div>
+          <div>
+            <input
+              className=" mx-2"
+              type="radio"
+              id="isApproved"
+              name="isApproved"
+              value={-3}
+              checked={filters.isApproved == -3}
+              onChange={chooseFilters}
+            ></input>
+            <label htmlFor="accepted">مرفودين</label>
+          </div>
         </div>
         {/*------------ end filter for applicants --------------*/}
         <div className="text-gray-900 grid grid-cols-4 mt-4 mr-0">

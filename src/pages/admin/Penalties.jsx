@@ -139,7 +139,7 @@ const Penalties = () => {
             ...prev[ind2],
             isHoused: -1,
             isAccepted: 0,
-            isApproved: -1,
+            isApproved: -3,
           };
           return prev;
         });

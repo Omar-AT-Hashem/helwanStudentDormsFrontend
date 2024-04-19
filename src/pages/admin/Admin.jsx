@@ -20,6 +20,7 @@ const Admin = () => {
   const [filters, setFilters] = useState({
     isApproved: null,
     gender: null,
+    faculty: null,
     notHoused: false,
     housed: false,
   });
