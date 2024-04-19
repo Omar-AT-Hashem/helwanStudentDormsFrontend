@@ -4,7 +4,6 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import Loading from "../../components/minicomponent/Loading.jsx";
 
-
 const CreateEmployee = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
@@ -56,9 +55,6 @@ const CreateEmployee = () => {
       superAdmin: 0,
     },
   ]);
-
-
-
 
   useEffect(() => {
     setLoading((prev) => prev + 1);
@@ -215,6 +211,15 @@ const CreateEmployee = () => {
       .then((res) => {
         toast.dismiss();
         toast.success("تم تعديل الصلاحيات بنجاح");
+        //handle logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `تعديل صلاحيات موظف ${employees[ind].name}`,
+          objectId: `${employees[ind].id}`,
+          objectName: `${employees[ind].name}`,
+        });
         setLoading((prev) => prev - 1);
       })
       .catch((err) => {
@@ -227,7 +232,39 @@ const CreateEmployee = () => {
       });
   };
 
+  const deleteAdmin = (e, id, index) => {
+    setLoading((prev) => prev + 1);
+    axios
+      .delete(`${API_ROUTE}/v1/employee/${id}`)
+      .then((res) => {
+        toast.dismiss();
+        toast.success("تم حذف المستخدم بنجاح");
 
+        setLoading((prev) => prev - 1);
+        //handle logs
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `حذف مستخدم ${employees[index].name}`,
+          objectId: `${employees[index].id}`,
+          objectName: `${employees[index].name}`,
+        });
+
+        setEmployees((prev) => {
+          prev.splice(index, 1);
+          return prev;
+        });
+      })
+      .catch((err) => {
+        setLoading((prev) => prev - 1);
+        if (err && err.code === "ERR_BAD_REQUEST") {
+          return;
+        }
+        toast.dismiss();
+        return toast("حدث خطأ");
+      });
+  };
 
   return (
     <div className="pt-16 flex flex-row w-screen h-screen overflow-x-hidden">
@@ -566,14 +603,26 @@ const CreateEmployee = () => {
                       </div>
                       <div className="flex gap-5"></div>
                     </div>
-                    {Boolean(permissions.superAdmin) && (
-                      <button
-                        className="bg-blue-600 w-40 h-10 rounded hover:opacity-70 text-white font-bold transition-all duration-200 mb-4 -mt-4"
-                        onClick={(e) => handleEmployeeChangesSave(e, index)}
-                      >
-                        حفظ
-                      </button>
-                    )}
+                    <div className="flex gap-28">
+                      {Boolean(permissions.superAdmin) && (
+                        <button
+                          className="bg-blue-600 w-40 h-10 rounded hover:opacity-70 text-white font-bold transition-all duration-200 mb-4 -mt-4"
+                          onClick={(e) => handleEmployeeChangesSave(e, index)}
+                        >
+                          حفظ
+                        </button>
+                      )}
+                      {Boolean(permissions.superAdmin) && (
+                        <button
+                          className="bg-red-600 w-40 h-10 rounded hover:opacity-70 text-white font-bold transition-all duration-200 mb-4 -mt-4"
+                          onClick={(e) =>
+                            deleteAdmin(e, employees[index].id, index)
+                          }
+                        >
+                          حذف
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </>
