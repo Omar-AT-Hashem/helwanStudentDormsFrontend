@@ -10,6 +10,12 @@ import { useCallback, useRef } from "react";
 import { toPng } from "html-to-image";
 
 const MealRecievingCard = () => {
+  if (sessionStorage.getItem("token")) {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
+  }
+  
   const [studentData, setStudentData] = useState();
   const [loading, setLoading] = useState(0);
 

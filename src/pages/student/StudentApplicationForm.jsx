@@ -5,6 +5,11 @@ import toast, { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 
 function StudentApplicationForm() {
+  if (sessionStorage.getItem("token")) {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
+  }
   const [formData, setFormData] = useState({
     nationalId: "",
     name: "",

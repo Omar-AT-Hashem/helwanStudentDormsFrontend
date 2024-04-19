@@ -2,6 +2,11 @@ import  { useState } from 'react';
 import axios from 'axios';
 
 function SearchByNationalId() {
+  if (sessionStorage.getItem("token")) {
+    axios.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${sessionStorage.getItem("token")}`;
+  }
   // State variables to manage national ID input, result (name and address), and errors.
   const [nationalId, setNationalId] = useState(0); // Initialize as 0 or an appropriate default value.
   const [result, setResult] = useState({ name: '', address: '' });
