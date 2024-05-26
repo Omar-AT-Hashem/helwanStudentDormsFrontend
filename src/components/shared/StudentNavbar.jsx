@@ -48,7 +48,7 @@ export default function StudentNavbar() {
                     onClick={handleStudentSlider}
                     className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
-                    بيانات الطلاب
+                  الخيارات
                   </button>
                 </div>
               </div>
@@ -69,7 +69,7 @@ export default function StudentNavbar() {
                 studentSliderOpen ? "right-[0%]" : "right-[-100%]"
               }`}
             >
-              <StudentSlider />
+              <StudentSlider loggedIn={loggedIn}/>
             </div>
           </div>
         </div>
