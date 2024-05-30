@@ -52,6 +52,7 @@ const UsersAndPermissionsReport = () => {
     editHousingResources: 0,
     studentEvaluation: 0,
     systemWash: 0,
+    deleteStudent: 0,
   });
   const [loading, setLoading] = useState(0);
 
@@ -63,9 +64,6 @@ const UsersAndPermissionsReport = () => {
     });
     setRerenderTrigger((prev) => prev + 1);
   };
-
-
-
 
 
   return (
@@ -364,6 +362,18 @@ const UsersAndPermissionsReport = () => {
                           value={employees[index].systemWash}
                           checked={Boolean(employees[index].systemWash)}
                           
+                          required
+                          className="mr-1"
+                        />
+                      </div>
+
+                      <div className="flex">
+                        <label className="text-xl">حذف طالب</label>
+                        <input
+                          type="checkbox"
+                          name="systemWash"
+                          value={employees[index].deleteStudent}
+                          checked={Boolean(employees[index].deleteStudent)}
                           required
                           className="mr-1"
                         />

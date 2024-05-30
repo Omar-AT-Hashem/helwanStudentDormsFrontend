@@ -7,7 +7,6 @@ import { useOutletContext } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 
-
 const BasicData = () => {
   if (sessionStorage.getItem("token")) {
     axios.defaults.headers.common[
@@ -32,6 +31,7 @@ const BasicData = () => {
     {
       superAdmin: 0,
       editStudentData: 0,
+      deleteStudent: 0,
     },
   ]);
   const [
@@ -188,7 +188,7 @@ const BasicData = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSaveChanges = async (e) => {
     e.preventDefault();
     setLoading((prev) => prev + 1);
     axios
@@ -237,6 +237,45 @@ const BasicData = () => {
       });
   };
 
+  const handleDeleteStudent = () => {
+    setLoading((prev) => prev + 1);
+    axios
+      .delete(`${API_ROUTE}/v1/student/${selectedStudentData.id}`)
+      .then((res) => {
+        setLoading((prev) => prev - 1);
+        axios.post(`${API_ROUTE}/v1/log`, {
+          adminId: sessionStorage.getItem("id"),
+          adminName: sessionStorage.getItem("name"),
+          adminUsername: sessionStorage.getItem("username"),
+          action: `تم حذف بيانات الطالب ${selectedStudentData.name} و الرقم القومى ${selectedStudentData.nationalId}`,
+          objectId: selectedStudentData.nationalId,
+          objectName: selectedStudentData.name,
+        });
+        const ind = studentList.findIndex(
+          (ele) => ele.id == selectedStudentData.id
+        );
+        const ind2 = filteredList.findIndex(
+          (ele) => ele.id == selectedStudentData.id
+        );
+        setStudentList((prev) => {
+          prev.splice(ind, 1);
+          return prev;
+        });
+        setFilteredList((prev) => {
+          prev.splice(ind2, 1);
+          return prev;
+        });
+        setSelectedStudentData([]);
+        setFormData(null);
+        toast.dismiss();
+        toast("تم الحذف بنجاح");
+      })
+      .catch((err) => {
+        setLoading((prev) => prev - 1);
+        toast.dismiss();
+        toast("حدث خطأ");
+      });
+  };
 
   return (
     formData && (
@@ -333,10 +372,7 @@ const BasicData = () => {
               )}
             </div>
           </div>
-          <form
-            onSubmit={handleSubmit}
-            className="mt-20 flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8 	"
-          >
+          <form className="mt-20 flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8 	">
             <div className="flex flex-col items-start">
               <label className="mb-4 ">
                 الرقم القومى :
@@ -737,21 +773,40 @@ const BasicData = () => {
                 </label>
               </div>
             </div>
-            <div>
-              <div className="mt-10 w-auto items-center">
+            <div className="flex justify-between ml-28 mt-10 mb-10">
+              <div className="w-auto items-center">
                 {(Boolean(permissions.superAdmin) ||
                   Boolean(permissions.editStudentData)) && (
                   <button
-                    type="submit"
                     className={`bg-blue-500 w-56 hover:opacity-70 h-14${
                       loading && "opacity-70 hover:cursor-default"
                     } hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 flex justify-center`}
+                    onClick={handleSaveChanges}
                     disabled={loading}
                   >
                     {loading ? (
                       <Loader2 className="animate-spin duration-200" />
                     ) : (
                       <span>حفظ التعديل </span>
+                    )}
+                  </button>
+                )}
+              </div>
+
+              <div className="w-auto items-center">
+                {(Boolean(permissions.superAdmin) ||
+                  Boolean(permissions.deleteStudent)) && (
+                  <button
+                    className={`bg-red-500 w-56 hover:opacity-70 h-14${
+                      loading && "opacity-70 hover:cursor-default"
+                    } hover:cursor-pointer transition-all duration-200 text-white font-bold py-2 px-4 rounded mx-2 flex justify-center`}
+                    onClick={handleDeleteStudent}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <Loader2 className="animate-spin duration-200" />
+                    ) : (
+                      <span>ازالة الطالب </span>
                     )}
                   </button>
                 )}

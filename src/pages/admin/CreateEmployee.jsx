@@ -47,6 +47,7 @@ const CreateEmployee = () => {
     editHousingResources: 0,
     studentEvaluation: 0,
     systemWash: 0,
+    deleteStudent: 0,
   });
   const [loading, setLoading] = useState(0);
 
@@ -118,6 +119,7 @@ const CreateEmployee = () => {
             editHousingResources: formData.editHousingResources,
             studentEvaluation: formData.studentEvaluation,
             systemWash: formData.systemWash,
+            deleteStudent: formData.deleteStudent
           })
           .then((res) => {
             //handle Logs
@@ -157,6 +159,7 @@ const CreateEmployee = () => {
               editHousingResources: 0,
               studentEvaluation: 0,
               systemWash: 0,
+              deleteStudent: 0
             });
             toast.dismiss();
             return toast("تم انشاء حساب بنجاح");
@@ -600,6 +603,20 @@ const CreateEmployee = () => {
                             className="mr-1"
                           />
                         </div>
+
+                        <div className="flex">
+                          <label className="text-xl">حذف طالب</label>
+                          <input
+                            type="checkbox"
+                            name="deleteStudent"
+                            value={employees[index].deleteStudent}
+                            checked={Boolean(employees[index].deleteStudent)}
+                            onChange={(e) => handleEmployeeChange(e, index)}
+                            disabled={!editable}
+                            required
+                            className="mr-1"
+                          />
+                        </div>
                       </div>
                       <div className="flex gap-5"></div>
                     </div>
@@ -930,6 +947,20 @@ const CreateEmployee = () => {
                       name="systemWash"
                       value={formData.systemWash}
                       checked={Boolean(formData.systemWash)}
+                      onChange={handleChange}
+                      required
+                      className="mr-1"
+                    />
+                  </div>
+
+
+                  <div className="flex">
+                    <label className="text-xl">حذف طالب</label>
+                    <input
+                      type="checkbox"
+                      name="deleteStudent"
+                      value={formData.deleteStudent}
+                      checked={Boolean(formData.deleteStudent)}
                       onChange={handleChange}
                       required
                       className="mr-1"

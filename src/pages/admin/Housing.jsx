@@ -137,6 +137,10 @@ const Housing = () => {
       })
       .catch((err) => {
         setLoading((prev) => prev - 1);
+        if (err.response.status === 412) {
+          toast.dismiss();
+          return toast("هذا الطالب مسجل في غرفة");
+        }
         if (err && err.code === "ERR_BAD_REQUEST") {
           return;
         }
