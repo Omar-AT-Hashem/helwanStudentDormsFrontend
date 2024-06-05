@@ -45,6 +45,9 @@ const BasicData = () => {
     setFilteredList,
   ] = useOutletContext();
 
+  console.log(selectedStudentData);
+  console.log(formData);
+
   const [loadPage, setLoadPage] = useState(false);
 
   useEffect(() => {

@@ -25,6 +25,8 @@ function UserProfile() {
 
   const [faculties, setFaculties] = useState([]);
 
+  
+
   useEffect(() => {
     axios
       .get(`${API_ROUTE}/v1/university-structure/get-faculties`)
@@ -88,25 +90,20 @@ function UserProfile() {
       const form = new FormData();
       form.set("image", selectedImage);
       form.set("id", sessionStorage.getItem("id"));
-      await axios.put(`${API_ROUTE}/v1/student/update-image`, form);
-      const res = await axios.get(
-        `${API_ROUTE}/v1/student/get-by-nationalId/${sessionStorage.getItem(
-          "nationalId"
-        )}`
-      );
-      setFormData(res.data);
+      await axios
+        .put(`${API_ROUTE}/v1/student/update-image`, form)
+        .then((res) => {
+          setFormData(prev => ({...prev, image: res.data.filePath}));
+        });
+
       setEditableImage(false);
     }
     if (e.target.name == "delete") {
       await axios.put(`${API_ROUTE}/v1/student/delete-image`, {
         id: sessionStorage.getItem("id"),
       });
-      const res = await axios.get(
-        `${API_ROUTE}/v1/student/get-by-nationalId/${sessionStorage.getItem(
-          "nationalId"
-        )}`
-      );
-      setFormData(res.data);
+
+      setFormData((prev) => ({ ...prev, image: null }));
       setEditableImage(false);
     }
   };
@@ -152,7 +149,7 @@ function UserProfile() {
             },
           }}
         />
-        <div className="flex justify-between mx-5 ml-20 my-2 border-2 border-black p-3">
+        <div className="flex justify-between mx-5 ml-20 my-6 border-2 h-[250px] border-black p-3">
           <div className="flex flex-col">
             <span className="text-2xl">
               <span className="text-red-600 font-bold">الاسم:</span>{" "}
@@ -166,7 +163,7 @@ function UserProfile() {
           <div className="flex flex-col items-end">
             <img
               src={formData.image ? formData.image : "/default-photo.jpg"}
-              className="w-40"
+              className="w-44 mb-2 border-black border-separate border-2 p-1"
               alt="default image"
             />
             {!editableImage && (

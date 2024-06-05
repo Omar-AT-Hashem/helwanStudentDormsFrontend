@@ -156,20 +156,47 @@ const BlockMeals = () => {
               حجب الوجبات - جامعة حلوان
             </div>
             <div className="flex flex-col  py-2 2xl:text-3xl text-2xl	pr-8">
-              <label className="mb-4 ">
-                <span className="font-bold text-2xl">اسم المستخدم :</span>{" "}
+             
                 {selectedStudentData && (
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={selectedStudentData.name}
-                    // Add onChange handler to update the state
-                    readOnly
-                    className="border border-gray-400"
-                  />
+                  <div className="border-2 border-slate  mt-5 h-48 px-2 mx-2 mb-10 ">
+                  <div className="flex justify-between items-center h-full">
+                    <div className="flex flex-col ">
+                      <div>
+                        <span className="font bold text-2xl te ">الاسم: </span>
+                        <span className="font text-xl text-gray-400">
+                          {selectedStudentData.name}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="font bold text-2xl">الرقم القومي: </span>
+                        <span className="font text-xl text-gray-400">
+                          {selectedStudentData.nationalId}
+                        </span>
+                      </div>
+        
+                      <div>
+                        <span className="font bold text-2xl">نوع السكن : </span>
+                        <span className="font text-xl text-gray-400">
+                          {selectedStudentData.accomodationType}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      {" "}
+                      <img
+                        src={
+                          selectedStudentData.image
+                            ? selectedStudentData.image
+                            : "/default-photo.jpg"
+                        }
+                        className="w-36 border-2 border-black"
+                        alt="default image"
+                      />
+                    </div>
+                  </div>
+                </div>
                 )}
-              </label>
+              
 
               <div className="mb-4">
                 <label className=" font-bold text-2xl"> من تاريخ : </label>

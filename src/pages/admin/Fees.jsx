@@ -185,6 +185,8 @@ const Fees = () => {
         <div className="  bg-sky-700 w-full h-10 text-fuchsia-50 text-center text-2xl mb-10">
           الرسوم - جامعة حلوان
         </div>
+
+        
         {selectedStudentData && (
           <div className="border-2 border-slate  mt-5 h-48 px-2 mx-2 mb-10 ">
             <div className="flex justify-between items-center h-full">
